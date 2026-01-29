@@ -22,6 +22,12 @@ export default defineConfig({
         cssVariable: "--font-inter",
         weights: ["100 900"],
       },
+      {
+        provider: fontProviders.google(),
+        name: "Montserrat",
+        cssVariable: "--font-montserrat",
+        weights: ["100 900"],
+      },
     ],
   },
 });

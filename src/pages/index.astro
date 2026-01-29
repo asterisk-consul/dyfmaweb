@@ -26,73 +26,77 @@ import logo8 from "../assets/logoipsum-331.svg";
   <HeroHome
     title="Soluciones Industriales para Pelado de Frutos Secos"
     subtitle="Maquinaria de alto rendimiento diseñada y fabricada en Argentina para optimizar la cosecha y postcosecha de nueces, almendras y otros frutos secos."
+    imageSrc="/image-1.jpg",
+    imageAlt="Línea industrial de pelado de frutos secos",
     cta={{
       title: "Conocé nuestros productos",
       url: "#",
     }}
   />
 
-  <Introducing
-    title="A platform designed to turn ideas into impact"
-    text="From first concept to final delivery, our tools streamline collaboration, eliminate bottlenecks, and keep your team focused on what matters most: results. Simple to adopt, powerful at scale."
-    cta={{
-      title: "Get Started",
-      url: "#",
-    }}
-  />
+<Introducing
+  title="Ingeniería aplicada al procesamiento de frutos secos"
+  text="En DYFMA desarrollamos y fabricamos maquinaria industrial especializada en el pelado y procesamiento de frutos secos. Combinamos ingeniería, experiencia productiva y fabricación nacional para ofrecer soluciones eficientes, robustas y adaptadas a cada escala productiva."
+  cta={{
+    title: "Ver soluciones",
+    url: "#productos",
+  }}
+/>
 
-  <StepsTimeline
-    title="How it works"
-    items={[
-      {
-        title: "Set up in minutes",
-        text: "Create your workspace, invite your team, and configure projects effortlessly—no complex onboarding or technical setup required.",
-      },
-      {
-        title: "Collaborate without friction",
-        text: "Centralize communication, assets, and tasks in one place so everyone stays aligned and productive.",
-      },
-      {
-        title: "Deliver measurable results",
-        text: "Track progress in real time, optimize workflows, and ship projects faster with complete visibility.",
-      },
-    ]}
-  />
 
-  <GalleryText
-    title="Designed for teams that value clarity and speed"
-    text="A clean interface, powerful features, and thoughtful details come together to help your team move faster—without sacrificing quality."
-    cta={{
-      title: "Try It Today",
-      url: "#",
-    }}
-    images={[
-      {
-        alt: "Dashboard overview",
-        src: "/image-1.jpg",
-        width: 6000,
-        height: 4000,
-      },
-      {
-        alt: "Project collaboration view",
-        src: "/image-2.jpg",
-        width: 2689,
-        height: 4032,
-      },
-      {
-        alt: "Analytics and reporting",
-        src: "/image-3.jpg",
-        width: 3734,
-        height: 5359,
-      },
-    ]}
-    marqueeTexts={[
-      "Creative Firepower",
-      "Built for Speed",
-      "Trusted by Professionals",
-      "Simple, Transparent Pricing",
-    ]}
-  />
+<StepsTimeline
+  title="Nuestro proceso de trabajo"
+  items={[
+    {
+      title: "Análisis productivo",
+      text: "Evaluamos el tipo de fruto, volumen de producción y necesidades operativas para definir la solución más eficiente.",
+    },
+    {
+      title: "Diseño y fabricación",
+      text: "Desarrollamos equipos robustos con ingeniería propia, fabricados en Argentina y preparados para trabajo continuo.",
+    },
+    {
+      title: "Implementación y soporte",
+      text: "Acompañamos la puesta en marcha y brindamos soporte técnico para asegurar el máximo rendimiento del equipo.",
+    },
+  ]}
+/>
+
+
+<GalleryText
+  title="Maquinaria diseñada para producir más"
+  text="Cada equipo DYFMA está pensado para maximizar rendimiento, reducir mermas y garantizar un proceso estable y confiable en entornos industriales exigentes."
+  cta={{
+    title: "Explorar maquinaria",
+    url: "#productos",
+  }}
+  images={[
+    {
+      alt: "Línea industrial de pelado de frutos secos",
+      src: "/1.webp",
+      width: 6000,
+      height: 4000,
+    },
+    {
+      alt: "Detalle de maquinaria DYFMA",
+      src: "/2.webp",
+      width: 2689,
+      height: 4032,
+    },
+    {
+      alt: "Proceso industrial de pelado",
+      src: "/3.webp",
+      width: 3734,
+      height: 5359,
+    },
+  ]}
+  marqueeTexts={[
+    "Ingeniería Nacional",
+    "Diseño Industrial",
+    "Alta Productividad",
+    "Procesos Confiables",
+  ]}
+/>
 
 <Statements
   items={[
@@ -112,17 +116,53 @@ import logo8 from "../assets/logoipsum-331.svg";
 />
 
 
-  <TextMarquee
-    class="marquee"
-    texts={[
-      "Creative Firepower",
-      "Built for Speed",
-      "Trusted by Professionals",
-      "Simple, Transparent Pricing",
-    ]}
-  />
+ <TextMarquee
+  class="marquee"
+  texts={[
+    "Ingeniería aplicada al agro",
+    "Fabricación nacional",
+    "Procesos industriales eficientes",
+    "Soluciones para frutos secos",
+  ]}
+/>
 
-  <Plans
+
+
+  <Faqs
+  title="Preguntas frecuentes"
+  mobileTitle="FAQs"
+  subtitle="Respuestas a las consultas más comunes sobre nuestras soluciones industriales."
+  items={[
+    {
+      question: "¿Qué tipo de frutos secos procesa la maquinaria?",
+      answer:
+        "Nuestros equipos están diseñados principalmente para nuez pecán, nuez de castilla, almendras y otros frutos secos, según el requerimiento del cliente.",
+    },
+    {
+      question: "¿Las máquinas se adaptan a distintos volúmenes de producción?",
+      answer:
+        "Sí. Desarrollamos soluciones para producciones medianas y grandes, con posibilidad de escalar líneas completas.",
+    },
+    {
+      question: "¿La fabricación es nacional?",
+      answer:
+        "Sí. Diseñamos y fabricamos nuestros equipos en Argentina, lo que nos permite ofrecer soporte técnico cercano y repuestos.",
+    },
+    {
+      question: "¿Ofrecen instalación y puesta en marcha?",
+      answer:
+        "Acompañamos la implementación del equipo y brindamos asistencia técnica para asegurar un funcionamiento óptimo.",
+    },
+    {
+      question: "¿Cómo se solicita una cotización?",
+      answer:
+        "Podés contactarnos a través del formulario o por nuestros canales comerciales para evaluar tu necesidad productiva.",
+    },
+  ]}
+/>
+
+
+  <!-- <Plans
     title="Plans & Pricing"
     subtitle="Start for free, upgrade when you’re ready. No hidden fees, no long-term commitments."
     items={[
@@ -163,42 +203,9 @@ import logo8 from "../assets/logoipsum-331.svg";
         ],
       },
     ]}
-  />
+  /> -->
 
-  <Faqs
-    title="Frequently Asked Questions"
-    mobileTitle="FAQs"
-    subtitle="Quick answers to the most common questions."
-    items={[
-      {
-        question: "Who is this platform for?",
-        answer:
-          "It’s built for creators, startups, agencies, and teams who want to move faster without sacrificing quality or control.",
-      },
-      {
-        question: "Can I upgrade or downgrade at any time?",
-        answer:
-          "Yes. You can change plans whenever you need, with no penalties or long-term contracts.",
-      },
-      {
-        question: "Does the free plan really cost nothing?",
-        answer:
-          "Absolutely. The free plan gives you full access to core features so you can evaluate the platform with confidence.",
-      },
-      {
-        question: "Is my data secure?",
-        answer:
-          "Yes. We use industry-standard security practices to protect your data and ensure reliability.",
-      },
-      {
-        question: "Do you offer support during onboarding?",
-        answer:
-          "Premium users receive guided onboarding and priority support to ensure a smooth start.",
-      },
-    ]}
-  />
-
-  <ImageMarquee
+  <!-- <ImageMarquee
     images={[
       {
         src: logo1.src,
@@ -233,10 +240,10 @@ import logo8 from "../assets/logoipsum-331.svg";
         alt: "Logo 7",
       },
     ]}
-  />
+  /> -->
 
-  <GL />
-  <GLPlaces />
+  <!-- <GL /> -->
+  <!-- <GLPlaces /> -->
 </Layout>
 
 <style>

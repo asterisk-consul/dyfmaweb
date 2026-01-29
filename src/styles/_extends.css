@@ -23,6 +23,6 @@
 }
 
 %u-heading {
-  font: var(--fw, 350) var(--fs, var(--font-size-base)) / var(--lh, 1.2) var(--font-roboto-slab);
+  font: var(--fw, 350) var(--fs, var(--font-size-base)) / var(--lh, 1.2) var(--font-montserrat);
   letter-spacing: var(--ls, -0.01em);
 }

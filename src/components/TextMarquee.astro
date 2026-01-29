@@ -44,35 +44,65 @@ const { texts, direction, class: className = "" } = Astro.props;
     width: fit-content;
   }
 
-  .text {
-    @extend %u-text;
-    --fs: 4rem;
-    --fw: 600;
+.text {
+  @extend %u-text;
+  --fs: 4rem;
+  --fw: 600;
 
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    -webkit-text-stroke-color: currentColor;
-    -webkit-text-stroke-width: 2px;
-    -webkit-text-fill-color: transparent;
-    color: var(--c, var(--color-brand-1));
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  color: var(--c, var(--color-brand-1));
+  -webkit-font-smoothing: antialiased;
 
-    &:before {
-      display: block;
-      margin: 0 0.35em;
-      width: 0.2em;
-      height: 0.2em;
-
-      background: currentcolor;
-      border-radius: 99px;
-
-      content: "";
-    }
-
-    &:nth-child(odd) {
-      -webkit-text-fill-color: unset;
-    }
+  &:before {
+    display: block;
+    margin: 0 0.35em;
+    width: 0.2em;
+    height: 0.2em;
+    background: currentcolor;
+    border-radius: 99px;
+    content: "";
   }
+
+  /* Cada 5 textos un estilo diferente */
+
+  /* 1: Normal bold */
+  &:nth-child(5n + 1) {
+    --fw: 700;
+  }
+
+  /* 2: Light con sombra */
+  &:nth-child(5n + 2) {
+    --fw: 300;
+    opacity: 0.9;
+    text-shadow: 0 2px 8px color-mix(in srgb, currentColor 20%, transparent);
+  }
+
+  /* 3: Gradiente sutil */
+  &:nth-child(5n + 3) {
+    --fw: 600;
+    background: linear-gradient(
+      90deg,
+      var(--c, var(--color-brand-1)),
+      color-mix(in srgb, var(--c, var(--color-brand-1)) 60%, white)
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* 4: Semi-transparente */
+  &:nth-child(5n + 4) {
+    --fw: 500;
+    opacity: 0.7;
+  }
+
+  /* 5: Destacado con glow */
+  &:nth-child(5n + 5) {
+    --fw: 800;
+    filter: drop-shadow(0 0 8px color-mix(in srgb, currentColor 30%, transparent));
+  }
+}
 </style>
 
 <script>

@@ -4,11 +4,19 @@ interface Props {
 }
 
 const defaultColors = [
-  [180, 150, 250],
-  [236, 231, 253],
-  [141, 115, 245],
-  [220, 210, 250],
+  // Gris claro técnico
+  [238, 238, 238], // #EEEEEE
+  [214, 214, 214], // #D6D6D6
+
+  // Gris medio industrial
+  [198, 198, 198], // #C6C6C6
+  [176, 176, 176], // #B0B0B0
+
+  // Acento DYFMA (muy sutil)
+  [244, 124, 44],  // Naranja DYFMA
+  [253, 228, 210], // Beige DYFMA
 ];
+
 
 const { colors = defaultColors } = Astro.props;
 ---

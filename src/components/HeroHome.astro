@@ -6,131 +6,199 @@ interface Props {
   title: string;
   subtitle?: string;
   cta?: Link;
+
+  /** Imagen del hero */
+  imageSrc?: string;
+  imageAlt?: string;
 }
 
-const { title, subtitle, cta } = Astro.props;
+const {
+  title,
+  subtitle,
+  cta,
+  imageSrc,
+  imageAlt = "",
+} = Astro.props;
 ---
 
 <div class="sy-hero-home">
   <div class="bg"></div>
+
   <div class="u-container container">
     <div class="inner">
+
+
+
       <div class="content">
-        <h1 class="u-heading title" data-sy-reveal="words">{title}</h1>
-        {
-          subtitle ? (
-            <p class="u-text subtitle" data-sy-reveal="lines">
-              {subtitle}
-            </p>
-          ) : null
-        }
+        <h1 class="u-heading title" data-sy-reveal="words">
+          {title}
+        </h1>
+
+        {subtitle ? (
+          <p class="u-text subtitle" data-sy-reveal="lines">
+            {subtitle}
+          </p>
+        ) : null}
+
         {cta ? <Button {...cta} arrow class="cta" /> : null}
       </div>
+
+       {imageSrc ? (
+        <div class="media" data-sy-reveal="fade">
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      ) : null}
+
       <div data-gl-place></div>
     </div>
   </div>
 </div>
 
 <style>
-  .sy-hero-home {
-    position: relative;
-    overflow: hidden;
-  }
+/* ===== Wrapper ===== */
+.sy-hero-home {
+  position: relative;
+  overflow: hidden;
+}
 
-  .bg {
-  &:before,
-  &:after {
-    content: "";
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+/* ===== Background gris técnico ===== */
+.bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
 
-  &:before {
-    background: linear-gradient(
-      135deg,
-      var(--color-bg) 0%,
-      #fff3ea 18%,
-      #fde4d2 32%,
-      #fbcfb0 46%,
-      #f7b98f 58%,
-      #f47c2c 72%,
-      #e86f26 82%,
-      var(--color-bg) 100%
-    );
+.bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
 
-    background-position: center;
-    mask: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 0) 2%,
-      rgba(0, 0, 0, 1) 100%
-    );
-  }
-    &:after {
-      backdrop-filter: blur(5px);
-    }
-  }
+  background: linear-gradient(
+    180deg,
+    #eeeeee 0%,
+    #e3e3e3 25%,
+    #d6d6d6 50%,
+    #c4c4c4 75%,
+    #b0b0b0 100%
+  );
 
+  mask: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 1) 80%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(4px);
+}
+
+/* ===== Layout ===== */
+.inner {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: center;
+  gap: 4rem;
+
+  min-height: 100vh;
+  padding: 9rem 0 10rem;
+}
+
+/* ===== Imagen ===== */
+.media {
+  position: relative;
+  width: 120%;
+  margin-left: -20%;
+
+  /* Fade hacia la izquierda */
+  mask-image: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 1) 55%,
+    rgba(0, 0, 0, 0.6) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  backdrop-filter: blur(6px);
+
+  mask-image: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0) 50%,
+    rgba(0, 0, 0, 1) 100%
+  );
+
+  pointer-events: none;
+}
+
+.media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.18));
+}
+
+/* ===== Texto ===== */
+.content {
+  position: relative;
+  z-index: 2;
+}
+
+.title {
+  --fw: 700;
+  --fs: 4.5rem;
+  --lh: 1;
+  max-width: 8em;
+}
+
+.subtitle {
+  --fs: var(--font-size-lg);
+  max-width: 25em;
+  margin-top: 1.5rem;
+}
+
+.cta {
+  margin-top: 2rem;
+}
+
+/* ===== Responsive ===== */
+@media (--mq-tablet) {
   .inner {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 9rem 0 10rem;
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
-
-    @media (--mq-tablet) {
-      flex-direction: column;
-      align-items: flex-start;
-    }
+    grid-template-columns: 1fr;
+    padding: 7rem 0 6rem;
   }
 
-  .title {
-    --fs: 4.5rem;
-    --lh: 1;
-    max-width: 5.7em;
-
-    @media (--mq-phone) {
-      --fs: 3.5rem;
-    }
+  .media {
+    width: 100%;
+    margin-left: 0;
+    mask-image: none;
   }
 
-  .subtitle {
-    --fs: var(--font-size-lg);
-    max-width: 25em;
-    margin-top: 1.5rem;
+  .media::after {
+    display: none;
   }
 
-  .cta {
-    margin-top: 2rem;
+  .content {
+    margin-top: 2.5rem;
   }
-
-  [data-gl-place] {
-    --d: 1;
-    --s: 24rem;
-    margin-top: -2rem;
-
-    @media (--mq-desktop-lg) {
-      --s: 22rem;
-    }
-
-    @media (--mq-tablet) {
-      margin: 0;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      margin: 0 auto;
-      right: 0;
-      width: 20rem;
-      transform: translateY(-60%);
-    }
-
-    @media (--mq-tablet-sm) {
-      --s: 20rem;
-    }
-  }
+}
 </style>

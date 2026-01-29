@@ -255,47 +255,6 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     }
   }
 
-  .signup {
-    @media (--mq-phone) {
-      display: none;
-    }
-  }
-
-  .login {
-    @extend %u-text;
-
-    --fs: var(--font-size-sm);
-    position: relative;
-    transform: translateY(0);
-    transition: 0.3s var(--ease-out-expo);
-    transition-property: transform, color;
-
-    &::after {
-      content: "";
-      position: absolute;
-      height: 2px;
-      background: currentcolor;
-      top: 115%;
-      width: 100%;
-      left: 0;
-      pointer-events: none;
-      transform: scaleX(0);
-      transition: transform 0.3s var(--ease-out-expo);
-      transform-origin: right;
-    }
-
-    &:hover,
-    &:focus {
-      &::after {
-        transform: scaleX(1);
-        transform-origin: left;
-      }
-    }
-
-    @media (--mq-phone) {
-      display: none;
-    }
-  }
 
   .toggle {
     border: none;

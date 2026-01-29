@@ -28,6 +28,8 @@ const { title, text, cta } = Astro.props;
   .container {
     margin-bottom: 8rem;
     position: relative;
+    background-color: var(--color-bg);
+    width: 100% ;
   }
 
   .inner {
@@ -49,6 +51,7 @@ const { title, text, cta } = Astro.props;
   h2 {
     --fs: 3rem;
     --lh: 1.1;
+    --fw:500;
     max-width: 20em;
   }
 
@@ -69,4 +72,5 @@ const { title, text, cta } = Astro.props;
       left: 0;
     }
   }
+
 </style>
