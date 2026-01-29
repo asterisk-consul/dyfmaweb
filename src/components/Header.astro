@@ -36,15 +36,6 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
         </div>
 
         <div class="buttons">
-          {
-            link1 ? (
-              <a class="login" href={link1.url}>
-                {link1.title}
-              </a>
-            ) : null
-          }
-          {link2 ? <Button {...link2} revealable={false} /> : null}
-
           <button type="button" class="toggle" aria-label="">
             <span class="u-sr-only">Toggle Mobile Menu</span>
             <span aria-hidden>
@@ -120,6 +111,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 2rem;
 
     @media (--mq-tablet) {
       flex-wrap: wrap;
@@ -145,7 +137,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     left: 0;
     right: 0;
     margin: 0 auto;
-    width: min-content;
+    width: fit-content;
 
     @media (--mq-tablet) {
       align-items: center;
