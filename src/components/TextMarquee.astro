@@ -25,7 +25,8 @@ const { texts, direction, class: className = "" } = Astro.props;
     max-width: 100%;
     opacity: 0;
     transition: opacity 0.2s ease-in-out;
-    backdrop-filter: blur(6px) saturate(1.05);
+    background: var(--color-brand-1);
+    padding: 1rem 0;
 
     :global(&.is-ready) {
       opacity: 1;
@@ -44,70 +45,58 @@ const { texts, direction, class: className = "" } = Astro.props;
     width: fit-content;
   }
 
-.text {
-  @extend %u-text;
-  --fs: 4rem;
-  --fw: 600;
-
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  color: var(--c, var(--color-brand-1));
-  -webkit-font-smoothing: antialiased;
-
-  &:before {
-    display: block;
-    margin: 0 0.35em;
-    width: 0.2em;
-    height: 0.2em;
-    background: currentcolor;
-    border-radius: 99px;
-    content: "";
-  }
-
-  /* Cada 5 textos un estilo diferente */
-
-  /* 1: Normal bold */
-  &:nth-child(5n + 1) {
-    --fw: 700;
-  }
-
-  /* 2: Light con sombra */
-  &:nth-child(5n + 2) {
-    --fw: 300;
-    opacity: 0.9;
-    text-shadow: 0 2px 8px color-mix(in srgb, currentColor 20%, transparent);
-  }
-
-  /* 3: Gradiente sutil */
-  &:nth-child(5n + 3) {
+  .text {
+    @extend %u-heading;
+    --fs: var(--type-subtitle);
     --fw: 600;
-    background: linear-gradient(
-      90deg,
-      var(--c, var(--color-brand-1)),
-      color-mix(in srgb, var(--c, var(--color-brand-1)) 60%, white)
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    color: var(--color-white);
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.04em;
+
+    &:before {
+      display: block;
+      margin: 0 0.75em;
+      width: 0.25em;
+      height: 0.25em;
+      background: currentcolor;
+      border-radius: 99px;
+      content: "";
+      opacity: 0.5;
+    }
   }
 
-  /* 4: Semi-transparente */
-  &:nth-child(5n + 4) {
-    --fw: 500;
+  .text:nth-child(5n + 1) {
+    --fw: 700;
+    opacity: 1;
+  }
+
+  .text:nth-child(5n + 2) {
+    --fw: 400;
     opacity: 0.7;
   }
 
-  /* 5: Destacado con glow */
-  &:nth-child(5n + 5) {
-    --fw: 800;
-    filter: drop-shadow(0 0 8px color-mix(in srgb, currentColor 30%, transparent));
+  .text:nth-child(5n + 3) {
+    --fw: 600;
+    opacity: 0.9;
   }
-}
+
+  .text:nth-child(5n + 4) {
+    --fw: 500;
+    opacity: 0.6;
+  }
+
+  .text:nth-child(5n + 5) {
+    --fw: 700;
+    opacity: 1;
+  }
 </style>
 
 <script>
-  import { addResizeObserver } from "../utils/observers";
-  import { addIntersectingTicker } from "../utils/globalTicker";
+  import { addResizeObserver } from "../utils/helpers";
+  import { gsap } from "gsap";
 
   class TextMarquee extends HTMLElement {
     x = 0;
@@ -115,24 +104,40 @@ const { texts, direction, class: className = "" } = Astro.props;
     direction = 1;
     html: string;
     outerEl: HTMLElement;
+    private isVisible = false;
 
     constructor() {
       super();
-
       this.direction = Number(this.dataset.dir) || 1;
       this.outerEl = this.querySelector(".outer") as HTMLElement;
       this.html = this.outerEl.innerHTML;
       this.x = Math.round(1000 * -this.direction * Math.random());
-
       addResizeObserver(this);
-      addIntersectingTicker(this);
     }
 
     connectedCallback() {
-      document.fonts.ready.then(() => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          this.isVisible = entry.isIntersecting;
+          if (entry.isIntersecting) observer.disconnect();
+        },
+        { threshold: 0 },
+      );
+      observer.observe(this);
+
+      gsap.ticker.add(this.tick);
+
+      Promise.race([
+        document.fonts.ready,
+        new Promise<void>((r) => setTimeout(r, 2000)),
+      ]).then(() => {
         this.fill();
         this.classList.add("is-ready");
       });
+    }
+
+    disconnectedCallback() {
+      gsap.ticker.remove(this.tick);
     }
 
     onWidthResize() {
@@ -164,7 +169,8 @@ const { texts, direction, class: className = "" } = Astro.props;
       this.textWidth = Math.round(outerEl.scrollWidth / 2);
     }
 
-    tick() {
+    tick = () => {
+      if (!this.isVisible) return;
       const txtWidth = this.textWidth;
       let x = this.x;
 

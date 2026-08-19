@@ -67,10 +67,11 @@ const { images, direction } = Astro.props;
 </style>
 
 <script>
-  import { addResizeObserver } from "../utils/observers";
-  import { addIntersectingTicker } from "../utils/globalTicker";
-
+  import { addResizeObserver } from "../utils/helpers";
   import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
 
   class ImageMarquee extends HTMLElement {
     x = 0;
@@ -79,21 +80,35 @@ const { images, direction } = Astro.props;
     ghosts: HTMLElement[] = [];
     images: HTMLElement[] = [];
     wrap!: (n: number) => number;
+    private isVisible = false;
+    private st?: ScrollTrigger;
 
     constructor() {
       super();
-
       this.images = Array.from(this.querySelectorAll(".img")) as HTMLElement[];
       this.direction = Number(this.dataset.dir) || 1;
-
       addResizeObserver(this);
-      addIntersectingTicker(this);
     }
 
     connectedCallback() {
-      this.reCalc();
+      this.st = ScrollTrigger.create({
+        trigger: this,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => { this.isVisible = true; },
+        onLeave: () => { this.isVisible = false; },
+        onEnterBack: () => { this.isVisible = true; },
+        onLeaveBack: () => { this.isVisible = false; },
+      });
 
+      gsap.ticker.add(this.tick);
+      this.reCalc();
       this.classList.add("is-ready");
+    }
+
+    disconnectedCallback() {
+      this.st?.kill();
+      gsap.ticker.remove(this.tick);
     }
 
     onWidthResize() {
@@ -154,7 +169,8 @@ const { images, direction } = Astro.props;
       this.images = images;
     }
 
-    tick() {
+    tick = () => {
+      if (!this.isVisible) return;
       const dir = this.direction;
 
       this.x -=

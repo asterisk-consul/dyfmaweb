@@ -59,8 +59,14 @@ class SyGL extends HTMLElement {
     scene.add(innerCurve(1, 0.4));
 
     /* -------- RENDER LOOP -------- */
+    let isVisible = true;
+    const visibilityObserver = new IntersectionObserver(entries => {
+      isVisible = entries[0].isIntersecting;
+    }, { threshold: 0 });
+    visibilityObserver.observe(this);
+
     function animate() {
-      renderer.render(scene, camera);
+      if (isVisible) renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }
     animate();

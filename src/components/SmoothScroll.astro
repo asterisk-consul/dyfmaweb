@@ -4,15 +4,15 @@
       scrollVelocity: number;
       scrollDirection: number;
       scrollCurrent: number;
-      scrollStickyOffsets: [number, number, number][];
     }
   }
 
   import Lenis from "lenis";
+  import { gsap } from "gsap";
   import ScrollTrigger from "gsap/ScrollTrigger";
-  import { addGlobalTicker } from "../utils/globalTicker";
 
-  window.scrollStickyOffsets = window.scrollStickyOffsets || [];
+  gsap.registerPlugin(ScrollTrigger);
+
   window.scrollVelocity = 0;
   window.scrollDirection = 1;
 
@@ -24,7 +24,7 @@
 
   lenis.direction = 1;
 
-  addGlobalTicker((t: number) => {
+  gsap.ticker.add((t: number) => {
     lenis.raf(t * 1000);
     window.scrollVelocity = lenis.velocity;
     window.scrollDirection = lenis.direction;

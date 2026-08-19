@@ -1,24 +1,24 @@
 ---
-import RectReveal from "../components/RectReveal.astro";
-
 interface Props {
   items: { title: string; text: string }[];
+  class?: string;
 }
 
-const { items } = Astro.props;
+const { items, class: className } = Astro.props;
 ---
 
-<div class="sy-statements">
-  <RectReveal ignoreLast>
+<sy-statements class:list={className}>
+  <div class="inner">
     {
       items.map(({ title, text }, i) => (
         <div class="box">
           <div class="u-container">
             <div class="content">
-              <h2
-                class="u-heading"
-                data-sy-reveal={i === 0 ? "words" : undefined}
-              >
+              <div class="box-eyebrow">
+                <span class="box-eyebrow-line"></span>
+                <span>{["01 · FABRICACIÓN", "02 · TRAYECTORIA", "03 · SOPORTE"][i]}</span>
+              </div>
+              <h2 class="u-heading" data-sy-reveal={i === 0 ? "words" : undefined}>
                 {title}
               </h2>
               <p class="u-text" data-sy-reveal={i === 0 ? "lines" : undefined}>
@@ -29,9 +29,138 @@ const { items } = Astro.props;
         </div>
       ))
     }
-  </RectReveal>
+  </div>
   <div data-gl-place="0"></div>
-</div>
+</sy-statements>
+
+<script>
+  import gsap from "gsap";
+  import ScrollTrigger from "gsap/ScrollTrigger";
+  import { manualRevealIn } from "../utils/reveals";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  function rotateSquarePercent(
+    angle: number,
+    sizePercent: number,
+    containerWidth: number,
+    containerHeight: number,
+  ) {
+    const square = [
+      { x: -0.5, y: -0.5 },
+      { x: 0.5, y: -0.5 },
+      { x: 0.5, y: 0.5 },
+      { x: -0.5, y: 0.5 },
+    ];
+    const centerPercent = { x: 50, y: 50 };
+    const angleRad = (angle * Math.PI) / 180;
+    const cos = Math.cos(angleRad);
+    const sin = Math.sin(angleRad);
+    const sizeX =
+      sizePercent *
+      (containerWidth < containerHeight
+        ? containerWidth / 100
+        : containerHeight / 100);
+
+    return square.map((p) => {
+      const x = p.x * sizeX;
+      const y = p.y * sizeX;
+      const rotatedX = x * cos - y * sin;
+      const rotatedY = x * sin + y * cos;
+      return {
+        x: centerPercent.x + (rotatedX / containerWidth) * 100,
+        y: centerPercent.y + (rotatedY / containerHeight) * 100,
+      };
+    });
+  }
+
+  class SyStatements extends HTMLElement {
+    connectedCallback() {
+      const isTablet = window.matchMedia("(max-width: 987px)");
+      if (isTablet.matches) return;
+
+      const inner = this.querySelector<HTMLElement>(".inner")!;
+      const boxes = Array.from(this.querySelectorAll<HTMLElement>(".box"));
+      if (boxes.length < 2) return;
+
+      const initRotation = 35;
+      const theta = (initRotation * Math.PI) / 180;
+      const factor = Math.abs(Math.cos(theta)) + Math.abs(Math.sin(theta));
+      const sizes = [0, 0];
+
+      boxes.forEach((box, i) => {
+        gsap.set(box, { zIndex: boxes.length - i });
+      });
+
+      const count = boxes.length;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: inner,
+          pin: true,
+          scrub: true,
+          start: "top top",
+          end: () => `+=${window.innerHeight * (count - 0.5)}`,
+          invalidateOnRefresh: true,
+          onRefresh: () => {
+            sizes[0] = window.innerWidth;
+            sizes[1] = window.innerHeight;
+          },
+        },
+      });
+
+      boxes.forEach((box, i) => {
+        const reveals = box.querySelectorAll<HTMLElement>("[data-sy-reveal-manual]");
+        const p = { p: 0 };
+
+        tl.add(
+          () => {
+            if (tl.scrollTrigger?.direction === 1) {
+              reveals.forEach((r) => manualRevealIn(r));
+            }
+          },
+          i === 0 ? 0 : ">-0.3",
+        );
+
+        if (i === count - 1) return;
+
+        const segmentStart = i / (count - 1);
+        const segmentDuration = 1 / (count - 1);
+
+        tl.fromTo(
+          p,
+          { p: 0 },
+          {
+            p: 1,
+            duration: segmentDuration,
+            onUpdate: () => {
+              const progress = p.p;
+              const [wWidth, wHeight] = sizes;
+              const angle = initRotation + progress * 75;
+              const maxSide = Math.max(wWidth, wHeight) * factor;
+              const initialSizePercent =
+                (maxSide / Math.min(wWidth, wHeight)) * 100;
+              const sizePercent =
+                initialSizePercent - progress * initialSizePercent;
+              const rotated = rotateSquarePercent(
+                angle,
+                sizePercent,
+                wWidth,
+                wHeight,
+              );
+              const polygon = rotated
+                .map((pt) => `${pt.x}% ${pt.y}%`)
+                .join(", ");
+              box.style.clipPath = `polygon(${polygon})`;
+            },
+          },
+        );
+      });
+    }
+  }
+
+  customElements.define("sy-statements", SyStatements);
+</script>
 
 <style>
   [data-gl-place] {
@@ -48,10 +177,19 @@ const { items } = Astro.props;
     }
   }
 
-  .sy-statements {
+  sy-statements {
+    display: block;
     margin-bottom: 0;
     position: relative;
     z-index: 9;
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    height: 100vh;
+    position: relative;
   }
 
   .box {
@@ -64,15 +202,18 @@ const { items } = Astro.props;
     color: var(--color-text);
     text-align: center;
     flex-direction: column;
+    will-change: clip-path;
+    grid-row: 1;
+    grid-column: 1;
+  }
 
-    &:nth-child(2) {
-      background: var(--color-brand-1);
-      color: var(--color-brand-3);
-    }
+  .box:nth-child(2) {
+    background: var(--color-brand-1);
+    color: var(--color-brand-3);
+  }
 
-    &:nth-child(3) {
-      background: var(--color-brand-3);
-    }
+  .box:nth-child(3) {
+    background: var(--color-brand-3);
   }
 
   .content {
@@ -82,12 +223,58 @@ const { items } = Astro.props;
     align-items: center;
   }
 
+  .box-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-brand-1);
+  }
+
+  .box-eyebrow-line {
+    width: 2rem;
+    height: 1px;
+    background: var(--color-brand-1);
+    flex-shrink: 0;
+  }
+
+  .box:nth-child(2) .box-eyebrow {
+    color: var(--color-brand-3);
+  }
+
+  .box:nth-child(2) .box-eyebrow-line {
+    background: var(--color-brand-3);
+  }
+
   h2 {
     --fs: 3rem;
-    --lh: 1.3;
+    --lh: 1.05;
+    letter-spacing: -0.03em;
   }
 
   p {
     max-width: 40em;
+  }
+
+  @media (--mq-tablet) {
+    .box {
+      height: auto;
+      min-height: 80vh;
+      padding: 4rem 1.5rem;
+    }
+
+    .box:nth-child(2) {
+      background: var(--color-brand-1);
+      color: var(--color-brand-3);
+    }
+
+    .box:nth-child(3) {
+      background: var(--color-brand-3);
+    }
   }
 </style>

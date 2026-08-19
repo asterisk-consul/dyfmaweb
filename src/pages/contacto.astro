@@ -1,0 +1,481 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/Button.astro";
+---
+
+<Layout title="Contacto — DYFMA">
+  <div class="contact-page">
+    <div class="u-container container">
+      <div class="inner">
+        <!-- Info -->
+        <div class="info">
+          <span class="section-tag u-spec">Contacto</span>
+          <h1 class="page-title">Solicitar cotización</h1>
+          <p class="page-desc">
+            Contanos sobre tu proyecto. Necesitamos conocer el fruto, el volumen y la etapa del proceso que necesitás resolver.
+          </p>
+
+          <div class="details">
+            <div class="detail-item">
+              <span class="detail-label u-spec">Ubicación</span>
+              <span class="detail-value">Ruta Nac. N° 9 — Parque Industrial — Villa María, Córdoba, Argentina</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label u-spec">Teléfono</span>
+              <a href="tel:+5493534118602" class="detail-value detail-link">+549 3534 11-8602</a>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label u-spec">Email</span>
+              <a href="mailto:info@dyfma.ar" class="detail-value detail-link">info@dyfma.ar</a>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label u-spec">Actividad</span>
+              <span class="detail-value">Diseño y fabricación de maquinaria para frutos secos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form class="form" id="contact-form" novalidate>
+          <!-- Honeypot -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="hp">No completar</label>
+            <input type="text" id="hp" name="hp" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="name" class="field-label u-spec">Nombre / Empresa *</label>
+              <input type="text" id="name" name="name" required aria-describedby="name-error" />
+              <span class="field-error" id="name-error" role="alert"></span>
+            </div>
+            <div class="field">
+              <label for="country" class="field-label u-spec">País *</label>
+              <input type="text" id="country" name="country" required aria-describedby="country-error" />
+              <span class="field-error" id="country-error" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="fruit" class="field-label u-spec">Fruto *</label>
+              <select id="fruit" name="fruit" required aria-describedby="fruit-error">
+                <option value="">Seleccionar...</option>
+                <option value="nuez-chandler">Nuez Chandler</option>
+                <option value="pecan">Nuez Pecán</option>
+                <option value="almendra">Almendra</option>
+                <option value="pistacho">Pistacho</option>
+                <option value="avellana">Avellana</option>
+                <option value="otro">Otro</option>
+              </select>
+              <span class="field-error" id="fruit-error" role="alert"></span>
+            </div>
+            <div class="field">
+              <label for="volume" class="field-label u-spec">Volumen estimado</label>
+              <input type="text" id="volume" name="volume" placeholder="Ej: 500 kg/h" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="stage" class="field-label u-spec">Etapa que necesita resolver *</label>
+              <select id="stage" name="stage" required aria-describedby="stage-error">
+                <option value="">Seleccionar...</option>
+                <option value="cosecha">Cosecha</option>
+                <option value="recepcion">Recepción</option>
+                <option value="limpieza">Limpieza</option>
+                <option value="secado">Secado / Deshidratación</option>
+                <option value="partido">Partido</option>
+                <option value="separacion">Separación</option>
+                <option value="clasificacion">Clasificación</option>
+                <option value="pelado">Pelado / Procesamiento</option>
+                <option value="envasado">Envasado</option>
+                <option value="lineas">Línea de procesamiento completa</option>
+                <option value="otro">Otro</option>
+              </select>
+              <span class="field-error" id="stage-error" role="alert"></span>
+          </div>
+
+          <div class="field">
+            <label for="message" class="field-label u-spec">Mensaje *</label>
+            <textarea id="message" name="message" rows="4" required aria-describedby="message-error"></textarea>
+            <span class="field-error" id="message-error" role="alert"></span>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="email" class="field-label u-spec">Email *</label>
+              <input type="email" id="email" name="email" required aria-describedby="email-error" />
+              <span class="field-error" id="email-error" role="alert"></span>
+            </div>
+            <div class="field">
+              <label for="phone" class="field-label u-spec">Teléfono</label>
+              <input type="tel" id="phone" name="phone" />
+            </div>
+          </div>
+
+          <!-- Success state -->
+          <div class="form-success" id="form-success" hidden>
+            <p class="success-title">Consulta lista para enviar</p>
+            <p class="success-text">Se abrió tu cliente de email con los datos de la consulta. Si no se abrió automáticamente, copiá el mensaje y envialo a <a href="mailto:info@dyfma.ar">info@dyfma.ar</a>.</p>
+            <div class="success-actions">
+              <a href="https://wa.me/5493534118602?text=Hola%20DYFMA%2C%20quiero%20consultar%20por%20una%20m%C3%A1quina" class="success-link" target="_blank" rel="noopener">O escribinos por WhatsApp</a>
+              <button type="button" class="success-retry" id="form-retry">Enviar otra consulta</button>
+            </div>
+          </div>
+
+          <div class="actions" id="form-actions">
+            <Button title="Enviar consulta" arrow submit />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .contact-page {
+    padding: 8rem 0 4rem;
+    min-height: 100vh;
+    background: var(--color-bg);
+  }
+
+  .container {
+    max-width: 1100px;
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  /* Info */
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: sticky;
+    top: 6rem;
+  }
+
+  .section-tag {
+    color: var(--color-brand-1);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .page-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .page-desc {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-alt);
+    line-height: 1.6;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .detail-label {
+    font-size: 0.6rem;
+    color: var(--color-brand-1);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .detail-value {
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  .detail-link {
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .detail-link:hover,
+  .detail-link:focus {
+    color: var(--color-brand-1);
+  }
+
+  /* Form */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: rgba(0,0,0,0.02);
+    padding: 2rem;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .field-label {
+    font-size: 0.6rem;
+    color: var(--color-text-alt);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: var(--color-bg);
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    color: var(--color-text);
+    transition: border-color 0.2s ease;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--color-brand-1);
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .field select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23646464' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+  }
+
+  /* Validation states */
+  .field-error {
+    font-size: 0.75rem;
+    color: #c53030;
+    min-height: 0;
+    overflow: hidden;
+    transition: min-height 0.2s ease;
+  }
+
+  .field:has(.field-error:not(:empty)) input,
+  .field:has(.field-error:not(:empty)) select,
+  .field:has(.field-error:not(:empty)) textarea {
+    border-color: #c53030;
+  }
+
+  .field input[aria-invalid="true"],
+  .field select[aria-invalid="true"],
+  .field textarea[aria-invalid="true"] {
+    border-color: #c53030;
+  }
+
+  /* Honeypot */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* Success state */
+  .form-success {
+    padding: 1.5rem;
+    background: rgba(34, 139, 34, 0.06);
+    border: 1px solid rgba(34, 139, 34, 0.15);
+  }
+
+  .success-title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a6b1a;
+    margin: 0 0 0.5rem;
+  }
+
+  .success-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-alt);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .success-text a {
+    color: var(--color-brand-1);
+    text-decoration: underline;
+  }
+
+  .success-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .success-link {
+    font-size: var(--font-size-sm);
+    color: var(--color-brand-1);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .success-link:hover {
+    text-decoration: underline;
+  }
+
+  .success-retry {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-alt);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-family: var(--font-body);
+  }
+
+  .success-retry:hover {
+    color: var(--color-text);
+  }
+
+  .actions {
+    margin-top: 0.5rem;
+  }
+
+  /* Responsive */
+  @media (--mq-tablet) {
+    .inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .info {
+      position: static;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+  }
+
+  @media (--mq-phone) {
+    .contact-page {
+      padding: 6rem 0 3rem;
+    }
+
+    .form-row {
+      grid-template-columns: 1fr;
+    }
+
+    .form {
+      padding: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement;
+  const successEl = document.getElementById("form-success")!;
+  const actionsEl = document.getElementById("form-actions")!;
+  const retryBtn = document.getElementById("form-retry")!;
+  const hpField = form.querySelector("#hp") as HTMLInputElement;
+
+  const fields = {
+    name: { el: form.querySelector("#name") as HTMLInputElement, error: form.querySelector("#name-error") as HTMLElement, msg: "Ingresá tu nombre o el de tu empresa" },
+    country: { el: form.querySelector("#country") as HTMLInputElement, error: form.querySelector("#country-error") as HTMLElement, msg: "Ingresá tu país" },
+    fruit: { el: form.querySelector("#fruit") as HTMLSelectElement, error: form.querySelector("#fruit-error") as HTMLElement, msg: "Seleccioná un fruto" },
+    stage: { el: form.querySelector("#stage") as HTMLSelectElement, error: form.querySelector("#stage-error") as HTMLElement, msg: "Seleccioná una etapa" },
+    message: { el: form.querySelector("#message") as HTMLTextAreaElement, error: form.querySelector("#message-error") as HTMLElement, msg: "Contanos sobre tu proyecto" },
+    email: { el: form.querySelector("#email") as HTMLInputElement, error: form.querySelector("#email-error") as HTMLElement, msg: "Ingresá un email válido" },
+  } as const;
+
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function validateField(key: keyof typeof fields): boolean {
+    const { el, error, msg } = fields[key];
+    const val = el.value.trim();
+    let valid = val.length > 0;
+    if (valid && key === "email") valid = emailRe.test(val);
+    error.textContent = valid ? "" : msg;
+    el.setAttribute("aria-invalid", valid ? "false" : "true");
+    return valid;
+  }
+
+  Object.keys(fields).forEach((key) => {
+    const { el } = fields[key as keyof typeof fields];
+    el.addEventListener("blur", () => validateField(key as keyof typeof fields));
+    el.addEventListener("input", () => {
+      if (el.getAttribute("aria-invalid") === "true") validateField(key as keyof typeof fields);
+    });
+  });
+
+  function buildMailto(): string {
+    const d = Object.fromEntries(new FormData(form).entries());
+    const subject = encodeURIComponent(`Consulta DYFMA — ${d.fruit || "fruto"} — ${d.stage || "etapa"}`);
+    const body = encodeURIComponent(
+      `Nombre: ${d.name}\nPaís: ${d.country}\nEmail: ${d.email}\nTeléfono: ${d.phone || "—"}\n\nFruto: ${d.fruit}\nVolumen: ${d.volume || "—"}\nEtapa: ${d.stage}\n\nMensaje:\n${d.message}`
+    );
+    return `mailto:info@dyfma.ar?subject=${subject}&body=${body}`;
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (hpField.value) return;
+
+    const valid = Object.keys(fields).every((k) => validateField(k as keyof typeof fields));
+    if (!valid) {
+      const firstInvalid = form.querySelector("[aria-invalid='true']");
+      firstInvalid?.focus();
+      return;
+    }
+
+    window.location.href = buildMailto();
+    form.hidden = true;
+    successEl.hidden = false;
+    actionsEl.hidden = true;
+  });
+
+  retryBtn.addEventListener("click", () => {
+    form.reset();
+    form.hidden = false;
+    successEl.hidden = true;
+    actionsEl.hidden = false;
+    Object.keys(fields).forEach((k) => {
+      fields[k as keyof typeof fields].error.textContent = "";
+      fields[k as keyof typeof fields].el.removeAttribute("aria-invalid");
+    });
+  });
+</script>

@@ -1,25 +1,19 @@
 ---
-import Logo from "../assets/LogoAsterisk.svg";
 import type { Link } from "../types";
 
 interface Props {
-  logoUrl: string;
-  logoAlt: string;
   links: Link[];
-  creadoref?: string;
-  creadorlogo?: string;
 }
 
-const { logoUrl, logoAlt, links, creadoref, creadorlogo } = Astro.props;
+const { links } = Astro.props;
 ---
 
 <sy-footer>
   <footer>
     <div class="inner u-container">
       <div class="wrapper">
-        <a class="logo" href={logoUrl}>
-          <Logo />
-          <span class="u-sr-only">{logoAlt}</span>
+        <a class="logo" href="https://asteriskconsultora.com/" target="_blank" rel="noopener">
+          <img src="/dyfmaweb/LogoAsterisk.svg" alt="Asterisk Consultora" />
         </a>
 
         <div class="menu">
@@ -33,7 +27,13 @@ const { logoUrl, logoAlt, links, creadoref, creadorlogo } = Astro.props;
             }
           </ul>
         </div>
-        <p class="cp"><a class="logo-inline"><Logo /> {creadoref}</a> © {new Date().getFullYear()}</p>
+
+        <div class="contact-info">
+          <a href="tel:+5493534118602" class="contact-item contact-link">+549 3534 11-8602</a>
+          <a href="mailto:info@dyfma.ar" class="contact-item contact-link">info@dyfma.ar</a>
+        </div>
+
+        <p class="cp"><a class="logo-inline" href="https://asteriskconsultora.com/" target="_blank" rel="noopener"><img src="/dyfmaweb/LogoAsterisk.svg" alt="" />Asterisk Consultora</a> &copy; {new Date().getFullYear()}</p>
       </div>
     </div>
   </footer>
@@ -43,64 +43,90 @@ const { logoUrl, logoAlt, links, creadoref, creadorlogo } = Astro.props;
   sy-footer {
     @extend %u-text;
 
-    --fs: var(--font-size-sm);
+    --fs: var(--font-size-xs);
     display: block;
-    clip-path: inset(0);
-
-    :global(&.has-no-anim footer) {
-      position: static;
-    }
+    background: var(--color-text);
+    color: rgba(255, 255, 255, 0.6);
+    position: relative;
+    z-index: 10;
   }
 
   footer {
-    background: #2E2E2E;
-    color: rgba(255, 255, 255, 0.8);
-    position: fixed;
-    bottom: 0;
     width: 100%;
   }
 
   .inner {
-    padding: 2rem 0;
+    padding: 1rem 0;
   }
-
 
   .cp {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0;
-  white-space: nowrap;
-}
-.logo-inline {
-  position: relative;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: var(--font-size-xs);
+  }
 
-  svg {
-    width: 1.5rem;
-    height: 1.5rem;
+  .contact-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
 
-    :global(path) {
-      fill: currentcolor;
+    @media (--mq-tablet) {
+      justify-content: center;
     }
   }
-}
+
+  .contact-item {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+  }
+
+  .contact-link {
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover,
+    &:focus {
+      color: var(--color-brand-1);
+    }
+  }
+
+  .logo-inline {
+    position: relative;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.5);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    img {
+      height: 1rem;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+  }
 
 
   .logo {
     position: relative;
     z-index: 3;
 
-    svg {
-      width: 4.8rem;
-      height: 1.5rem;
-
-      :global(path) {
-        fill: currentcolor;
-      }
+    img {
+      height: 1.4rem;
+      width: auto;
+      filter: brightness(0) invert(1);
     }
   }
 
@@ -108,7 +134,7 @@ const { logoUrl, logoAlt, links, creadoref, creadorlogo } = Astro.props;
     ul {
       display: flex;
       padding: 0;
-      gap: 1rem;
+      gap: 1.25rem;
       margin: 0;
       list-style: none;
       flex-wrap: wrap;
@@ -118,27 +144,16 @@ const { logoUrl, logoAlt, links, creadoref, creadorlogo } = Astro.props;
       a {
         text-decoration: none;
         position: relative;
+        color: rgba(255, 255, 255, 0.6);
+        font-family: var(--font-heading);
+        font-size: var(--font-size-xs);
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        transition: color 0.2s ease;
 
-        &::after {
-          content: "";
-          position: absolute;
-          height: 2px;
-          background: currentcolor;
-          top: 115%;
-          width: 100%;
-          left: 0;
-          pointer-events: none;
-          transform: scaleX(0);
-          transition: transform 0.3s var(--ease-out-expo);
-          transform-origin: right;
-        }
-
-        &:hover,
-        &:focus {
-          &::after {
-            transform: scaleX(1);
-            transform-origin: left;
-          }
+        &:hover {
+          color: var(--color-brand-1);
         }
       }
     }
@@ -148,7 +163,7 @@ const { logoUrl, logoAlt, links, creadoref, creadorlogo } = Astro.props;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 2rem;
+    gap: 1.5rem;
 
     @media (--mq-tablet) {
       flex-direction: column;
@@ -157,28 +172,6 @@ const { logoUrl, logoAlt, links, creadoref, creadorlogo } = Astro.props;
 </style>
 
 <script>
-  import { addResizeObserver } from "../utils/observers";
-
-  class Footer extends HTMLElement {
-    connectedCallback() {
-      addResizeObserver(this);
-
-      this.onResize();
-    }
-
-    onResize() {
-      const inner = this.firstElementChild as HTMLElement;
-      const bcr = inner.getBoundingClientRect();
-
-      if (bcr.height + 100 > window.innerHeight) {
-        this.style.height = "";
-        this.classList.add("has-no-anim");
-      } else {
-        this.style.height = `${bcr.height}px`;
-        this.classList.remove("has-no-anim");
-      }
-    }
-  }
-
+  class Footer extends HTMLElement {}
   customElements.define("sy-footer", Footer);
 </script>

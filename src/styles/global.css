@@ -1,37 +1,49 @@
 @import './reset.css';
 @import './utils.css';
 @import './reveals.css';
+@import '@fontsource/ibm-plex-mono/400.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource/ibm-plex-mono/600.css';
+@import '@fontsource/ibm-plex-mono/700.css';
 
 :root {
 
-  --font-heading: var(--font-ibm-plex-sans), system-ui, sans-serif;
-  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-heading: var(--font-montserrat), system-ui, sans-serif;
+  --font-body: var(--font-montserrat), system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   /* fonts */
-  --font-size-base: 20px;
-  --font-size-lg: 1.1rem;
+  --font-size-base: 21px;
+  --font-size-lg: 1.15rem;
   --font-size-md: 1rem;
   --font-size-sm: 0.9rem;
   --font-size-xs: 0.8rem;
-  /* colors DYFMA */
+
+  /* type scale — index & sections */
+  --type-hero: 3.25rem;
+  --type-display: 2.75rem;
+  --type-title: 2rem;
+  --type-subtitle: 1.6rem;
+
+  /* colors DYFMA - based on real branding */
   --rgb-white: 255, 255, 255;
   --rgb-black: 0, 0, 0;
 
   /* texto */
-  --rgb-text: 46, 46, 46;
-  /* #2E2E2E */
-  --rgb-text-alt: 107, 107, 107;
-  /* #6B6B6B */
+  --rgb-text: 45, 45, 45;
+  /* #2D2D2D - dark gray, not pure black */
+  --rgb-text-alt: 100, 100, 100;
+  /* #646464 */
 
   /* branding */
   --rgb-brand-1: 244, 124, 44;
   /* Naranja DYFMA #F47C2C */
   --rgb-brand-2: 253, 228, 210;
   /* Naranja claro */
-  --rgb-brand-3: 255, 243, 234;
-  /* Fondo claro */
+  --rgb-brand-3: 250, 250, 250;
+  /* Gris muy claro - fondo */
   --rgb-brand-4: 229, 229, 229;
   /* Gris claro */
-  --rgb-brand-5: 46, 46, 46;
+  --rgb-brand-5: 45, 45, 45;
   /* Gris oscuro */
 
   /* aliases */
@@ -44,11 +56,12 @@
   /* CTA / acento */
   --color-brand-2: rgb(var(--rgb-brand-2));
   --color-brand-3: rgb(var(--rgb-brand-3));
-  /* header bg */
+  /* fondo claro */
   --color-brand-4: rgb(var(--rgb-brand-4));
   --color-brand-5: rgb(var(--rgb-brand-5));
 
-  --color-bg: #ffffff;
+  --color-bg: #fafafa;
+  --color-surface: #ffffff;
 
   /* easings */
   --ease-in-quad: cubic-bezier(0.55, 0.085, 0.68, 0.53);
@@ -63,7 +76,7 @@
   --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
   --ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
-  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out-back: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
   --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
   --ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
@@ -81,8 +94,10 @@
   }
 
   @media (--mq-tablet) {
-    --font-size-base: 16px;
+    --font-size-base: 18px;
     --container-offset: 2rem;
+    --type-display-md: 2.25rem;
+    --type-title-md: 1.75rem;
   }
 
   @media (--mq-phone) {
@@ -99,6 +114,8 @@ body {
   font-size: var(--font-size-base);
   line-height: 1.5;
   font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -109,3 +126,116 @@ a {
 button {
   color: currentcolor;
 }
+
+/* Section label - clean, no numbers */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.section-label .u-spec {
+  color: var(--color-brand-1);
+  font-size: 0.7rem;
+}
+
+/* Eyebrow — mono section label with accent line */
+.u-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-alt);
+}
+
+.u-eyebrow-line {
+  width: 2rem;
+  height: 1px;
+  background: var(--color-brand-1);
+  flex-shrink: 0;
+}
+
+/* Square index badge — hero 01 style */
+.u-badge {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-brand-1);
+  color: var(--color-white);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: rgba(0,0,0,0.08);
+}
+
+/* Visual thread connecting sections - thin vertical line */
+.section-connector {
+  position: relative;
+}
+
+.section-connector::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(244, 124, 44, 0.15) 20%,
+    rgba(244, 124, 44, 0.15) 80%,
+    transparent
+  );
+  transform: translateX(-50%);
+}
+
+@media (--mq-tablet) {
+  .section-connector::before {
+    display: none;
+  }
+}
+
+/* Machine card specs */
+.spec-row {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.spec-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.spec-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-alt);
+}
+
+.spec-value {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+

@@ -1,0 +1,337 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/Button.astro";
+---
+
+<Layout title="Nosotros — DYFMA">
+  <div class="about-page">
+    <div class="u-container container">
+      <!-- Hero -->
+      <div class="hero">
+        <span class="section-tag u-spec">Nosotros</span>
+        <h1 class="page-title">Ingeniería y fabricación de soluciones para frutos secos</h1>
+        <p class="page-desc">
+          DYFMA es una empresa argentina con más de 12 años de trayectoria, especializada en el desarrollo, fabricación e instalación de soluciones y maquinaria para la cosecha, procesamiento y agregado de valor de frutos secos.
+        </p>
+      </div>
+
+      <!-- Story -->
+      <section class="story">
+        <div class="story-grid">
+          <div class="story-content">
+            <h2 class="section-title">Nuestra historia</h2>
+            <p>
+              DYFMA fue fundada por Marcelo Primo, ingeniero mecánico, y Melania Sosa. Juntos desarrollaron la empresa desde un taller hasta una fábrica industrial radicada en el Parque Industrial, Logístico y Tecnológico de Villa María, Córdoba.
+            </p>
+            <p>
+              A lo largo de más de 12 años, desarrollamos e instalado máquinas y líneas de procesamiento en más de 200 puntos del país, con presencia en 18 provincias argentinas.
+            </p>
+            <p>
+              Nuestro trabajo también ha trascendido las fronteras: contamos con equipos exportados a Brasil, Uruguay, Paraguay y Chile. Nuestro objetivo es consolidarnos como referentes en América Latina en soluciones de ingeniería y maquinaria para el procesamiento de frutos secos.
+            </p>
+          </div>
+          <div class="story-visual">
+            <div class="location-card">
+              <span class="location-tag u-spec">Ubicación</span>
+              <h3 class="location-name">Villa María, Córdoba</h3>
+              <p class="location-detail">Parque Industrial, Logístico y Tecnológico</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- What we do -->
+      <section class="what-we-do">
+        <h2 class="section-title">Qué hacemos</h2>
+        <div class="capabilities-grid">
+          <div class="capability">
+            <span class="cap-number u-mono">01</span>
+            <h3 class="cap-title">Diseño e ingeniería</h3>
+            <p class="cap-desc">Desarrollamos maquinaria según las necesidades específicas de cada productor, cada fruto y cada volumen.</p>
+          </div>
+          <div class="capability">
+            <span class="cap-number u-mono">02</span>
+            <h3 class="cap-title">Fabricación</h3>
+            <p class="cap-desc">Fabricamos equipos robustos con ingeniería propia en nuestra planta de Villa María: soldadura, pintura, armado, ensamblado y puesta a punto.</p>
+          </div>
+          <div class="capability">
+            <span class="cap-number u-mono">03</span>
+            <h3 class="cap-title">Instalación</h3>
+            <p class="cap-desc">Instalamos y ponemos en marcha los equipos con nuestro equipo técnico especializado.</p>
+          </div>
+          <div class="capability">
+            <span class="cap-number u-mono">04</span>
+            <h3 class="cap-title">Soporte continuo</h3>
+            <p class="cap-desc">Acompañamos la operación con soporte técnico, repuestos, mantenimiento y mejoras. Repuestos desde Villa María.</p>
+          </div>
+          <div class="capability">
+            <span class="cap-number u-mono">05</span>
+            <h3 class="cap-title">Diseño y marketing propios</h3>
+            <p class="cap-desc">DYFMA cuenta con áreas propias de diseño gráfico y marketing, integrando identidad, comunicación y contenido dentro de la empresa.</p>
+          </div>
+          <div class="capability">
+            <span class="cap-number u-mono">06</span>
+            <h3 class="cap-title">Desarrollo a medida</h3>
+            <p class="cap-desc">Adaptamos y desarrollamos soluciones según el producto, volumen, escala y necesidades de cada cliente.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Fruits -->
+      <section class="fruits">
+        <h2 class="section-title">Con qué frutos trabajamos</h2>
+        <div class="fruits-list">
+          <div class="fruit-item">
+            <span class="fruit-name">Nuez Chandler</span>
+            <span class="fruit-botanical u-mono">Juglans regia</span>
+          </div>
+          <div class="fruit-item">
+            <span class="fruit-name">Nuez Pecán</span>
+            <span class="fruit-botanical u-mono">Carya illinoinensis</span>
+          </div>
+          <div class="fruit-item">
+            <span class="fruit-name">Almendra</span>
+            <span class="fruit-botanical u-mono">Prunus dulcis</span>
+          </div>
+          <div class="fruit-item">
+            <span class="fruit-name">Pistacho</span>
+            <span class="fruit-botanical u-mono">Pistacia vera</span>
+          </div>
+          <div class="fruit-item">
+            <span class="fruit-name">Avellana</span>
+            <span class="fruit-botanical u-mono">Corylus avellana</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="cta-section">
+        <h2 class="cta-title">¿Tenés un proyecto en mente?</h2>
+        <p class="cta-desc">Contanos qué necesitás y te ayudamos a encontrar la solución ideal.</p>
+        <Button title="Contactanos" url="/dyfmaweb/contacto" arrow />
+      </section>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .about-page {
+    padding: 8rem 0 4rem;
+    min-height: 100vh;
+    background: var(--color-bg);
+  }
+
+  .container {
+    max-width: 1000px;
+  }
+
+  /* Hero */
+  .hero {
+    margin-bottom: 5rem;
+  }
+
+  .section-tag {
+    color: var(--color-brand-1);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .page-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--color-text);
+    margin: 1rem 0;
+    max-width: 14em;
+  }
+
+  .page-desc {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-alt);
+    line-height: 1.6;
+    max-width: 30em;
+  }
+
+  /* Story */
+  .story {
+    margin-bottom: 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .section-title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin: 0 0 1.5rem;
+  }
+
+  .story-content p {
+    color: var(--color-text-alt);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .location-card {
+    background: rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .location-tag {
+    font-size: 0.6rem;
+    color: var(--color-brand-1);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .location-name {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .location-detail {
+    font-size: 0.85rem;
+    color: var(--color-text-alt);
+    margin: 0;
+  }
+
+  /* What we do */
+  .what-we-do {
+    margin-bottom: 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .capabilities-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .capability {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cap-number {
+    font-size: 0.7rem;
+    color: var(--color-brand-1);
+  }
+
+  .cap-title {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .cap-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-alt);
+    line-height: 1.6;
+  }
+
+  /* Fruits */
+  .fruits {
+    margin-bottom: 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .fruits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .fruit-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .fruit-item:last-child {
+    border-bottom: none;
+  }
+
+  .fruit-name {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .fruit-botanical {
+    font-size: 0.75rem;
+    color: var(--color-text-alt);
+  }
+
+  /* CTA */
+  .cta-section {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .cta-title {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 500;
+    color: var(--color-text);
+    margin: 0 0 1rem;
+  }
+
+  .cta-desc {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-alt);
+    margin-bottom: 2rem;
+  }
+
+  /* Responsive */
+  @media (--mq-tablet) {
+    .story-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .capabilities-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .page-title {
+      font-size: 2rem;
+    }
+  }
+
+  @media (--mq-phone) {
+    .about-page {
+      padding: 6rem 0 3rem;
+    }
+
+    .fruit-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+  }
+</style>

@@ -6,71 +6,538 @@ interface Props {
   title: string;
   text: string;
   cta?: Link;
+  image?: { src: string; alt: string };
+  class?: string;
 }
 
-const { title, text, cta } = Astro.props;
+const { title, text, cta, image, class: className } = Astro.props;
 ---
 
-<div class="sy-introducing">
+<section class:list={["introducing", className]}>
   <div class="u-container container">
     <div class="inner">
-      <h2 class="u-heading title" data-sy-reveal="words">{title}</h2>
-      <p class="u-text" data-sy-reveal="lines">
-        {text}
-      </p>
-      {cta ? <Button {...cta} arrow class="cta" /> : null}
-      <div data-gl-place></div>
+
+      <!-- =====================================================
+           TEXT
+           ===================================================== -->
+
+      <div class="text-col">
+
+        <div class="u-eyebrow" data-sy-reveal="fade">
+          <span class="u-eyebrow-line"></span>
+          <span>INGENIERÍA ARGENTINA</span>
+        </div>
+
+        <h2 class="intro-title" data-sy-reveal="words">
+          {title}
+        </h2>
+
+        <p class="intro-text u-text" data-sy-reveal="lines">
+          {text}
+        </p>
+
+        {cta ? (
+          <div class="cta-wrapper">
+            <Button {...cta} arrow class="cta" />
+          </div>
+        ) : null}
+
+        <!-- Technical detail -->
+        <div class="intro-meta" data-sy-reveal="fade">
+          <span>FABRICACIÓN NACIONAL</span>
+          <span class="meta-dot"></span>
+          <span>DESDE 2012</span>
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           MEDIA
+           ===================================================== -->
+
+      <div class="media" data-sy-reveal="fade">
+
+        <div class="media-frame">
+
+          <div class="media-label">
+            <span>DYFMA</span>
+            <span>ARG / LATAM</span>
+          </div>
+
+          <div class="media-content">
+
+            {image ? (
+              <img
+                src={image.src}
+                alt={image.alt}
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <slot name="media" />
+            )}
+
+          </div>
+
+          <div class="media-accent"></div>
+
+        </div>
+
+      </div>
+
     </div>
   </div>
-</div>
+</section>
 
 <style>
-  .container {
-    margin-bottom: 8rem;
-    position: relative;
-    background-color: var(--color-bg);
-    width: 100% ;
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.introducing {
+  position: relative;
+
+  width: 100%;
+
+  padding: clamp(7rem, 12vw, 11rem) 0;
+
+  background: var(--color-bg);
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.container {
+  position: relative;
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.inner {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 0.9fr)
+    minmax(0, 1.1fr);
+
+  align-items: center;
+
+  gap: clamp(3rem, 7vw, 8rem);
+
+  width: min(100%, 78rem);
+
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+.text-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.intro-title {
+  --fs: var(--type-display);
+  --lh: 0.98;
+  --fw: 500;
+
+  margin: 1.5rem 0 0;
+
+  max-width: 11em;
+
+  font-size: var(--fs);
+  font-weight: var(--fw);
+  line-height: var(--lh);
+
+  letter-spacing: -0.035em;
+
+  color: var(--color-text);
+}
+
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.intro-text {
+  max-width: 34em;
+
+  margin: 1.75rem 0 0;
+
+  font-size: var(--font-size-lg);
+  line-height: 1.55;
+
+  color: var(--color-text-alt);
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.cta-wrapper {
+  margin-top: 2rem;
+}
+
+
+/* =========================================================
+   META
+   ========================================================= */
+
+.intro-meta {
+  display: flex;
+  align-items: center;
+
+  gap: 0.7rem;
+
+  margin-top: 3rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 500;
+
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  color: var(--color-text-alt);
+
+  opacity: 0.65;
+}
+
+.meta-dot {
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: var(--color-brand-1);
+}
+
+
+/* =========================================================
+   MEDIA
+   ========================================================= */
+
+.media {
+  position: relative;
+
+  width: 100%;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   MEDIA FRAME
+   ========================================================= */
+
+.media-frame {
+  position: relative;
+
+  width: 100%;
+
+  padding: clamp(1rem, 2vw, 2rem);
+
+  isolation: isolate;
+}
+
+
+/* Orange frame */
+.media-frame::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border: 1px solid rgba(244, 124, 44, 0.22);
+
+  transform: translate(-1rem, 1rem);
+
+  z-index: -1;
+}
+
+
+/* Secondary architectural frame */
+.media-frame::after {
+  content: "";
+
+  position: absolute;
+
+  top: 1.75rem;
+  right: 0;
+  bottom: 0;
+  left: 1.75rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  z-index: -2;
+}
+
+
+/* =========================================================
+   MEDIA LABEL
+   ========================================================= */
+
+.media-label {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  transform: translateY(-100%);
+
+  padding-bottom: 0.75rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 500;
+
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  color: var(--color-text-alt);
+}
+
+.media-label span:first-child {
+  color: var(--color-brand-1);
+}
+
+
+/* =========================================================
+   MEDIA CONTENT
+   ========================================================= */
+
+.media-content {
+  position: relative;
+
+  width: 100%;
+
+  min-height: 28rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.025),
+      transparent 60%
+    );
+}
+
+
+/* =========================================================
+   IMAGE
+   ========================================================= */
+
+.media :global(img) {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  max-height: 34rem;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(0 20px 40px rgba(0, 0, 0, 0.07));
+}
+
+
+/* =========================================================
+   SLOT
+   ========================================================= */
+
+.media :global(svg) {
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  max-width: 100%;
+  max-height: 34rem;
+}
+
+
+/* =========================================================
+   ORANGE ACCENT
+   ========================================================= */
+
+.media-accent {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+
+  width: 5rem;
+  height: 5rem;
+
+  border-right: 3px solid var(--color-brand-1);
+  border-bottom: 3px solid var(--color-brand-1);
+
+  z-index: 4;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (--mq-tablet) {
+
+  .introducing {
+    padding: 6rem 0;
   }
 
   .inner {
-    position: relative;
-    z-index: 9;
-    max-width: 50rem;
-    margin: 0 auto;
-    padding: 1rem;
-    text-align: center;
-    gap: 1rem;
-    display: flex;
-    justify-content: center;
+    grid-template-columns: 1fr;
+
+    gap: 4rem;
+
+    width: 100%;
+  }
+
+  .text-col {
     align-items: center;
-    flex-direction: column;
-    border-radius: 1.5rem;
-    backdrop-filter: blur(6px) saturate(1.05);
+
+    text-align: center;
   }
 
-  h2 {
-    --fs: 3rem;
-    --lh: 1.1;
-    --fw:500;
-    max-width: 20em;
+  .intro-title {
+    --fs: var(--type-display-md);
+
+    max-width: 13em;
   }
 
-  p {
+  .intro-text {
     max-width: 40em;
   }
 
-  [data-gl-place] {
-    --d: 0.1;
-    --s: 18rem;
-    position: absolute;
-    right: 0%;
-    top: 0;
-    margin-top: -2rem;
-
-    @media (--mq-tablet-sm) {
-      transform: translateX(-10%);
-      left: 0;
-    }
+  .intro-meta {
+    justify-content: center;
   }
 
+  .media {
+    width: min(100%, 42rem);
+
+    margin: 0 auto;
+  }
+
+  .media-frame::before,
+  .media-frame::after {
+    display: none;
+  }
+
+  .media-content {
+    min-height: 24rem;
+  }
+}
+
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (--mq-phone) {
+
+  .introducing {
+    padding: 5rem 0;
+  }
+
+  .inner {
+    gap: 3rem;
+  }
+
+  .intro-title {
+    --fs: var(--type-title);
+
+    line-height: 1.02;
+  }
+
+  .intro-text {
+    font-size: var(--font-size-md);
+
+    margin-top: 1.25rem;
+  }
+
+  .cta-wrapper {
+    margin-top: 1.75rem;
+  }
+
+  .intro-meta {
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    margin-top: 2.5rem;
+
+    font-size: 0.52rem;
+  }
+
+  .media-frame {
+    padding: 0.5rem;
+  }
+
+  .media-content {
+    min-height: 18rem;
+  }
+
+  .media-label {
+    font-size: 0.5rem;
+  }
+
+  .media-accent {
+    width: 3rem;
+    height: 3rem;
+
+    border-width: 2px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .media :global(img),
+  .media :global(svg) {
+    transition: none;
+  }
+}
 </style>

@@ -4,6 +4,14 @@ import Button from "./Button.astro";
 import Gallery from "./Gallery.astro";
 import GradientBackground from "./GradientBackground.astro";
 import TextMarquee from "../components/TextMarquee.astro";
+import { machines } from "../data/machines";
+import type { MachineCategory, Machine } from "../data/machines";
+
+const cardSpecs = (m: Machine) => {
+  const key = m.specs.find(s => /rendimiento|capacidad/i.test(s.label)) ?? m.specs[0];
+  const rest = m.specs.filter(s => s !== key);
+  return [key, rest[0]].filter(Boolean) as Machine["specs"];
+};
 
 interface Props {
   images: Image[];
@@ -11,97 +19,667 @@ interface Props {
   text?: string;
   cta?: Link;
   marqueeTexts: string[];
+  class?: string;
 }
 
-const { title, text, cta, images, marqueeTexts } = Astro.props;
+const { title, text, cta, images, marqueeTexts, class: className } = Astro.props;
+
+const grouped = machines.reduce((acc, m) => {
+  if (!acc[m.category]) acc[m.category] = [];
+  acc[m.category].push(m);
+  return acc;
+}, {} as Record<MachineCategory, typeof machines>);
+
+const steps = [
+  { label: "Cosecha", desc: "Recolección del fruto", cats: ["cosecha"] as MachineCategory[] },
+  { label: "Partido", desc: "Ruptura de cáscara", cats: ["partido"] as MachineCategory[] },
+  { label: "Limpieza", desc: "Separación de impurezas", cats: ["limpieza"] as MachineCategory[] },
+  { label: "Líneas", desc: "Procesamiento integral", cats: ["lineas", "envasado"] as MachineCategory[] },
+];
+
+const machineIndex = new Map<string, number>();
+let idx = 0;
+for (const s of steps) {
+  for (const cat of s.cats) {
+    for (const m of grouped[cat] ?? []) {
+      machineIndex.set(m.id, ++idx);
+    }
+  }
+}
 ---
 
-<div class="sy-gallery-text">
+<div id="productos" class:list={["gallery-text", className]}>
   <div class="u-container container">
     <div class="content">
-      <h2 class="u-heading title" data-sy-reveal="words">{title}</h2>
-      <p class="u-text text" data-sy-reveal="lines">{text}</p>
+      <div class="u-eyebrow" data-sy-reveal="fade">
+        <span class="u-eyebrow-line"></span>
+        <span>MAQUINARIA</span>
+      </div>
+
+      <h2 class="gallery-title" data-sy-reveal="words">{title}</h2>
+
+      <p class="gallery-text-body" data-sy-reveal="lines">{text}</p>
+
       {cta ? <Button {...cta} arrow class="cta" /> : null}
     </div>
-    <Gallery class="gallery" images={images} />
+
+    <div class="gallery-frame">
+      <div class="gallery-label">
+        <span>DYFMA</span>
+        <span>MAQUINARIA 01–03</span>
+      </div>
+      <div class="gallery-accent"></div>
+      <div class="gallery-wrap">
+        <Gallery class="gallery" images={images} />
+      </div>
+    </div>
+
+    <div class="process-flow">
+      {steps.map((step, i) => (
+        <div class="process-step">
+          <div class="step-marker">
+            <span>{String(i + 1).padStart(2, "0")}</span>
+          </div>
+          <div class="step-content">
+            <span class="step-label">{step.label}</span>
+            <span class="step-desc">{step.desc}</span>
+            <div class="step-machines">
+              {step.cats.map(cat => grouped[cat]?.map(m => (
+                <a href={`/dyfmaweb/maquinas/${m.id}`} class="step-card">
+                  <span class="step-card-top">
+                    <span class="step-card-index u-mono">{String(machineIndex.get(m.id)!).padStart(2, "0")}</span>
+                    <span class="step-card-arrow">&rarr;</span>
+                  </span>
+                  <span class="step-card-name">{m.name}</span>
+                  <span class="step-card-en u-mono">{m.nameEn}</span>
+                  <span class="step-card-specs">
+                    {cardSpecs(m).map(s => (
+                      <span class="step-card-spec u-mono">
+                        <span class="spec-label">{s.label}</span>
+                        <span class="spec-value">{s.value}</span>
+                      </span>
+                    ))}
+                  </span>
+                </a>
+              )))}
+            </div>
+          </div>
+          {i < steps.length - 1 && <span class="step-connector"></span>}
+        </div>
+      ))}
+    </div>
+
   </div>
+
   <TextMarquee class="marquee" texts={marqueeTexts} direction={-1} />
   <GradientBackground />
 </div>
 
 <style>
-  .sy-gallery-text {
-    margin: 8rem 0 0;
-    padding: 10rem 0 0;
-    position: relative;
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.gallery-text {
+  margin: 8rem 0 0;
+  padding: 10rem 0 0;
+  position: relative;
+  background: var(--color-bg);
+}
+
+
+/* =========================================================
+   GRID — aligned to hero / introducing / steps-timeline
+   ========================================================= */
+
+.container {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  column-gap: clamp(3rem, 6vw, 7rem);
+  row-gap: clamp(3.5rem, 6vw, 5.5rem);
+  position: relative;
+  z-index: 9;
+  padding: 2rem;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem 0;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.gallery-title {
+  --fs: var(--type-display);
+  --fw: 500;
+  --lh: 0.98;
+  font-size: var(--fs);
+  font-weight: var(--fw);
+  line-height: var(--lh);
+  max-width: 11em;
+  margin: 0;
+  color: var(--color-text);
+  letter-spacing: -0.035em;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.gallery-text-body {
+  --fs: var(--font-size-lg);
+  max-width: 28em;
+  margin: 1.75rem 0 0;
+  font-size: var(--fs);
+  line-height: 1.55;
+  color: var(--color-text-alt);
+}
+
+.cta {
+  margin-top: 2rem;
+}
+
+
+/* =========================================================
+   PROCESS FLOW — square markers + hairlines
+   ========================================================= */
+
+.process-flow {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  width: 100%;
+}
+
+.process-step {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.process-step:last-child {
+  padding-bottom: 0;
+}
+
+.step-marker {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: var(--color-bg);
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+  transition: border-color 300ms ease, background 300ms ease, color 300ms ease, transform 300ms ease;
+}
+
+.step-marker span {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 500;
+  color: var(--color-text-alt);
+}
+
+.process-step:hover .step-marker {
+  border-color: var(--color-brand-1);
+  background: var(--color-brand-1);
+  transform: scale(1.08);
+}
+
+.process-step:hover .step-marker span {
+  color: #fff;
+}
+
+.step-connector {
+  position: absolute;
+  top: 1rem;
+  right: -1px;
+  width: calc(100% - 2rem);
+  height: 1px;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.step-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.step-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-alt);
+  line-height: 1.3;
+}
+
+.step-machines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+
+/* =========================================================
+   STEP CARD — specimen / product catalog card
+   ========================================================= */
+
+.step-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 0.85rem;
+  row-gap: 0.15rem;
+  padding: 1.1rem 1.15rem 1rem;
+  background: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+  overflow: hidden;
+  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 400ms cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Top accent hairline — grows from left on hover/focus */
+.step-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-brand-1);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* Orange wash overlay — fades in on hover */
+.step-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(130% 110% at 0% 0%, rgba(244, 124, 44, 0.09), transparent 60%);
+  opacity: 0;
+  transition: opacity 400ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.step-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.step-card:hover,
+.step-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(244, 124, 44, 0.4);
+  box-shadow: 0 22px 44px -18px rgba(0, 0, 0, 0.2);
+}
+
+.step-card:hover::before,
+.step-card:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.step-card:hover::after,
+.step-card:focus-visible::after {
+  opacity: 1;
+}
+
+/* Index — large catalog number, left column spanning both rows */
+.step-card-index {
+  grid-row: 1 / 3;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--color-brand-1);
+  background: rgba(244, 124, 44, 0.08);
+  border: 1px solid rgba(244, 124, 44, 0.15);
+  transition: background 350ms ease, color 350ms ease, border-color 350ms ease;
+}
+
+.step-card:hover .step-card-index,
+.step-card:focus-visible .step-card-index {
+  background: var(--color-brand-1);
+  color: #fff;
+  border-color: var(--color-brand-1);
+}
+
+/* Top row: index fills left, right side has name + arrow */
+.step-card-top {
+  grid-column: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.step-card-name {
+  font-family: var(--font-heading);
+  font-size: clamp(0.95rem, 1.1vw, 1.12rem);
+  font-weight: 500;
+  color: var(--color-text);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+}
+
+.step-card-arrow {
+  color: var(--color-text-alt);
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  transition: color 350ms ease, transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.step-card:hover .step-card-arrow,
+.step-card:focus-visible .step-card-arrow {
+  color: var(--color-brand-1);
+  transform: translateX(4px);
+}
+
+/* nameEn — mono label */
+.step-card-en {
+  grid-column: 2;
+  font-size: 0.58rem;
+  color: var(--color-text-alt);
+  letter-spacing: 0.08em;
+  margin-top: 0.05rem;
+}
+
+/* Specs section — always visible, spanning full width under name */
+.step-card-specs {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.step-card-spec {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.6rem;
+  line-height: 1.3;
+}
+
+.spec-label {
+  color: var(--color-text-alt);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.spec-value {
+  font-weight: 600;
+  color: var(--color-text);
+  transition: color 350ms ease;
+}
+
+.step-card:hover .spec-value,
+.step-card:focus-visible .spec-value {
+  color: var(--color-brand-1);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .step-card,
+  .step-card::before,
+  .step-card::after,
+  .step-card-index,
+  .step-card-arrow,
+  .step-card-spec-value {
+    transition: none;
+  }
+
+  .step-card:hover,
+  .step-card:focus-visible {
+    transform: none;
+  }
+}
+
+
+/* =========================================================
+   GALLERY FRAME — cloned from hero / introducing media-frame
+   ========================================================= */
+
+.gallery-frame {
+  position: relative;
+  width: 100%;
+  padding: clamp(1rem, 2vw, 2rem);
+  isolation: isolate;
+}
+
+.gallery-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(244, 124, 44, 0.22);
+  transform: translate(-1rem, 1rem);
+  z-index: -1;
+}
+
+.gallery-frame::after {
+  content: "";
+  position: absolute;
+  top: 1.75rem;
+  right: 0;
+  bottom: 0;
+  left: 1.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  z-index: -2;
+}
+
+.gallery-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(-100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-alt);
+}
+
+.gallery-label > span:first-child {
+  color: var(--color-brand-1);
+}
+
+.gallery-accent {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 5rem;
+  height: 5rem;
+  border-right: 3px solid var(--color-brand-1);
+  border-bottom: 3px solid var(--color-brand-1);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.gallery-wrap {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.gallery {
+  height: 100%;
+}
+
+.gallery :global(img) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.11));
+}
+
+
+/* =========================================================
+   MARQUEE
+   ========================================================= */
+
+.marquee {
+  z-index: 9;
+  padding: 2rem 0;
+  margin: 6rem 0 0;
+  --c: var(--color-brand-1);
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (--mq-tablet) {
+
+  .gallery-text {
+    margin: 6rem 0 0;
+    padding: 6rem 0 0;
   }
 
   .container {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 3rem;
-    position: relative;
-    z-index: 9;
-    padding: 2rem;
-    border-radius: 1.5rem;
-    backdrop-filter: blur(6px) saturate(1.05);
-
-    @media (--mq-tablet) {
-      gap: 2rem;
-    }
-
-    @media (--mq-tablet-sm) {
-      flex-direction: column-reverse;
-    }
-
-    @media (--mq-phone) {
-      padding: 1rem 0;
-    }
+    grid-template-columns: 1fr;
+    gap: 4rem;
   }
 
   .content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem 0;
-    flex: 1;
+    align-items: center;
+    text-align: center;
   }
 
-  .title {
-    --fs: 2rem;
-    --fw: 600;
-    --lh: 1;
-    max-width: 10em;
-    margin-bottom: 1rem;
+  .gallery-title {
+    --fs: var(--type-display-md);
+    max-width: 13em;
   }
 
-  .text {
-    max-width: 25em;
+  .gallery-text-body {
+    max-width: 34em;
   }
 
-  .cta {
-    margin-top: 1.5rem;
+  .gallery-frame {
+    max-width: 100%;
+    width: min(100%, 42rem);
+    margin: 0 auto;
+    order: -1;
   }
 
-  .gallery {
-    max-width: 32rem;
-    min-height: 22rem;
-
-    @media (--mq-desktop-sm) {
-      max-width: 27rem;
-    }
-
-    @media (--mq-tablet) {
-      max-width: 25rem;
-    }
+  .gallery-frame::before,
+  .gallery-frame::after {
+    display: none;
   }
 
-  .marquee {
-    z-index: 9;
-    padding: 2rem 0;
-    margin: 6rem 0 0;
-    --c: var(--color-white);
+  .process-flow {
+    flex-wrap: wrap;
+    gap: 1.5rem;
   }
+
+  .process-step {
+    flex: 0 0 calc(50% - 0.75rem);
+  }
+
+  .step-connector {
+    display: none;
+  }
+}
+
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (--mq-phone) {
+
+  .gallery-text {
+    margin: 4rem 0 0;
+    padding: 4rem 0 0;
+  }
+
+  .gallery-title {
+    --fs: var(--type-title);
+    line-height: 1.02;
+  }
+
+  .gallery-text-body {
+    --fs: var(--font-size-md);
+    margin-top: 1.25rem;
+  }
+
+  .gallery-frame {
+    padding: 0.5rem;
+  }
+
+  .gallery-frame::before {
+    transform: translate(-0.5rem, 0.5rem);
+  }
+
+  .gallery-frame::after {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .gallery-accent {
+    width: 3rem;
+    height: 3rem;
+    border-width: 2px;
+  }
+
+  .gallery-label {
+    font-size: 0.5rem;
+  }
+
+  .process-step {
+    flex: 0 0 100%;
+  }
+
+  .step-connector {
+    display: none;
+  }
+}
 </style>

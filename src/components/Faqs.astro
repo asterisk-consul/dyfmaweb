@@ -17,11 +17,15 @@ const { title, subtitle, mobileTitle, items } = Astro.props;
 <sy-faqs>
   <div class="u-container container">
     <div class="content">
-      <h2 class="u-heading" data-sy-reveal="words">
+      <div class="u-eyebrow" data-sy-reveal="fade">
+        <span class="u-eyebrow-line"></span>
+        <span>INFORMACIÓN</span>
+      </div>
+      <h2 class="faq-title" data-sy-reveal="words">
         <span>{title}</span>
         <span aria-hidden>{mobileTitle}</span>
       </h2>
-      <p class="u-text subtitle" data-sy-reveal="lines">{subtitle}</p>
+      <p class="faq-subtitle u-text" data-sy-reveal="lines">{subtitle}</p>
     </div>
 
     <div class="faqs">
@@ -36,10 +40,11 @@ const { title, subtitle, mobileTitle, items } = Astro.props;
                   aria-controls={`faq-panel-${i}`}
                   aria-expanded="false"
                 >
+                  <span class="faq-num u-mono">{String(i + 1).padStart(2, "0")}</span>
                   <span class="question-text" data-sy-reveal="words">
                     {item["question"]}
                   </span>
-                  <span />
+                  <span class="toggle-icon" />
                 </button>
               </h3>
             </div>
@@ -112,6 +117,7 @@ const { title, subtitle, mobileTitle, items } = Astro.props;
     overflow: hidden;
     margin: 8rem 0;
     position: relative;
+    background: var(--color-bg);
   }
 
   .container {
@@ -127,25 +133,26 @@ const { title, subtitle, mobileTitle, items } = Astro.props;
     margin-bottom: 3rem;
   }
 
-  h2 {
-    --fs: 3rem;
+  .faq-title {
+    --fs: var(--type-display);
+    font-size: var(--fs);
     position: relative;
     z-index: 2;
-    text-transform: uppercase;
     text-align: center;
-    margin-bottom: 0.1em;
+    margin-bottom: 0.5em;
+    color: var(--color-text);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1;
 
     span:last-child {
       display: none;
     }
-
-    @media (--mq-phone) {
-      --fs: 2.5rem;
-    }
   }
 
-  .subtitle {
+  .faq-subtitle {
     --fs: var(--font-size-lg);
+    font-size: var(--fs);
     color: var(--color-text-alt);
   }
 
@@ -158,7 +165,7 @@ const { title, subtitle, mobileTitle, items } = Astro.props;
   .faq {
     padding: 1.5rem 0;
     position: relative;
-    border: solid rgba(var(--rgb-text), 0.2);
+    border: solid rgba(0,0,0,0.1);
     border-width: 1px 0 0;
 
     &:last-child {
@@ -177,16 +184,25 @@ const { title, subtitle, mobileTitle, items } = Astro.props;
 
   .answer {
     --fs: var(--font-size-sm);
+    font-size: var(--fs);
     margin-top: 0.75rem;
     white-space: preserve-breaks;
     padding-left: calc(1rem + 0.75rem);
     color: var(--color-text-alt);
   }
 
+  .faq-num {
+    color: var(--color-brand-1);
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
   h3 {
     --fs: var(--font-size-lg);
     --fw: 500;
     --ls: -0.02em;
+    font-size: var(--fs);
 
     button {
       font: inherit;
@@ -206,40 +222,55 @@ const { title, subtitle, mobileTitle, items } = Astro.props;
     text-align: left;
     gap: 1rem;
     flex-direction: row-reverse;
+  }
 
-    > span:last-child {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 0.75rem;
-      height: 0.75rem;
-      position: relative;
+  .question-text {
+    flex: 1;
+    color: var(--color-text);
+  }
 
-      &::before,
-      &::after {
-        content: "";
-        background: var(--color-brand-1);
-        position: absolute;
-        width: 100%;
-        height: 2px;
-        border-radius: 99px;
-        transform: translateZ(0);
-        transition: transform 0.2s var(--ease-in-out-cubic);
-      }
+  .toggle-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 0.75rem;
+    height: 0.75rem;
+    position: relative;
 
-      &::after {
-        transform: rotate(90deg);
-      }
+    &::before,
+    &::after {
+      content: "";
+      background: var(--color-brand-1);
+      position: absolute;
+      width: 100%;
+      height: 1.5px;
+      border-radius: 99px;
+      transform: translateZ(0);
+      transition: transform 0.2s var(--ease-in-out-cubic);
+    }
+
+    &::after {
+      transform: rotate(90deg);
     }
   }
 
-  :global(.faq.is-opened .toggle > span) {
+  :global(.faq.is-opened .toggle-icon) {
     &::before {
       transform: rotate(45deg);
     }
 
     &::after {
       transform: rotate(135deg);
+    }
+  }
+
+  @media (--mq-tablet) {
+    sy-faqs {
+      margin: 4rem 0;
+    }
+
+    .faq-title {
+      --fs: var(--type-display-md);
     }
   }
 </style>

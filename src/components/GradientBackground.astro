@@ -24,22 +24,45 @@ const { colors = defaultColors } = Astro.props;
 <sy-gradient-bg data-colors={JSON.stringify(colors)}></sy-gradient-bg>
 
 <script>
-  import { addIntersectingTicker } from "../utils/globalTicker";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
 
   class GradientBackground extends HTMLElement {
     step = 0;
     colorIndices = [0, 1, 2, 3];
     gradientSpeed = 0.002;
     colors: number[][];
+    private isVisible = false;
+    private st?: ScrollTrigger;
 
     constructor() {
       super();
-
       this.colors = JSON.parse(this.dataset.colors || "");
-      addIntersectingTicker(this);
     }
 
-    tick(t: number) {
+    connectedCallback() {
+      this.st = ScrollTrigger.create({
+        trigger: this,
+        start: "top bottom",
+        end: "bottom top",
+        onEnter: () => { this.isVisible = true; },
+        onLeave: () => { this.isVisible = false; },
+        onEnterBack: () => { this.isVisible = true; },
+        onLeaveBack: () => { this.isVisible = false; },
+      });
+
+      gsap.ticker.add(this.tick);
+    }
+
+    disconnectedCallback() {
+      this.st?.kill();
+      gsap.ticker.remove(this.tick);
+    }
+
+    tick = (t: number) => {
+      if (!this.isVisible) return;
       const colors = this.colors;
       const colorIndices = this.colorIndices;
       const step = this.step;

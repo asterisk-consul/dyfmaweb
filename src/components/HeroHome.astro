@@ -6,8 +6,6 @@ interface Props {
   title: string;
   subtitle?: string;
   cta?: Link;
-
-  /** Imagen del hero */
   imageSrc?: string;
   imageAlt?: string;
 }
@@ -21,184 +19,697 @@ const {
 } = Astro.props;
 ---
 
-<div class="sy-hero-home">
-  <div class="bg"></div>
+<section class="hero-dyfma">
+  <!-- Decorative architectural arcs -->
+  <div class="hero-decoration" aria-hidden="true">
+    <svg
+      class="hero-arcs"
+      viewBox="0 0 900 900"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M80 820V420C80 210 250 40 460 40"
+        stroke="currentColor"
+        stroke-width="1"
+      />
+      <path
+        d="M120 820V430C120 240 270 80 460 80"
+        stroke="currentColor"
+        stroke-width="1"
+      />
+      <path
+        d="M160 820V440C160 270 290 120 460 120"
+        stroke="currentColor"
+        stroke-width="1"
+      />
+    </svg>
+  </div>
 
-  <div class="u-container container">
-    <div class="inner">
+  <div class="hero-grid u-container container">
 
+    <!-- Content -->
+    <div class="content">
 
-
-      <div class="content">
-        <h1 class="u-heading title" data-sy-reveal="words">
-          {title}
-        </h1>
-
-        {subtitle ? (
-          <p class="u-text subtitle" data-sy-reveal="lines">
-            {subtitle}
-          </p>
-        ) : null}
-
-        {cta ? <Button {...cta} arrow class="cta" /> : null}
+      <div class="eyebrow" data-sy-reveal="fade">
+        <span class="eyebrow-line"></span>
+        <span>TECNOLOGÍA PARA PROCESAMIENTO</span>
       </div>
 
-       {imageSrc ? (
-        <div class="media" data-sy-reveal="fade">
-          <img
-            src={imageSrc}
-            alt={imageAlt}
-            loading="eager"
-            decoding="async"
-          />
+      <h1 class="hero-title" data-sy-reveal="words">
+        {title}
+      </h1>
+
+      {subtitle ? (
+        <p class="hero-subtitle u-text" data-sy-reveal="lines">
+          {subtitle}
+        </p>
+      ) : null}
+
+      {cta ? (
+        <div class="cta-wrapper" data-sy-reveal="fade">
+          <Button {...cta} arrow class="cta" />
         </div>
       ) : null}
 
-      <div data-gl-place></div>
+      <div class="nut-types" data-sy-reveal="fade">
+        <span class="nut-label">PROCESAMOS</span>
+
+        <div class="nut-tags">
+          <span class="nut-tag">NUEZ CHANDLER</span>
+          <span class="nut-tag">PECÁN</span>
+          <span class="nut-tag">ALMENDRA</span>
+          <span class="nut-tag">PISTACHO</span>
+          <span class="nut-tag">AVELLANA</span>
+        </div>
+      </div>
+
     </div>
+
+    <!-- Machine -->
+    <div class="media" data-sy-reveal="fade">
+      <div class="media-frame">
+        <div class="media-number">01</div>
+
+        {imageSrc ? (
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            width="1000"
+            height="750"
+            loading="eager"
+            decoding="async"
+          />
+        ) : null}
+
+        <div class="media-accent"></div>
+      </div>
+    </div>
+
   </div>
-</div>
+
+  <div class="hero-bottom" aria-hidden="true">
+    <span>DYFMA</span>
+    <span>PRECISIÓN · EFICIENCIA · TECNOLOGÍA</span>
+  </div>
+</section>
 
 <style>
-/* ===== Wrapper ===== */
-.sy-hero-home {
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero-dyfma {
   position: relative;
+  height: 100svh;
+  min-height: 100svh;
+
+  display: flex;
+  align-items: center;
+
   overflow: hidden;
+  isolation: isolate;
+
+  background: var(--color-bg);
 }
 
-/* ===== Background gris técnico ===== */
-.bg {
+
+/* =========================================================
+   DECORATIVE ARCS
+   ========================================================= */
+
+.hero-decoration {
   position: absolute;
-  inset: 0;
-  z-index: 0;
+
+  top: -12%;
+  right: -8%;
+
+  width: min(65vw, 900px);
+  aspect-ratio: 1;
+
+  color: var(--color-brand-1);
+
+  opacity: 0.11;
+
+  pointer-events: none;
+
+  z-index: -1;
 }
 
-.bg::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-
-  background: linear-gradient(
-    180deg,
-    #eeeeee 0%,
-    #e3e3e3 25%,
-    #d6d6d6 50%,
-    #c4c4c4 75%,
-    #b0b0b0 100%
-  );
-
-  mask: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 1) 80%,
-    rgba(0, 0, 0, 0) 100%
-  );
+.hero-arcs {
+  width: 100%;
+  height: 100%;
 }
 
-.bg::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  backdrop-filter: blur(4px);
-}
 
-/* ===== Layout ===== */
-.inner {
+/* =========================================================
+   MAIN GRID
+   ========================================================= */
+
+.hero-grid {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+
+  width: 100%;
 
   display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  align-items: center;
-  gap: 4rem;
 
-  min-height: 100vh;
-  padding: 9rem 0 10rem;
+  grid-template-columns:
+    minmax(0, 0.9fr)
+    minmax(0, 1.1fr);
+
+  align-items: center;
+
+  gap: clamp(2rem, 5vw, 5rem);
+
+  padding: 4rem 0;
 }
 
-/* ===== Imagen ===== */
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.content {
+  position: relative;
+  z-index: 3;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  min-width: 0;
+}
+
+
+/* =========================================================
+   EYEBROW
+   ========================================================= */
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+
+  gap: 0.75rem;
+
+  margin-bottom: 1.25rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: var(--color-text-alt);
+}
+
+.eyebrow-line {
+  width: 2rem;
+  height: 1px;
+
+  flex-shrink: 0;
+
+  background: var(--color-brand-1);
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.hero-title {
+  --fw: 500;
+  --fs: var(--type-hero);
+  --lh: 0.98;
+
+  margin: 0;
+
+  max-width: 8em;
+
+  font-size: var(--fs);
+  font-weight: var(--fw);
+  line-height: var(--lh);
+
+  letter-spacing: -0.035em;
+
+  color: var(--color-text);
+}
+
+
+/* =========================================================
+   SUBTITLE
+   ========================================================= */
+
+.hero-subtitle {
+  --fs: var(--font-size-lg);
+
+  max-width: 28em;
+
+  margin: 1.25rem 0 0;
+
+  font-size: var(--fs);
+  line-height: 1.45;
+
+  color: var(--color-text-alt);
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.cta-wrapper {
+  margin-top: 1.75rem;
+}
+
+.cta {
+  position: relative;
+}
+
+
+/* =========================================================
+   NUT TYPES
+   ========================================================= */
+
+.nut-types {
+  width: min(100%, 32rem);
+
+  position: relative;
+
+  margin-top: 2.5rem;
+  padding-top: 1.1rem;
+
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nut-label {
+  display: block;
+
+  margin-bottom: 0.7rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: var(--color-brand-1);
+}
+
+.nut-tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 0.35rem 0.75rem;
+}
+
+.nut-tag {
+  position: relative;
+
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+
+  color: var(--color-text-alt);
+
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.nut-tag:not(:last-child)::after {
+  content: "·";
+
+  margin-left: 0.75rem;
+
+  color: var(--color-brand-1);
+}
+
+.nut-tag:hover {
+  color: var(--color-brand-1);
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   MACHINE MEDIA
+   ========================================================= */
+
 .media {
   position: relative;
-  width: 120%;
-  margin-left: -20%;
 
-  /* Fade hacia la izquierda */
-  mask-image: linear-gradient(
-    270deg,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 1) 55%,
-    rgba(0, 0, 0, 0.6) 70%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  width: 100%;
+  min-width: 0;
 }
 
-.media::after {
+.media-frame {
+  position: relative;
+
+  width: 100%;
+
+  padding: clamp(0.75rem, 1.5vw, 1.5rem);
+
+  isolation: isolate;
+}
+
+
+/* Main architectural frame */
+.media-frame::before {
   content: "";
+
   position: absolute;
+
   inset: 0;
 
-  backdrop-filter: blur(6px);
+  border: 1px solid rgba(244, 124, 44, 0.22);
 
-  mask-image: linear-gradient(
-    270deg,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 0) 50%,
-    rgba(0, 0, 0, 1) 100%
-  );
+  transform: translate(-0.9rem, 0.9rem);
+
+  z-index: -1;
+}
+
+
+/* Secondary frame */
+.media-frame::after {
+  content: "";
+
+  position: absolute;
+
+  top: 1.5rem;
+  right: 0;
+  bottom: 0;
+  left: 1.5rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  z-index: -2;
+}
+
+
+/* =========================================================
+   MACHINE IMAGE
+   ========================================================= */
+
+.media img {
+  position: relative;
+
+  display: block;
+
+  width: 100%;
+  height: auto;
+
+  /*
+   * Importante:
+   * La imagen nunca debería ocupar todo el viewport.
+   */
+  max-height: 62svh;
+
+  object-fit: contain;
+  object-position: center;
+
+  filter:
+    drop-shadow(0 25px 45px rgba(0, 0, 0, 0.11));
+
+  z-index: 2;
+}
+
+
+/* =========================================================
+   IMAGE ORANGE ACCENT
+   ========================================================= */
+
+.media-accent {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+
+  width: 5rem;
+  height: 5rem;
+
+  border-right: 3px solid var(--color-brand-1);
+  border-bottom: 3px solid var(--color-brand-1);
+
+  z-index: 3;
+}
+
+
+/* =========================================================
+   IMAGE NUMBER
+   ========================================================= */
+
+.media-number {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  transform: translate(-50%, -50%);
+
+  width: 2.5rem;
+  height: 2.5rem;
+
+  display: grid;
+  place-items: center;
+
+  background: var(--color-brand-1);
+  color: #fff;
+
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 500;
+
+  z-index: 4;
+}
+
+
+/* =========================================================
+   BOTTOM LABEL
+   ========================================================= */
+
+.hero-bottom {
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 1.25rem;
+
+  padding: 0 clamp(1rem, 4vw, 4rem);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  color: var(--color-text-alt);
+
+  opacity: 0.55;
 
   pointer-events: none;
 }
 
-.media img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.18));
+.hero-bottom span:first-child {
+  color: var(--color-brand-1);
+  font-weight: 600;
 }
 
-/* ===== Texto ===== */
-.content {
-  position: relative;
-  z-index: 2;
-}
 
-.title {
-  --fw: 700;
-  --fs: 4.5rem;
-  --lh: 1;
-  max-width: 8em;
-}
+/* =========================================================
+   TABLET
+   ========================================================= */
 
-.subtitle {
-  --fs: var(--font-size-lg);
-  max-width: 25em;
-  margin-top: 1.5rem;
-}
-
-.cta {
-  margin-top: 2rem;
-}
-
-/* ===== Responsive ===== */
 @media (--mq-tablet) {
-  .inner {
+
+  .hero-dyfma {
+    /*
+     * En tablet ya no forzamos exactamente 100vh,
+     * porque el contenido pasa a una sola columna.
+     */
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .hero-grid {
     grid-template-columns: 1fr;
-    padding: 7rem 0 6rem;
+
+    gap: 3.5rem;
+
+    padding-top: 6rem;
+    padding-bottom: 5rem;
   }
 
+
+  /* Machine first */
   .media {
-    width: 100%;
-    margin-left: 0;
-    mask-image: none;
+    order: -1;
   }
 
-  .media::after {
+  .media-frame {
+    width: min(100%, 800px);
+
+    margin: 0 auto;
+  }
+
+  .media img {
+    max-height: 45svh;
+  }
+
+
+  /* Center content */
+  .content {
+    align-items: center;
+
+    text-align: center;
+  }
+
+  .eyebrow {
+    justify-content: center;
+  }
+
+  .hero-title {
+    --fs: var(--type-display);
+
+    max-width: 12em;
+  }
+
+  .hero-subtitle {
+    max-width: 36em;
+  }
+
+
+  /* Nuts */
+  .nut-types {
+    width: auto;
+  }
+
+  .nut-tags {
+    justify-content: center;
+  }
+
+
+  /* Decoration */
+  .hero-decoration {
+    top: 0;
+    right: -35%;
+
+    width: 100vw;
+
+    opacity: 0.08;
+  }
+
+
+  /* Hide bottom label */
+  .hero-bottom {
     display: none;
   }
+}
 
-  .content {
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (--mq-phone) {
+
+  .hero-dyfma {
+    height: auto;
+    min-height: auto;
+  }
+
+  .hero-grid {
+    gap: 2.5rem;
+
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+  }
+
+
+  /* Title */
+  .hero-title {
+    --fs: var(--type-title);
+
+    line-height: 1.02;
+  }
+
+
+  /* Subtitle */
+  .hero-subtitle {
+    --fs: var(--font-size-md);
+
+    margin-top: 1.25rem;
+
+    line-height: 1.5;
+  }
+
+
+  /* CTA */
+  .cta-wrapper {
+    margin-top: 1.75rem;
+  }
+
+
+  /* Image */
+  .media-frame {
+    padding: 0.5rem;
+  }
+
+  .media-frame::before {
+    transform: translate(-0.5rem, 0.5rem);
+  }
+
+  .media-frame::after {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .media img {
+    max-height: 32svh;
+  }
+
+
+  /* Image number */
+  .media-number {
+    width: 2rem;
+    height: 2rem;
+
+    font-size: 0.55rem;
+  }
+
+
+  /* Orange corner */
+  .media-accent {
+    width: 3rem;
+    height: 3rem;
+  }
+
+
+  /* Nuts */
+  .nut-types {
     margin-top: 2.5rem;
+  }
+
+  .nut-tag {
+    font-size: 0.6rem;
+  }
+
+
+  /* Decoration */
+  .hero-decoration {
+    top: 5%;
+    right: -55%;
+
+    width: 130vw;
   }
 }
 </style>

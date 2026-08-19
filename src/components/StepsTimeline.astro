@@ -4,39 +4,101 @@ interface Props {
   items: {
     title: string;
     text: string;
+    image?: string;
   }[];
+  class?: string;
 }
 
-const { title, items } = Astro.props;
+const { title, items, class: className } = Astro.props;
 ---
 
-<sy-steps-timeline>
+<sy-steps-timeline class:list={[className]}>
   <div class="u-container container">
     <div class="wrapper">
+
+      <!-- Header -->
       <div class="content">
-        <h2 class="u-heading title" data-sy-reveal="words">{title}</h2>
-      </div>
-      <div class="items-wrapper">
-        <div class="items">
-          {
-            items.map((item, i) => (
-              <div class:list={["item", i === 0 && "is-active"]}>
-                <div class="item-inner">
-                  <h3 class="u-heading item-title" data-sy-reveal="words">
-                    {item.title}
-                  </h3>
-                  <p class="u-text item-text" data-sy-reveal="lines">
-                    {item.text}
-                  </p>
-                </div>
-              </div>
-            ))
-          }
+        <div class="u-eyebrow" data-sy-reveal="fade">
+          <span class="u-eyebrow-line"></span>
+          <span>PROCESO</span>
         </div>
+
+        <h2 class="section-title" data-sy-reveal="words">
+          {title}
+        </h2>
+      </div>
+
+      <!-- Process -->
+      <div class="layout">
+
+        <!-- Steps -->
+        <div class="items-wrapper">
+          <div class="timeline-line"></div>
+
+          <div class="items">
+            {
+              items.map((item, i) => (
+                <div
+                  class:list={["item", i === 0 && "is-active"]}
+                  data-step={i}
+                >
+                  <div class="item-marker">
+                    <span>{String(i + 1).padStart(2, "0")}</span>
+                  </div>
+
+                  <div class="item-inner">
+                    <h3 class="item-title">
+                      {item.title}
+                    </h3>
+
+                    <p class="item-text u-text">
+                      {item.text}
+                    </p>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <!-- Image -->
+        <div class="step-frame">
+
+          <div class="step-frame-label">
+            <span>DYFMA</span>
+            <span class="step-counter">
+              01 / {String(items.length).padStart(2, "0")}
+            </span>
+          </div>
+
+          <div class="step-images">
+            {
+              items.map((item, i) => (
+                <div
+                  class:list={["step-image", i === 0 && "is-active"]}
+                >
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      width="800"
+                      height="600"
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  ) : null}
+
+                  <div class="image-overlay"></div>
+                </div>
+              ))
+            }
+          </div>
+
+          <div class="step-accent"></div>
+        </div>
+
       </div>
     </div>
-    <div data-gl-place="0" data-gl-place-factor="1.05"></div>
-    <div data-gl-place="1" data-gl-place-factor="1.01"></div>
   </div>
 </sy-steps-timeline>
 
@@ -48,26 +110,58 @@ const { title, items } = Astro.props;
 
   class StepsTimeline extends HTMLElement {
     connectedCallback() {
+      if (this.dataset.initialized) return;
+      this.dataset.initialized = "true";
+
       const itemsWrapper = this.querySelector(".items-wrapper");
       const wrapper = this.querySelector(".wrapper");
-      const items = Array.from(this.querySelectorAll<HTMLElement>(".item"));
+      const items = Array.from(
+        this.querySelectorAll<HTMLElement>(".item"),
+      );
+      const images = Array.from(
+        this.querySelectorAll<HTMLElement>(".step-image"),
+      );
+      const counter = this.querySelector(".step-counter");
+
+      if (!itemsWrapper || !wrapper || !items.length) return;
+
       let current = 0;
 
-      new ScrollTrigger({
+      const setActive = (index: number) => {
+        if (index === current) return;
+
+        items[current]?.classList.remove("is-active");
+        images[current]?.classList.remove("is-active");
+
+        items[index]?.classList.add("is-active");
+        images[index]?.classList.add("is-active");
+
+        if (counter) {
+          counter.textContent =
+            `${String(index + 1).padStart(2, "0")} / ${String(items.length).padStart(2, "0")}`;
+        }
+
+        current = index;
+      };
+
+      ScrollTrigger.create({
         trigger: itemsWrapper,
         pin: wrapper,
-        start: "center center",
-        end: () => `+=${window.innerHeight * 2}px`,
+        start: "top top+=10%",
+        end: () => `+=${window.innerHeight * items.length * 0.85}`,
         invalidateOnRefresh: true,
-        onUpdate: (st) => {
-          const index = Math.round(st.progress * (items.length - 1));
-          if (index !== current) {
-            items[current].classList.remove("is-active");
-            items[index].classList.add("is-active");
-            current = index;
-          }
+
+        onUpdate: (self) => {
+          const index = Math.min(
+            Math.floor(self.progress * items.length),
+            items.length - 1,
+          );
+
+          setActive(index);
         },
       });
+
+      ScrollTrigger.refresh();
     }
   }
 
@@ -75,156 +169,577 @@ const { title, items } = Astro.props;
 </script>
 
 <style>
-  [data-gl-place] {
-    --d: 1;
-    --s: 18rem;
-    position: absolute;
-  }
+/* =========================================================
+   SECTION
+   ========================================================= */
 
-  [data-gl-place="0"] {
-    right: 10%;
-    top: 0;
-    bottom: 0;
+sy-steps-timeline {
+  display: block;
 
-    @media (--mq-tablet) {
-      top: -20vh;
-    }
-  }
+  position: relative;
+  z-index: 9;
 
-  [data-gl-place="1"] {
-    top: 200vh;
-    right: 10%;
+  margin: clamp(6rem, 10vw, 10rem) 0;
 
-    @media (--mq-tablet) {
-      top: 100vh;
-    }
-  }
+  background: var(--color-bg);
+}
+
+.container {
+  position: relative;
+  z-index: 2;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.content {
+  position: relative;
+
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.section-title {
+  --fs: var(--type-display);
+  --lh: 0.98;
+  --fw: 500;
+
+  margin: 0;
+
+  max-width: 11em;
+
+  font-size: var(--fs);
+  font-weight: var(--fw);
+  line-height: var(--lh);
+
+  letter-spacing: -0.035em;
+
+  color: var(--color-text);
+}
+
+
+/* =========================================================
+   LAYOUT
+   ========================================================= */
+
+.layout {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 0.85fr)
+    minmax(0, 1.15fr);
+
+  gap: clamp(3rem, 6vw, 7rem);
+
+  align-items: center;
+}
+
+
+/* =========================================================
+   TIMELINE
+   ========================================================= */
+
+.items-wrapper {
+  position: relative;
+
+  min-height: 32rem;
+
+  padding-left: 4rem;
+}
+
+.timeline-line {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 1rem;
+
+  width: 1px;
+
+  background: rgba(0, 0, 0, 0.1);
+}
+
+
+/* =========================================================
+   ITEMS
+   ========================================================= */
+
+.items {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  max-width: 30rem;
+}
+
+.item {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns: 2.5rem 1fr;
+
+  gap: 1.5rem;
+
+  min-height: 9rem;
+
+  opacity: 0.38;
+
+  transition:
+    opacity 400ms ease,
+    transform 400ms ease;
+}
+
+.item.is-active {
+  opacity: 1;
+
+  transform: translateX(0.35rem);
+}
+
+
+/* =========================================================
+   MARKER
+   ========================================================= */
+
+.item-marker {
+  position: relative;
+
+  width: 2rem;
+  height: 2rem;
+
+  display: grid;
+  place-items: center;
+
+  margin-top: 0.1rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.14);
+
+  background: var(--color-bg);
+
+  transition:
+    border-color 300ms ease,
+    background 300ms ease,
+    color 300ms ease,
+    transform 300ms ease;
+
+  z-index: 2;
+}
+
+.item-marker span {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 500;
+
+  color: var(--color-text-alt);
+}
+
+.item.is-active .item-marker {
+  border-color: var(--color-brand-1);
+
+  background: var(--color-brand-1);
+
+  transform: scale(1.08);
+}
+
+.item.is-active .item-marker span {
+  color: #fff;
+}
+
+
+/* =========================================================
+   ITEM CONTENT
+   ========================================================= */
+
+.item-inner {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0.65rem;
+
+  padding-bottom: 2.5rem;
+}
+
+.item-title {
+  --fs: var(--type-title);
+  --fw: 500;
+
+  margin: 0;
+
+  font-size: var(--fs);
+  font-weight: var(--fw);
+
+  line-height: 1.1;
+
+  letter-spacing: -0.025em;
+
+  color: var(--color-text);
+
+  transition:
+    color 300ms ease,
+    transform 300ms ease;
+}
+
+.item.is-active .item-title {
+  color: var(--color-brand-1);
+}
+
+.item-text {
+  --fs: var(--font-size-md);
+
+  margin: 0;
+
+  max-width: 28em;
+
+  font-size: var(--fs);
+  line-height: 1.55;
+
+  color: var(--color-text-alt);
+}
+
+
+/* =========================================================
+   IMAGE FRAME
+   ========================================================= */
+
+.step-frame {
+  position: relative;
+
+  width: 100%;
+
+  padding: clamp(1rem, 2vw, 1.75rem);
+
+  isolation: isolate;
+}
+
+
+/* Main frame */
+.step-frame::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  border: 1px solid rgba(244, 124, 44, 0.22);
+
+  transform: translate(-1rem, 1rem);
+
+  z-index: -1;
+}
+
+
+/* Secondary frame */
+.step-frame::after {
+  content: "";
+
+  position: absolute;
+
+  top: 1.75rem;
+  right: 0;
+  bottom: 0;
+  left: 1.75rem;
+
+  border: 1px solid rgba(0, 0, 0, 0.08);
+
+  z-index: -2;
+}
+
+
+/* =========================================================
+   IMAGE HEADER
+   ========================================================= */
+
+.step-frame-label {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  transform: translateY(-100%);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding-bottom: 0.75rem;
+
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 500;
+
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+
+  color: var(--color-text-alt);
+}
+
+.step-frame-label > span:first-child {
+  color: var(--color-brand-1);
+}
+
+
+/* =========================================================
+   IMAGE CONTAINER
+   ========================================================= */
+
+.step-images {
+  position: relative;
+
+  width: 100%;
+
+  aspect-ratio: 4 / 3;
+
+  overflow: hidden;
+
+  background: #f5f5f5;
+}
+
+
+/* =========================================================
+   INDIVIDUAL IMAGES
+   ========================================================= */
+
+.step-image {
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  transition:
+    opacity 500ms ease,
+    transform 700ms ease;
+
+  transform: scale(1.025);
+
+  pointer-events: none;
+}
+
+.step-image.is-active {
+  opacity: 1;
+
+  transform: scale(1);
+
+  pointer-events: auto;
+}
+
+.step-image img {
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+
+/* =========================================================
+   IMAGE OVERLAY
+   ========================================================= */
+
+.image-overlay {
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.04),
+      transparent 45%
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   ORANGE CORNER
+   ========================================================= */
+
+.step-accent {
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+
+  width: 4.5rem;
+  height: 4.5rem;
+
+  border-right: 3px solid var(--color-brand-1);
+  border-bottom: 3px solid var(--color-brand-1);
+
+  z-index: 3;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (--mq-tablet) {
 
   sy-steps-timeline {
-    display: block;
-    position: relative;
-    margin: 7rem 0;
-    z-index: 9;
-  }
-
-  .container {
-    position: relative;
-    z-index: 2;
+    margin: 5rem 0;
   }
 
   .content {
-    position: relative;
-
-    @media (--mq-tablet) {
-      display: contents;
-    }
+    margin-bottom: 3rem;
   }
 
-  .title {
-    --fs: 3rem;
-    --lh: 1;
-    --fw:500;
-    max-width: 10em;
-    margin-bottom: 1em;
+  .section-title {
+    --fs: var(--type-display-md);
   }
 
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+  .layout {
+    grid-template-columns: 1fr;
+
+    gap: 4rem;
   }
 
   .items-wrapper {
-    display: flex;
-    padding-left: 4rem;
-    position: relative;
-    backdrop-filter: blur(6px) saturate(1.05);
+    min-height: auto;
 
-    @media (--mq-desktop-sm) {
-      max-width: 34rem;
-    }
+    padding-left: 2.5rem;
+  }
 
-    @media (--mq-desktop-xs) {
-      max-width: 30rem;
-    }
-
-    @media (--mq-tablet-sm) {
-      max-width: 36rem;
-      align-self: center;
-      padding-left: 0;
-    }
-
-    &::before {
-      content: "";
-      display: block;
-      min-height: 100%;
-      min-width: 2px;
-      margin-right: 3rem;
-      background: var(--color-brand-3);
-
-      @media (--mq-tablet-sm) {
-        margin-right: 1.5rem;
-      }
-    }
+  .timeline-line {
+    left: 0.5rem;
   }
 
   .items {
-    display: flex;
-    flex-direction: column;
-    max-width: 33rem;
-    width: 100%;
-    counter-reset: items;
-    max-width: 24rem;
+    max-width: 100%;
+  }
+
+  .item {
+    grid-template-columns: 2rem 1fr;
+
+    gap: 1.25rem;
+
+    min-height: auto;
   }
 
   .item-inner {
-    display: flex;
-    position: relative;
-    flex-direction: column;
+    padding-bottom: 2rem;
+  }
+
+  .item.is-active {
+    transform: none;
+  }
+
+  .step-frame {
+    padding: 1rem;
+  }
+
+  .step-frame::before,
+  .step-frame::after {
+    display: none;
+  }
+
+  .step-images {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+@media (--mq-phone) {
+
+  sy-steps-timeline {
+    margin: 4rem 0;
+  }
+
+  .content {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-title {
+    --fs: var(--type-title);
+
+    line-height: 1.02;
+  }
+
+  .layout {
+    gap: 3rem;
+  }
+
+  .items-wrapper {
+    padding-left: 2rem;
+  }
+
+  .timeline-line {
+    left: 0.45rem;
+  }
+
+  .item {
+    grid-template-columns: 1.75rem 1fr;
+
+    gap: 1rem;
+  }
+
+  .item-marker {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .item-marker span {
+    font-size: 0.52rem;
+  }
+
+  .item-inner {
     gap: 0.5rem;
-    padding: 2rem 1rem;
 
-    &::before {
-      @extend %u-text;
-      --fs: 1.2rem;
-      --fw: 500;
-      display: flex;
-      align-items: center;
-      counter-increment: items;
-      content: counter(items, decimal-leading-zero);
-      position: absolute;
-      right: calc(100% + 3rem + 4rem);
-      transform: translateX(100%);
-      text-align: center;
-      top: 0;
-      bottom: 0;
-      margin: auto;
-      transition: color 0.2s var(--ease-in-out-cubic);
-      border-right: 2px solid transparent;
-      padding-right: calc(4rem - 2px);
-      width: 0;
-      opacity: 0.5;
-
-      @media (--mq-tablet-sm) {
-        right: calc(100% + 1.5rem + 4rem);
-      }
-    }
-
-    :global(.item.is-active &) {
-      &::before {
-        opacity: 1;
-        border-right-color: var(--color-brand-1);
-      }
-    }
+    padding-bottom: 1.75rem;
   }
 
   .item-title {
-    --fs: 1.5rem;
-    --fw: 500;
+    --fs: var(--font-size-lg);
   }
 
   .item-text {
-    --fs: var(--font-size-xs);
+    --fs: var(--font-size-md);
+
+    line-height: 1.5;
   }
-</style>
+
+  .step-frame {
+    padding: 0.5rem;
+  }
+
+  .step-frame-label {
+    font-size: 0.55rem;
+  }
+
+  .step-images {
+    aspect-ratio: 4 / 3;
+  }
+
+  .step-accent {
+    width: 3rem;
+    height: 3rem;
+
+    border-width: 2px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .item,
+  .item-marker,
+  .item-title,
+  .step-image {
+    transition: none;
+  }
+}

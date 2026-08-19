@@ -1,15 +1,15 @@
 export const languages = {
-  en: 'English',
+  es: 'Español',
 };
 
-export const defaultLang = 'en';
+export const defaultLang = 'es';
 
 export const ui = {
-  en: {
-    'accessibility.skip-to-content': 'Skip to content',
+  es: {
+    'accessibility.skip-to-content': 'Saltar al contenido',
 
-    'nav.home': 'Home',
-    'nav.about': 'About',
+    'nav.home': 'Inicio',
+    'nav.about': 'Nosotros',
     'nav.twitter': 'Twitter',
   },
 } as const;

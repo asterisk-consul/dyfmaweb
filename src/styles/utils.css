@@ -13,3 +13,11 @@
 .u-heading {
   @extend %u-heading;
 }
+
+.u-mono {
+  @extend %u-mono;
+}
+
+.u-spec {
+  @extend %u-spec;
+}

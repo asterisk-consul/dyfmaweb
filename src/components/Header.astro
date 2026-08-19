@@ -1,6 +1,5 @@
 ---
 import Button from "./Button.astro";
-import Logo from "../assets/logo.svg";
 import type { Link } from "../types";
 
 interface Props {
@@ -19,7 +18,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     <div class="inner u-container">
       <div class="wrapper">
         <a class="logo" href={logoUrl}>
-          <Logo />
+          <img src="/dyfmaweb/logo.svg" alt={logoAlt} />
           <span class="u-sr-only">{logoAlt}</span>
         </a>
 
@@ -36,8 +35,9 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
         </div>
 
         <div class="buttons">
-          <button type="button" class="toggle" aria-label="">
-            <span class="u-sr-only">Toggle Mobile Menu</span>
+          <Button title="Contacto" url="/dyfmaweb/contacto" revealable={false} class="nav-cta" />
+          <button type="button" class="toggle" aria-label="Abrir menú de navegación">
+            <span class="u-sr-only">Menú de navegación</span>
             <span aria-hidden>
               <span></span>
               <span></span>
@@ -62,6 +62,9 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     color: var(--color-text);
     margin: 0 auto;
     transition: transform 0.3s var(--ease-out-cubic);
+    background: rgba(250, 250, 250, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
 
     :global(body.is-nav-hidden) & {
       transform: translateY(-100%);
@@ -70,40 +73,10 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     @media (--mq-tablet-sm) {
       --br: 1rem;
     }
-
-    &::before,
-    &::after {
-      content: "";
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-
-    &::after {
-      background: rgba(var(--rgb-brand-3), 0.7);
-      transition: transform 0.3s var(--ease-out-cubic);
-      transform: scaleY(0);
-      transform-origin: top;
-      backdrop-filter: blur(15px);
-    }
-
-    :global(body.is-nav-small) & {
-      &::after {
-        transform: scaleY(1);
-      }
-    }
   }
 
   .inner {
     padding: 1rem 0;
-    transition: padding 0.3s var(--ease-out-cubic);
-
-    :global(body.is-nav-small) & {
-      padding: 0.5rem 0;
-    }
   }
 
   .wrapper {
@@ -122,12 +95,9 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     position: relative;
     z-index: 3;
 
-    svg {
-      width: 2.4rem;
-
-      :global(path) {
-        fill: currentcolor;
-      }
+    img {
+      height: 2rem;
+      width: auto;
     }
   }
 
@@ -146,7 +116,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
       height: 100vh;
       position: fixed;
       z-index: 2;
-      background: var(--color-brand-3);
+      background: var(--color-bg);
       top: 0;
       left: 0;
       clip-path: inset(0 0 0%);
@@ -182,12 +152,12 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
       gap: 1.3125em;
 
       @media (--mq-tablet) {
-        color: var(--color-brand-1);
+        color: var(--color-text);
       }
 
       @media (--mq-tablet) {
         flex-direction: column;
-        font-size: 2rem;
+        font-size: 1.5rem;
         gap: 1rem;
       }
 
@@ -206,6 +176,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
           content: "";
           width: 2px;
           height: 2px;
+          background: var(--color-text-alt);
         }
 
         &:last-child {
@@ -218,12 +189,13 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
       :global(a) {
         text-decoration: none;
         position: relative;
+        color: var(--color-text);
 
         &::before {
           content: "";
           position: absolute;
-          height: 2px;
-          background: currentcolor;
+          height: 1px;
+          background: var(--color-brand-1);
           top: 115%;
           width: 100%;
           left: 0;
@@ -255,6 +227,10 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     }
   }
 
+  :global(.nav-cta) {
+    --fs: var(--font-size-sm);
+  }
+
 
   .toggle {
     border: none;
@@ -269,7 +245,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     transition: color 0.3s var(--ease-out-expo);
 
     :global(.has-no-bg &) {
-      color: var(--color-brand-3);
+      color: var(--color-text);
     }
 
     :global(body.is-nav-opened &),
@@ -291,7 +267,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
       span {
         display: flex;
         width: 100%;
-        height: 4px;
+        height: 2px;
         background: currentcolor;
         border-radius: 10px;
         transition: transform 0.2s var(--ease-out-cubic);
@@ -309,7 +285,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
       > span {
         span {
           &:first-child {
-            transform: translateY(calc(0.75rem - 2px)) rotate(45deg);
+            transform: translateY(calc(0.75rem - 1px)) rotate(45deg);
           }
 
           &:nth-child(2) {
@@ -317,7 +293,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
           }
 
           &:last-child {
-            transform: translateY(calc(-0.75rem + 2px)) rotate(-45deg);
+            transform: translateY(calc(-0.75rem + 1px)) rotate(-45deg);
           }
         }
       }
@@ -326,9 +302,9 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
 </style>
 
 <script>
-  import { addScrollObserver } from "../utils/observers";
+  import { addScrollObserver } from "../utils/helpers";
 
-  const heroSelectors = ["sy-hero-home"];
+  const heroSelectors = ["hero-dyfma"];
 
   class Header extends HTMLElement {
     smallThreshold = 100;
@@ -343,8 +319,6 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
       addScrollObserver(this);
 
       this.toggleEl.addEventListener("click", this.toggleNav);
-
-      // addResizeObserver(this);
 
       this.onResize();
       this.onScroll(window.scrollY);

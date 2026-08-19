@@ -25,8 +25,6 @@ const { title, subtitle, items } = Astro.props;
 
 <div class="sy-plans">
   <div class="u-container">
-    <div data-gl-place data-gl-place-factor="1.5"></div>
-
     <h2 class="u-heading title" data-sy-reveal="words">{title}</h2>
     <p class="u-text subtitle" data-sy-reveal="lines">{subtitle}</p>
 
@@ -67,16 +65,6 @@ const { title, subtitle, items } = Astro.props;
 </div>
 
 <style>
-  [data-gl-place] {
-    --d: 1;
-    --s: 18.75rem;
-    margin: 3rem auto 5rem;
-
-    @media (--mq-tablet) {
-      --s: 16rem;
-    }
-  }
-
   @keyframes plan-border {
     from {
       transform: rotate(0deg);

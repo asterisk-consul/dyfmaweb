@@ -1,0 +1,427 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Button from "../../components/Button.astro";
+import { machines, categoryLabels } from "../../data/machines";
+
+export function getStaticPaths() {
+  return machines.map((machine) => ({
+    params: { id: machine.id },
+    props: { machine },
+  }));
+}
+
+const { machine } = Astro.props;
+
+// Cada spec se muestra como su propio subtítulo (label grande naranja + valor debajo),
+// igual que "Rendimiento" / "Dimensiones" en las fichas de referencia.
+// Si el valor trae varios ítems separados por " · ", se muestra como lista con ícono de engranaje
+// en vez de texto plano. "Dimensiones" siempre queda como texto plano, nunca como lista.
+const displaySpecs = machine.specs.map((spec) => {
+  const isDimension = /dimensi/i.test(spec.label);
+  const parts = spec.value.split(" · ").map((p) => p.trim());
+  const isList = !isDimension && parts.length > 1;
+  return { ...spec, isList, parts };
+});
+---
+
+<Layout title={`${machine.name} — DYFMA`}>
+  <div class="machine-page">
+    <div class="u-container container">
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="/dyfmaweb/">Inicio</a>
+        <span class="sep">/</span>
+        <a href="/dyfmaweb/maquinas">Máquinas</a>
+        <span class="sep">/</span>
+        <span class="current">{machine.name}</span>
+      </nav>
+
+      <div class="inner">
+        <!-- Content -->
+        <div class="content">
+          <span class="category-tag u-spec">{categoryLabels[machine.category]}</span>
+          <h1 class="machine-title">{machine.name}</h1>
+          <p class="machine-name-en u-mono">{machine.nameEn}</p>
+          <p class="machine-desc">{machine.description}</p>
+
+          <!-- Cada spec es su propio subtítulo naranja (como "Rendimiento" / "Dimensiones" de la ficha).
+               Si el valor es una lista real (varios ítems separados por "·"), se muestra con íconos de engranaje. -->
+          <div class="specs-section">
+            <span class="specs-eyebrow u-spec">Especificaciones</span>
+
+            {displaySpecs.map((spec) => (
+              <div class="spec-block">
+                <h3 class="spec-subtitle">{spec.label}</h3>
+
+                {spec.isList ? (
+                  <ul class="spec-gear-list">
+                    {spec.parts.map((part) => (
+                      <li class="spec-gear-item">
+                        <svg class="spec-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                          <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" stroke-width="1.6"/>
+                          <path d="M19.4 13.5c.04-.33.06-.66.06-1s-.02-.67-.06-1l1.86-1.46a.75.75 0 0 0 .18-.95l-1.76-3.05a.75.75 0 0 0-.9-.33l-2.2.88a7.6 7.6 0 0 0-1.73-1l-.33-2.34a.75.75 0 0 0-.74-.65h-3.53a.75.75 0 0 0-.74.65l-.33 2.34a7.6 7.6 0 0 0-1.73 1l-2.2-.88a.75.75 0 0 0-.9.33L2.63 9.09a.75.75 0 0 0 .18.95L4.67 11.5c-.04.33-.06.66-.06 1s.02.67.06 1l-1.86 1.46a.75.75 0 0 0-.18.95l1.76 3.05c.19.32.58.45.9.33l2.2-.88c.52.42 1.1.76 1.73 1l.33 2.34c.05.37.37.65.74.65h3.53c.37 0 .69-.28.74-.65l.33-2.34a7.6 7.6 0 0 0 1.73-1l2.2.88c.32.12.71-.01.9-.33l1.76-3.05a.75.75 0 0 0-.18-.95L19.4 13.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                        </svg>
+                        <span class="u-mono">{part}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p class="spec-plain-value u-mono">{spec.value}</p>
+                )}
+              </div>
+            ))}
+          </div>
+
+
+          <!-- CTA -->
+          <div class="actions">
+            <Button
+              title="Solicitar cotización"
+              url="/dyfmaweb/contacto"
+              arrow
+            />
+            <Button
+              title="Ver todas las máquinas"
+              url="/dyfmaweb/maquinas"
+              class="secondary"
+            />
+          </div>
+        </div>
+
+        <!-- Image + Quality card -->
+        <div class="media">
+          <div class="image-placeholder">
+            {machine.image ? (
+              <img src={machine.image} alt={machine.name} class="machine-photo" />
+            ) : (
+              <>
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="10" y="10" width="80" height="80" rx="4" stroke="#D4D4D4" stroke-width="1" stroke-dasharray="4 4"/>
+                  <path d="M50 35 L65 55 L35 55 Z" stroke="#F47C2C" stroke-width="1.5" fill="none"/>
+                  <circle cx="50" cy="45" r="3" fill="#F47C2C"/>
+                </svg>
+                <span class="u-spec">Imagen pendiente</span>
+              </>
+            )}
+          </div>
+
+          <!-- Card CALIDAD DYFMA -->
+          <div class="quality-card">
+            <svg class="quality-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6L12 2.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="m8.5 12 2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="quality-text">
+              <p class="quality-title u-spec">Calidad DYFMA</p>
+              <p class="quality-desc">Equipos diseñados y fabricados para brindar rendimiento, durabilidad y eficiencia en cada campaña.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back link -->
+      <a href="/dyfmaweb/maquinas" class="back-link">
+        ← Volver a máquinas
+      </a>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .machine-page {
+    padding: 8rem 0 4rem;
+    min-height: 100vh;
+    background: var(--color-bg);
+  }
+
+  .container {
+    max-width: 1000px;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--color-text-alt);
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .breadcrumb a {
+    color: var(--color-text-alt);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-brand-1);
+  }
+
+  .breadcrumb .sep {
+    opacity: 0.4;
+  }
+
+  .breadcrumb .current {
+    color: var(--color-text);
+  }
+
+  /* Layout */
+  .inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  /* Content */
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .category-tag {
+    color: var(--color-brand-1);
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .machine-title {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .machine-name-en {
+    font-size: 0.8rem;
+    color: var(--color-text-alt);
+    margin: 0;
+  }
+
+  .machine-desc {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-alt);
+    line-height: 1.6;
+  }
+
+  /* Specs section */
+  .specs-section {
+    padding: 1.5rem 0;
+    border-top: 1px solid rgba(0,0,0,0.08);
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Etiqueta chica de la sección (no compite con los subtítulos de cada dato) */
+  .specs-eyebrow {
+    color: var(--color-text-alt);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Cada dato es su propio bloque con subtítulo grande naranja, como "Rendimiento" / "Dimensiones" */
+  .spec-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .spec-subtitle {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-brand-1);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .spec-plain-value {
+    font-size: 0.95rem;
+    color: var(--color-text);
+    margin: 0;
+    overflow-wrap: break-word;
+  }
+
+  /* Lista real (varios ítems en el valor): se muestra con ícono de engranaje, uno por ítem */
+  .spec-gear-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .spec-gear-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    color: var(--color-text);
+  }
+
+  .spec-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--color-brand-1);
+    margin-top: 0.1rem;
+  }
+
+  /* Actions */
+  .actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .actions :global(.secondary) {
+    background: transparent;
+    color: var(--color-text);
+    border: 1px solid rgba(0,0,0,0.15);
+  }
+
+  .actions :global(.secondary:hover) {
+    border-color: var(--color-brand-1);
+    color: var(--color-brand-1);
+  }
+
+  /* Media */
+  .media {
+    position: sticky;
+    top: 6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .image-placeholder {
+    aspect-ratio: 1;
+    background: rgba(0,0,0,0.02);
+    border: 1px solid rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .image-placeholder svg {
+    width: 120px;
+    height: 120px;
+    opacity: 0.5;
+  }
+
+  .image-placeholder span {
+    font-size: 0.65rem;
+    color: var(--color-text-alt);
+  }
+
+  .machine-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Card CALIDAD DYFMA */
+  .quality-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 1.1rem 1.25rem;
+    background: rgba(0,0,0,0.015);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 6px;
+  }
+
+  .quality-icon {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    color: var(--color-brand-1);
+    margin-top: 0.1rem;
+  }
+
+  .quality-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .quality-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .quality-desc {
+    font-size: 0.78rem;
+    line-height: 1.5;
+    color: var(--color-text-alt);
+    margin: 0;
+  }
+
+  /* Back link */
+  .back-link {
+    display: inline-block;
+    margin-top: 4rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-alt);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link:hover {
+    color: var(--color-brand-1);
+  }
+
+  /* Responsive */
+  @media (--mq-tablet) {
+    .inner {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .media {
+      position: static;
+      order: -1;
+    }
+
+    .machine-title {
+      font-size: 2rem;
+    }
+
+    .section-subtitle,
+    .spec-subtitle {
+      font-size: 1.15rem;
+    }
+  }
+
+  @media (--mq-phone) {
+    .machine-page {
+      padding: 6rem 0 3rem;
+    }
+
+    .actions {
+      flex-direction: column;
+    }
+
+    .section-subtitle,
+    .spec-subtitle {
+      font-size: 1.1rem;
+    }
+  }
+</style>

@@ -3,6 +3,7 @@ import { Font } from "astro:assets";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SmoothScroll from "../components/SmoothScroll.astro";
+import WhatsAppButton from "../components/WhatsAppButton.astro";
 import { useTranslations } from "../i18n/utils";
 import "../styles/global.css";
 
@@ -10,34 +11,32 @@ const { title } = Astro.props;
 const t = useTranslations();
 
 const links = [
-  { title: "Inicio", url: "/" },
-  { title: "Sobre Nosotros", url: "/" },
-  { title: "Contacto", url: "/" },
+  { title: "Inicio", url: "/dyfmaweb/" },
+  { title: "Máquinas", url: "/dyfmaweb/maquinas" },
+  { title: "Nosotros", url: "/dyfmaweb/nosotros" },
+  { title: "Contacto", url: "/dyfmaweb/contacto" },
 ];
 ---
-
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <Font cssVariable="--font-montserrat" preload />
-    <Font cssVariable="--font-inter" preload />
     <title>{title}</title>
   </head>
   <body>
     <a href="#main" class="skip-link">{t("accessibility.skip-to-content")}</a>
     <Header
-      logoUrl="/"
-      logoAlt="Dyfma"
+      logoUrl="/dyfmaweb/"
+      logoAlt="DYFMA"
       links={links}
-      link1={{ title: "Login", url: "#" }}
-      link2={{ title: "Get Started", url: "#" }}
     />
     <main id="main">
       <slot />
     </main>
-    <Footer logoUrl="/" logoAlt="VIIO" links={links} creadoref="Asterisk" creadorlogo="/" />
+    <Footer links={links} />
     <SmoothScroll />
+    <WhatsAppButton />
   </body>
 </html>
 
