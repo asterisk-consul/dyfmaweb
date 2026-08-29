@@ -66,11 +66,10 @@ const {
         </p>
       ) : null}
 
-      {cta ? (
-        <div class="cta-wrapper" data-sy-reveal="fade">
-          <Button {...cta} arrow class="cta" />
-        </div>
-      ) : null}
+      <div class="cta-wrapper">
+        <Button title="Ver máquinas" url="#productos" arrow class="cta" revealable={false} />
+        <Button title="Contactar" url="/dyfmaweb/contacto" color="primary-alt" class="cta cta-contact" revealable={false} />
+      </div>
 
       <div class="nut-types" data-sy-reveal="fade">
         <span class="nut-label">PROCESAMOS</span>
@@ -91,16 +90,14 @@ const {
       <div class="media-frame">
         <div class="media-number">01</div>
 
-        {imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={imageAlt}
-            width="1000"
-            height="750"
-            loading="eager"
-            decoding="async"
-          />
-        ) : null}
+        <video
+          class="hero-video"
+          src="/dyfmaweb/LIMPIADORA-A-CAMPO.mp4"
+          autoplay
+          loop
+          muted
+          playsinline
+        ></video>
 
         <div class="media-accent"></div>
       </div>
@@ -121,7 +118,6 @@ const {
 
 .hero-dyfma {
   position: relative;
-  height: 100svh;
   min-height: 100svh;
 
   display: flex;
@@ -182,7 +178,7 @@ const {
 
   gap: clamp(2rem, 5vw, 5rem);
 
-  padding: 4rem 0;
+  padding: 6rem 0 4rem;
 }
 
 
@@ -247,6 +243,7 @@ const {
 
   max-width: 8em;
 
+  font-family: var(--font-heading);
   font-size: var(--fs);
   font-weight: var(--fw);
   line-height: var(--lh);
@@ -268,6 +265,7 @@ const {
 
   margin: 1.25rem 0 0;
 
+  font-family: var(--font-body);
   font-size: var(--fs);
   line-height: 1.45;
 
@@ -280,11 +278,44 @@ const {
    ========================================================= */
 
 .cta-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
   margin-top: 1.75rem;
 }
 
 .cta {
   position: relative;
+}
+
+.cta-contact {
+  --btn-txt-color: var(--color-white);
+  --btn-bg-color: transparent;
+  --btn-hover-bg-color: var(--color-brand-1);
+  --btn-hover-text-color: var(--color-white);
+}
+
+.cta-contact > span > span {
+  background: transparent !important;
+  color: var(--color-white) !important;
+}
+
+.cta-contact > span::after {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.cta-contact:hover > span::after {
+  border-color: var(--color-brand-1) !important;
+}
+
+.cta-contact:hover > span > span {
+  background: var(--color-brand-1) !important;
+  color: var(--color-white) !important;
+}
+
+.cta-contact > span > span:first-child {
+  background: var(--color-brand-1) !important;
+  color: var(--color-white) !important;
 }
 
 
@@ -300,7 +331,7 @@ const {
   margin-top: 2.5rem;
   padding-top: 1.1rem;
 
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .nut-label {
@@ -387,7 +418,7 @@ const {
 
   inset: 0;
 
-  border: 1px solid rgba(244, 124, 44, 0.22);
+  border: 1px solid rgba(242, 140, 40, 0.22);
 
   transform: translate(-0.9rem, 0.9rem);
 
@@ -406,7 +437,7 @@ const {
   bottom: 0;
   left: 1.5rem;
 
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
   z-index: -2;
 }
@@ -416,7 +447,8 @@ const {
    MACHINE IMAGE
    ========================================================= */
 
-.media img {
+.media img,
+.media video {
   position: relative;
 
   display: block;
@@ -426,11 +458,11 @@ const {
 
   /*
    * Importante:
-   * La imagen nunca debería ocupar todo el viewport.
+   * La imagen/video nunca debería ocupar todo el viewport.
    */
   max-height: 62svh;
 
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 
   filter:
@@ -561,7 +593,8 @@ const {
     margin: 0 auto;
   }
 
-  .media img {
+  .media img,
+  .media video {
     max-height: 45svh;
   }
 
@@ -673,7 +706,8 @@ const {
     left: 1rem;
   }
 
-  .media img {
+  .media img,
+  .media video {
     max-height: 32svh;
   }
 

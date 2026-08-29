@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="36" viewBox="0 0 120 36" fill="none">
   <!-- Arched orange line from DYFMA branding -->
-  <path d="M60 4 C30 4 8 18 8 30" stroke="#F47C2C" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M60 4 C30 4 8 18 8 30" stroke="#F28C28" stroke-width="2.5" fill="none" stroke-linecap="round"/>
   <!-- DYFMA text - bold condensed sans-serif -->
   <text x="20" y="34" font-family="Montserrat, system-ui, sans-serif" font-size="16" font-weight="700" letter-spacing="0.08em" fill="currentColor">DYFMA</text>
 </svg>

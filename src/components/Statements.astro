@@ -8,6 +8,8 @@ const { items, class: className } = Astro.props;
 ---
 
 <sy-statements class:list={className}>
+  <div class="glow glow-stmt-1" aria-hidden="true"></div>
+  <div class="glow glow-stmt-2" aria-hidden="true"></div>
   <div class="inner">
     {
       items.map(({ title, text }, i) => (
@@ -182,6 +184,30 @@ const { items, class: className } = Astro.props;
     margin-bottom: 0;
     position: relative;
     z-index: 9;
+    overflow: hidden;
+  }
+
+  .glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-stmt-1 {
+    width: 30rem;
+    height: 30rem;
+    top: 15%;
+    left: -5rem;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06), transparent 70%);
+  }
+
+  .glow-stmt-2 {
+    width: 25rem;
+    height: 25rem;
+    bottom: 10%;
+    right: -4rem;
+    background: radial-gradient(circle, rgba(242, 140, 40, 0.10), transparent 70%);
   }
 
   .inner {

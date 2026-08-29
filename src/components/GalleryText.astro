@@ -1,110 +1,110 @@
 ---
-import type { Link, Image } from "../types";
 import Button from "./Button.astro";
-import Gallery from "./Gallery.astro";
-import GradientBackground from "./GradientBackground.astro";
 import TextMarquee from "../components/TextMarquee.astro";
 import { machines } from "../data/machines";
 import type { MachineCategory, Machine } from "../data/machines";
 
-const cardSpecs = (m: Machine) => {
-  const key = m.specs.find(s => /rendimiento|capacidad/i.test(s.label)) ?? m.specs[0];
-  const rest = m.specs.filter(s => s !== key);
-  return [key, rest[0]].filter(Boolean) as Machine["specs"];
-};
-
 interface Props {
-  images: Image[];
   title: string;
   text?: string;
-  cta?: Link;
+  cta?: { title: string; url: string };
   marqueeTexts: string[];
   class?: string;
 }
 
-const { title, text, cta, images, marqueeTexts, class: className } = Astro.props;
+const { title, text, cta, marqueeTexts, class: className } = Astro.props;
+
+const steps: { label: string; num: string; cat: MachineCategory }[] = [
+  { label: "Cosecha", num: "01", cat: "cosecha" },
+  { label: "Partido", num: "02", cat: "partido" },
+  { label: "Limpieza", num: "03", cat: "limpieza" },
+  { label: "Lineas", num: "04", cat: "lineas" },
+  { label: "Envasado", num: "05", cat: "envasado" },
+];
 
 const grouped = machines.reduce((acc, m) => {
   if (!acc[m.category]) acc[m.category] = [];
   acc[m.category].push(m);
   return acc;
-}, {} as Record<MachineCategory, typeof machines>);
+}, {} as Record<MachineCategory, Machine[]>);
 
-const steps = [
-  { label: "Cosecha", desc: "Recolección del fruto", cats: ["cosecha"] as MachineCategory[] },
-  { label: "Partido", desc: "Ruptura de cáscara", cats: ["partido"] as MachineCategory[] },
-  { label: "Limpieza", desc: "Separación de impurezas", cats: ["limpieza"] as MachineCategory[] },
-  { label: "Líneas", desc: "Procesamiento integral", cats: ["lineas", "envasado"] as MachineCategory[] },
-];
-
-const machineIndex = new Map<string, number>();
-let idx = 0;
-for (const s of steps) {
-  for (const cat of s.cats) {
-    for (const m of grouped[cat] ?? []) {
-      machineIndex.set(m.id, ++idx);
-    }
-  }
-}
+const cardSpecs = (m: Machine) => {
+  const key = m.specs.find(s => /rendimiento|capacidad/i.test(s.label)) ?? m.specs[0];
+  const rest = m.specs.filter(s => s !== key);
+  return [key, rest[0], rest[1]].filter(Boolean) as Machine["specs"];
+};
 ---
 
 <div id="productos" class:list={["gallery-text", className]}>
   <div class="u-container container">
+
     <div class="content">
       <div class="u-eyebrow" data-sy-reveal="fade">
         <span class="u-eyebrow-line"></span>
         <span>MAQUINARIA</span>
       </div>
-
-      <h2 class="gallery-title" data-sy-reveal="words">{title}</h2>
-
-      <p class="gallery-text-body" data-sy-reveal="lines">{text}</p>
-
-      {cta ? <Button {...cta} arrow class="cta" /> : null}
+      <h2 class="section-title" data-sy-reveal="words">{title}</h2>
+      <p class="section-body" data-sy-reveal="lines">{text}</p>
+      {cta ? <Button {...cta} arrow class="cta" revealable={false} /> : null}
     </div>
 
-    <div class="gallery-frame">
-      <div class="gallery-label">
-        <span>DYFMA</span>
-        <span>MAQUINARIA 01–03</span>
+    <div class="tabs-wrap" data-sy-reveal="fade">
+      <div class="tab-bar" role="tablist">
+        {steps.map((s, i) => (
+          <button
+            class:list={["tab-btn", { active: i === 0 }]}
+            role="tab"
+            aria-selected={i === 0 ? "true" : "false"}
+            aria-controls={`panel-${s.cat}`}
+            data-tab={s.cat}
+          >
+            <span class="tab-num u-mono">{s.num}</span>
+            <span class="tab-label">{s.label}</span>
+          </button>
+        ))}
+        <span class="tab-indicator"></span>
       </div>
-      <div class="gallery-accent"></div>
-      <div class="gallery-wrap">
-        <Gallery class="gallery" images={images} />
-      </div>
-    </div>
 
-    <div class="process-flow">
-      {steps.map((step, i) => (
-        <div class="process-step">
-          <div class="step-marker">
-            <span>{String(i + 1).padStart(2, "0")}</span>
-          </div>
-          <div class="step-content">
-            <span class="step-label">{step.label}</span>
-            <span class="step-desc">{step.desc}</span>
-            <div class="step-machines">
-              {step.cats.map(cat => grouped[cat]?.map(m => (
-                <a href={`/dyfmaweb/maquinas/${m.id}`} class="step-card">
-                  <span class="step-card-top">
-                    <span class="step-card-index u-mono">{String(machineIndex.get(m.id)!).padStart(2, "0")}</span>
-                    <span class="step-card-arrow">&rarr;</span>
-                  </span>
-                  <span class="step-card-name">{m.name}</span>
-                  <span class="step-card-en u-mono">{m.nameEn}</span>
-                  <span class="step-card-specs">
-                    {cardSpecs(m).map(s => (
-                      <span class="step-card-spec u-mono">
-                        <span class="spec-label">{s.label}</span>
-                        <span class="spec-value">{s.value}</span>
-                      </span>
-                    ))}
-                  </span>
-                </a>
-              )))}
-            </div>
-          </div>
-          {i < steps.length - 1 && <span class="step-connector"></span>}
+      {steps.map((s, i) => (
+        <div
+          class:list={["tab-panel", { active: i === 0 }]}
+          role="tabpanel"
+          id={`panel-${s.cat}`}
+          data-panel={s.cat}
+        >
+          {(grouped[s.cat] ?? []).map(m => (
+            <a href={`/dyfmaweb/maquinas/${m.id}`} class="machine-card">
+              <div class="card-media">
+                {m.image ? (
+                  <img
+                    src={m.image}
+                    alt={m.name}
+                    width="800"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div class="card-placeholder">Imagen pendiente</div>
+                )}
+                <span class="card-index u-mono">{String(steps.findIndex(x => x.cat === m.category) + 1).padStart(2, "0")}</span>
+              </div>
+              <div class="card-body">
+                <h3 class="card-name">{m.name}</h3>
+                <span class="card-name-en u-mono">{m.nameEn}</span>
+                <p class="card-desc">{m.description}</p>
+                <div class="card-specs">
+                  {cardSpecs(m).map(sp => (
+                    <div class="card-spec">
+                      <span class="spec-label u-mono">{sp.label}</span>
+                      <span class="spec-value">{sp.value}</span>
+                    </div>
+                  ))}
+                </div>
+                <span class="card-arrow">&rarr;</span>
+              </div>
+            </a>
+          ))}
         </div>
       ))}
     </div>
@@ -112,194 +112,176 @@ for (const s of steps) {
   </div>
 
   <TextMarquee class="marquee" texts={marqueeTexts} direction={-1} />
-  <GradientBackground />
 </div>
 
+<script is:inline>
+  (function() {
+    const tabs = document.querySelectorAll("[data-tab]");
+    const panels = document.querySelectorAll("[data-panel]");
+    const indicator = document.querySelector(".tab-indicator");
+
+    function activateTab(cat) {
+      tabs.forEach(function(t) {
+        var isActive = t.dataset.tab === cat;
+        t.classList.toggle("active", isActive);
+        t.setAttribute("aria-selected", isActive ? "true" : "false");
+      });
+      panels.forEach(function(p) {
+        p.classList.toggle("active", p.dataset.panel === cat);
+      });
+      if (indicator) {
+        var activeBtn = document.querySelector('[data-tab="' + cat + '"]');
+        if (activeBtn) {
+          indicator.style.width = activeBtn.offsetWidth + "px";
+          indicator.style.left = activeBtn.offsetLeft + "px";
+        }
+      }
+    }
+
+    tabs.forEach(function(t) {
+      t.addEventListener("click", function() { activateTab(t.dataset.tab); });
+    });
+
+    var firstActive = document.querySelector("[data-tab].active");
+    if (firstActive && indicator) {
+      indicator.style.width = firstActive.offsetWidth + "px";
+      indicator.style.left = firstActive.offsetLeft + "px";
+    }
+  })();
+</script>
+
 <style>
-/* =========================================================
-   SECTION
-   ========================================================= */
-
 .gallery-text {
-  margin: 8rem 0 0;
-  padding: 10rem 0 0;
+  margin: 6rem 0 0;
+  padding: 6rem 0 0;
   position: relative;
-  background: var(--color-bg);
+  overflow: hidden;
 }
-
-
-/* =========================================================
-   GRID — aligned to hero / introducing / steps-timeline
-   ========================================================= */
 
 .container {
-  display: grid;
-  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  align-items: center;
-  column-gap: clamp(3rem, 6vw, 7rem);
-  row-gap: clamp(3.5rem, 6vw, 5.5rem);
-  position: relative;
-  z-index: 9;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding: 0 2rem;
 }
-
-
-/* =========================================================
-   CONTENT
-   ========================================================= */
 
 .content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 1rem 0;
-  min-width: 0;
+  max-width: 48rem;
 }
 
-
-/* =========================================================
-   TITLE
-   ========================================================= */
-
-.gallery-title {
+.section-title {
   --fs: var(--type-display);
   --fw: 500;
   --lh: 0.98;
+  font-family: var(--font-heading);
   font-size: var(--fs);
   font-weight: var(--fw);
   line-height: var(--lh);
-  max-width: 11em;
-  margin: 0;
+  margin: 0.75rem 0 0;
   color: var(--color-text);
   letter-spacing: -0.035em;
 }
 
-
-/* =========================================================
-   BODY
-   ========================================================= */
-
-.gallery-text-body {
+.section-body {
   --fs: var(--font-size-lg);
-  max-width: 28em;
-  margin: 1.75rem 0 0;
+  max-width: 30em;
+  margin: 1.25rem 0 0;
+  font-family: var(--font-body);
   font-size: var(--fs);
   line-height: 1.55;
   color: var(--color-text-alt);
 }
 
-.cta {
-  margin-top: 2rem;
-}
+.cta { margin-top: 1.75rem; }
 
+.tabs-wrap { width: 100%; }
 
-/* =========================================================
-   PROCESS FLOW — square markers + hairlines
-   ========================================================= */
-
-.process-flow {
-  grid-column: 1 / -1;
+.tab-bar {
   display: flex;
-  align-items: flex-start;
   gap: 0;
-  width: 100%;
-}
-
-.process-step {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
-  padding-bottom: 1.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
-.process-step:last-child {
-  padding-bottom: 0;
-}
+.tab-bar::-webkit-scrollbar { display: none; }
 
-.step-marker {
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  background: var(--color-bg);
-  margin-bottom: 1rem;
-  flex-shrink: 0;
-  transition: border-color 300ms ease, background 300ms ease, color 300ms ease, transform 300ms ease;
-}
-
-.step-marker span {
-  font-family: var(--font-mono);
-  font-size: 0.58rem;
-  font-weight: 500;
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: var(--font-body);
   color: var(--color-text-alt);
+  transition: color 300ms ease;
 }
 
-.process-step:hover .step-marker {
-  border-color: var(--color-brand-1);
+.tab-btn:hover { color: var(--color-text); }
+.tab-btn.active { color: var(--color-text); }
+
+.tab-num {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--color-text-alt);
+  transition: color 300ms ease, background 300ms ease, border-color 300ms ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-btn.active .tab-num {
   background: var(--color-brand-1);
-  transform: scale(1.08);
-}
-
-.process-step:hover .step-marker span {
+  border-color: var(--color-brand-1);
   color: #fff;
 }
 
-.step-connector {
-  position: absolute;
-  top: 1rem;
-  right: -1px;
-  width: calc(100% - 2rem);
-  height: 1px;
-  background: rgba(0, 0, 0, 0.1);
-  z-index: 1;
-}
-
-.step-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.step-label {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 600;
-  color: var(--color-text);
-  letter-spacing: 0.12em;
+.tab-label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  line-height: 1.2;
 }
 
-.step-desc {
-  font-size: 0.75rem;
-  color: var(--color-text-alt);
-  line-height: 1.3;
+.tab-indicator {
+  position: absolute;
+  bottom: -1px;
+  height: 2px;
+  background: var(--color-brand-1);
+  transition: left 300ms cubic-bezier(0.22, 1, 0.36, 1), width 300ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
 }
 
-.step-machines {
+.tab-panel { display: none; padding-top: 2rem; }
+
+.tab-panel.active {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 1.25rem;
+  animation: panelFade 350ms ease forwards;
+}
+
+@keyframes panelFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.machine-card {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-
-
-/* =========================================================
-   STEP CARD — specimen / product catalog card
-   ========================================================= */
-
-.step-card {
-  position: relative;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  column-gap: 0.85rem;
-  row-gap: 0.15rem;
-  padding: 1.1rem 1.15rem 1rem;
   background: var(--color-surface);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   text-decoration: none;
   overflow: hidden;
   transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -307,379 +289,189 @@ for (const s of steps) {
               box-shadow 400ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Top accent hairline — grows from left on hover/focus */
-.step-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--color-brand-1);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
+.machine-card:hover,
+.machine-card:focus-visible {
+  transform: translateY(-4px);
+  border-color: rgba(242, 140, 40, 0.35);
+  box-shadow: 0 20px 40px -16px rgba(0, 0, 0, 0.25);
 }
 
-/* Orange wash overlay — fades in on hover */
-.step-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(130% 110% at 0% 0%, rgba(244, 124, 44, 0.09), transparent 60%);
-  opacity: 0;
-  transition: opacity 400ms cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.step-card > * {
+.card-media {
   position: relative;
-  z-index: 1;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.step-card:hover,
-.step-card:focus-visible {
-  transform: translateY(-5px);
-  border-color: rgba(244, 124, 44, 0.4);
-  box-shadow: 0 22px 44px -18px rgba(0, 0, 0, 0.2);
+.card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.step-card:hover::before,
-.step-card:focus-visible::before {
-  transform: scaleX(1);
+.machine-card:hover .card-media img {
+  transform: scale(1.04);
 }
 
-.step-card:hover::after,
-.step-card:focus-visible::after {
-  opacity: 1;
+.card-placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-alt);
+  background: rgba(255, 255, 255, 0.03);
 }
 
-/* Index — large catalog number, left column spanning both rows */
-.step-card-index {
-  grid-row: 1 / 3;
-  align-self: center;
-  display: flex;
+.card-index {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  font-size: 0.72rem;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.06em;
-  color: var(--color-brand-1);
-  background: rgba(244, 124, 44, 0.08);
-  border: 1px solid rgba(244, 124, 44, 0.15);
-  transition: background 350ms ease, color 350ms ease, border-color 350ms ease;
-}
-
-.step-card:hover .step-card-index,
-.step-card:focus-visible .step-card-index {
-  background: var(--color-brand-1);
   color: #fff;
-  border-color: var(--color-brand-1);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-/* Top row: index fills left, right side has name + arrow */
-.step-card-top {
-  grid-column: 2;
+.card-body {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.5rem;
+  flex-direction: column;
+  padding: 0.9rem 1rem 1rem;
+  gap: 0.1rem;
+  position: relative;
 }
 
-.step-card-name {
+.card-name {
   font-family: var(--font-heading);
-  font-size: clamp(0.95rem, 1.1vw, 1.12rem);
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
   font-weight: 500;
   color: var(--color-text);
-  line-height: 1.18;
+  line-height: 1.15;
   letter-spacing: -0.02em;
+  margin: 0;
 }
 
-.step-card-arrow {
-  color: var(--color-text-alt);
-  font-size: 0.85rem;
-  flex-shrink: 0;
-  margin-top: 0.15rem;
-  transition: color 350ms ease, transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.step-card:hover .step-card-arrow,
-.step-card:focus-visible .step-card-arrow {
-  color: var(--color-brand-1);
-  transform: translateX(4px);
-}
-
-/* nameEn — mono label */
-.step-card-en {
-  grid-column: 2;
+.card-name-en {
   font-size: 0.58rem;
   color: var(--color-text-alt);
   letter-spacing: 0.08em;
-  margin-top: 0.05rem;
+  text-transform: uppercase;
 }
 
-/* Specs section — always visible, spanning full width under name */
-.step-card-specs {
-  grid-column: 1 / -1;
+.card-desc {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  color: var(--color-text-alt);
+  margin: 0.65rem 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-specs {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.3rem;
   margin-top: 0.65rem;
   padding-top: 0.6rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.step-card-spec {
+.card-spec {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
-  font-size: 0.6rem;
-  line-height: 1.3;
+  gap: 0.6rem;
 }
 
 .spec-label {
+  font-size: 0.58rem;
   color: var(--color-text-alt);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .spec-value {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
   font-weight: 600;
   color: var(--color-text);
   transition: color 350ms ease;
 }
 
-.step-card:hover .spec-value,
-.step-card:focus-visible .spec-value {
+.machine-card:hover .spec-value,
+.machine-card:focus-visible .spec-value {
   color: var(--color-brand-1);
 }
 
-
-@media (prefers-reduced-motion: reduce) {
-  .step-card,
-  .step-card::before,
-  .step-card::after,
-  .step-card-index,
-  .step-card-arrow,
-  .step-card-spec-value {
-    transition: none;
-  }
-
-  .step-card:hover,
-  .step-card:focus-visible {
-    transform: none;
-  }
-}
-
-
-/* =========================================================
-   GALLERY FRAME — cloned from hero / introducing media-frame
-   ========================================================= */
-
-.gallery-frame {
-  position: relative;
-  width: 100%;
-  padding: clamp(1rem, 2vw, 2rem);
-  isolation: isolate;
-}
-
-.gallery-frame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgba(244, 124, 44, 0.22);
-  transform: translate(-1rem, 1rem);
-  z-index: -1;
-}
-
-.gallery-frame::after {
-  content: "";
-  position: absolute;
-  top: 1.75rem;
-  right: 0;
-  bottom: 0;
-  left: 1.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  z-index: -2;
-}
-
-.gallery-label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  transform: translateY(-100%);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.6rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.card-arrow {
+  align-self: flex-end;
+  margin-top: 0.75rem;
   color: var(--color-text-alt);
+  font-size: 1.1rem;
+  transition: color 350ms ease, transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.gallery-label > span:first-child {
+.machine-card:hover .card-arrow,
+.machine-card:focus-visible .card-arrow {
   color: var(--color-brand-1);
+  transform: translateX(4px);
 }
-
-.gallery-accent {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 5rem;
-  height: 5rem;
-  border-right: 3px solid var(--color-brand-1);
-  border-bottom: 3px solid var(--color-brand-1);
-  z-index: 3;
-  pointer-events: none;
-}
-
-.gallery-wrap {
-  position: relative;
-  aspect-ratio: 4/3;
-  overflow: hidden;
-}
-
-.gallery {
-  height: 100%;
-}
-
-.gallery :global(img) {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: drop-shadow(0 25px 45px rgba(0, 0, 0, 0.11));
-}
-
-
-/* =========================================================
-   MARQUEE
-   ========================================================= */
 
 .marquee {
   z-index: 9;
   padding: 2rem 0;
-  margin: 6rem 0 0;
+  margin: 5rem 0 0;
   --c: var(--color-brand-1);
 }
 
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
 @media (--mq-tablet) {
-
-  .gallery-text {
-    margin: 6rem 0 0;
-    padding: 6rem 0 0;
-  }
-
-  .container {
-    grid-template-columns: 1fr;
-    gap: 4rem;
-  }
-
-  .content {
-    align-items: center;
-    text-align: center;
-  }
-
-  .gallery-title {
-    --fs: var(--type-display-md);
-    max-width: 13em;
-  }
-
-  .gallery-text-body {
-    max-width: 34em;
-  }
-
-  .gallery-frame {
-    max-width: 100%;
-    width: min(100%, 42rem);
-    margin: 0 auto;
-    order: -1;
-  }
-
-  .gallery-frame::before,
-  .gallery-frame::after {
-    display: none;
-  }
-
-  .process-flow {
-    flex-wrap: wrap;
-    gap: 1.5rem;
-  }
-
-  .process-step {
-    flex: 0 0 calc(50% - 0.75rem);
-  }
-
-  .step-connector {
-    display: none;
-  }
-}
-
-
-/* =========================================================
-   PHONE
-   ========================================================= */
-
-@media (--mq-phone) {
-
   .gallery-text {
     margin: 4rem 0 0;
     padding: 4rem 0 0;
   }
 
-  .gallery-title {
-    --fs: var(--type-title);
-    line-height: 1.02;
+  .container { padding: 0 1.5rem; }
+
+  .section-title { --fs: var(--type-display-md); }
+
+  .tab-panel.active {
+    grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  }
+}
+
+@media (--mq-phone) {
+  .gallery-text {
+    margin: 3rem 0 0;
+    padding: 3rem 0 0;
   }
 
-  .gallery-text-body {
-    --fs: var(--font-size-md);
-    margin-top: 1.25rem;
-  }
+  .container { padding: 0 1rem; }
 
-  .gallery-frame {
-    padding: 0.5rem;
-  }
+  .section-title { --fs: var(--type-title); }
 
-  .gallery-frame::before {
-    transform: translate(-0.5rem, 0.5rem);
-  }
+  .section-body { --fs: var(--font-size-md); }
 
-  .gallery-frame::after {
-    top: 1rem;
-    left: 1rem;
-  }
+  .tab-btn { padding: 0.7rem 0.85rem; }
 
-  .gallery-accent {
-    width: 3rem;
-    height: 3rem;
-    border-width: 2px;
-  }
+  .tab-label { font-size: 0.7rem; }
 
-  .gallery-label {
-    font-size: 0.5rem;
-  }
-
-  .process-step {
-    flex: 0 0 100%;
-  }
-
-  .step-connector {
-    display: none;
+  .tab-panel.active {
+    grid-template-columns: 1fr;
   }
 }
 </style>

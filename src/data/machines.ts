@@ -22,6 +22,7 @@ export const machines: Machine[] = [
     category: "cosecha",
     description: "Equipo de vibración de alta frecuencia para acople a tres puntos del tractor. Reduce la mano de obra en un 70% durante la cosecha.",
     descriptionEn: "High-frequency vibration unit for three-point tractor coupling. Reduces manual labor by 70% during harvest.",
+    image: "/dyfmaweb/1.webp",
     specs: [
       { label: "Fruto", value: "Nuez Chandler · Pecán" },
       { label: "Rendimiento", value: "15–30 árboles/h" },
@@ -56,6 +57,7 @@ export const machines: Machine[] = [
     category: "limpieza",
     description: "Unidad autónoma para limpieza primaria de frutos secos mediante zaranda vibratoria y turbina centrífuga para expulsión de hojas y ramas.",
     descriptionEn: "Autonomous primary cleaning unit for tree nuts using vibrating screen and centrifugal fan for leaf and branch removal.",
+    image: "/dyfmaweb/3.webp",
     specs: [
       { label: "Código", value: "LCLL-2700" },
       { label: "Fruto", value: "Nuez Pecán" },
@@ -87,6 +89,7 @@ export const machines: Machine[] = [
     category: "envasado",
     description: "Envasadora al vacío para frutos secos. Extiende la vida útil y preserva la calidad del producto procesado.",
     descriptionEn: "Vacuum packing machine for tree nuts. Extends shelf life and preserves processed product quality.",
+    image: "/dyfmaweb/1.webp",
     specs: [
       { label: "Códigos", value: "EVLP-600 | EVLP-500" },
       { label: "Fruto", value: "Nuez Chandler · Pecán · Almendra · Avellana" },

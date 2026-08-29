@@ -22,76 +22,62 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     }}
   />
 
-  <Introducing
-    title="Del diseño a la máquina — fabricación argentina para toda Sudamérica"
-    text="En DYFMA desarrollamos y fabricamos maquinaria industrial para la cosecha, procesamiento y agregado de valor de frutos secos. Combinamos ingeniería propia, fabricación nacional y más de 12 años de experiencia para ofrecer soluciones que permiten al productor procesar mejor y ganar más."
-    cta={{
-      title: "Ver soluciones",
-      url: "#productos",
-    }}
-    class="section-connector"
-  >
-    <LatamMapGraphic slot="media" />
-  </Introducing>
+  <div class="section-glow glow-gallery" aria-hidden="true">
+    <GalleryText
+      title="Maquinaria disenada para producir mas"
+      text="Cada equipo DYFMA esta pensado para maximizar rendimiento, reducir mermas y garantizar un proceso estable y confiable en entornos industriales exigentes."
+      cta={{
+        title: "Explorar maquinaria",
+        url: "#productos",
+      }}
+      marqueeTexts={[
+        "NUEZ CHANDLER",
+        "PECAN",
+        "ALMENDRA",
+        "PISTACHO",
+        "AVELLANA",
+      ]}
+      class="section-connector"
+    />
+  </div>
 
-  <StepsTimeline
-    title="Cómo trabajamos"
-    items={[
-      {
-        title: "Fabricamos",
-        text: "Diseñamos y fabricamos nuestras propias soluciones en Villa María, Córdoba. Cada máquina nace de una necesidad real del productor.",
-        image: "/dyfmaweb/1.webp",
-      },
-      {
-        title: "Resolvemos",
-        text: "Partimos de las necesidades de cada productor para desarrollar la tecnología adecuada. Asesoramiento personalizado sin presión de venta.",
-        image: "/dyfmaweb/3.webp",
-      },
-      {
-        title: "Agregamos valor",
-        text: "Transformamos la producción para que el productor pueda procesar su cosecha, mejorar su eficiencia y obtener un mayor retorno.",
-        image: "/dyfmaweb/elevador.png",
-      },
-    ]}
-    class="section-connector"
-  />
+  <div class="section-glow glow-intro" aria-hidden="true">
+    <Introducing
+      title="Del diseno a la maquina — fabricacion argentina para toda Sudamerica"
+      text="En DYFMA desarrollamos y fabricamos maquinaria industrial para la cosecha, procesamiento y agregado de valor de frutos secos. Combinamos ingenieria propia, fabricacion nacional y mas de 12 anos de experiencia para ofrecer soluciones que permiten al productor procesar mejor y ganar mas."
+      cta={{
+        title: "Ver soluciones",
+        url: "#productos",
+      }}
+      class="section-connector"
+    >
+      <LatamMapGraphic slot="media" />
+    </Introducing>
+  </div>
 
-  <GalleryText
-    title="Maquinaria diseñada para producir más"
-    text="Cada equipo DYFMA está pensado para maximizar rendimiento, reducir mermas y garantizar un proceso estable y confiable en entornos industriales exigentes."
-    cta={{
-      title: "Explorar maquinaria",
-      url: "#productos",
-    }}
-    images={[
-      {
-        alt: "Línea industrial de pelado de frutos secos",
-        src: "/dyfmaweb/1.webp",
-        width: 6000,
-        height: 4000,
-      },
-      {
-        alt: "Detalle de maquinaria DYFMA",
-        src: "/dyfmaweb/2.webp",
-        width: 2689,
-        height: 4032,
-      },
-      {
-        alt: "Proceso industrial de pelado",
-        src: "/dyfmaweb/3.webp",
-        width: 3734,
-        height: 5359,
-      },
-    ]}
-    marqueeTexts={[
-      "NUEZ CHANDLER",
-      "PECÁN",
-      "ALMENDRA",
-      "PISTACHO",
-      "AVELLANA",
-    ]}
-    class="section-connector"
-  />
+  <div class="section-glow glow-steps" aria-hidden="true">
+    <StepsTimeline
+      title="Como trabajamos"
+      items={[
+        {
+          title: "Fabricamos",
+          text: "Disenamos y fabricamos nuestras propias soluciones en Villa Maria, Cordoba. Cada maquina nace de una necesidad real del productor.",
+          image: "/dyfmaweb/1.webp",
+        },
+        {
+          title: "Resolvemos",
+          text: "Partimos de las necesidades de cada productor para desarrollar la tecnologia adecuada. Asesoramiento personalizado sin presion de venta.",
+          image: "/dyfmaweb/3.webp",
+        },
+        {
+          title: "Agregamos valor",
+          text: "Transformamos la produccion para que el productor pueda procesar su cosecha, mejorar su eficiencia y obtener un mayor retorno.",
+          image: "/dyfmaweb/elevador.png",
+        },
+      ]}
+      class="section-connector"
+    />
+  </div>
 
   <Statements
     items={[
@@ -123,52 +109,66 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     direction={-1}
   />
 
-  <Faqs
-    title="Preguntas frecuentes"
-    mobileTitle="FAQs"
-    subtitle="Respuestas a las consultas más comunes sobre nuestras soluciones."
-    items={[
-      {
-        question: "¿Qué tipo de frutos procesa la maquinaria?",
-        answer:
-          "Nuestros equipos están diseñados para nuez Chandler, nuez pecán, almendras, pistacho y avellanas, según el requerimiento del cliente.",
-      },
-      {
-        question: "¿Las máquinas se adaptan a distintos volúmenes de producción?",
-        answer:
-          "Sí. Desarrollamos soluciones para producciones medianas y grandes, con posibilidad de escalar líneas completas.",
-      },
-      {
-        question: "¿La fabricación es nacional?",
-        answer:
-          "Sí. Diseñamos y fabricamos nuestros equipos en Villa María, Córdoba, lo que nos permite ofrecer soporte técnico cercano y repuestos.",
-      },
-      {
-        question: "¿Puedo comprar una sola máquina o necesito una línea completa?",
-        answer:
-          "Trabajamos tanto con máquinas individuales como con líneas completas de procesamiento. Cada solución se adapta a la escala del productor.",
-      },
-      {
-        question: "¿Cómo se solicita una cotización?",
-        answer:
-          "Podés contactarnos a través del formulario o al +549 3534 11-8602. Evaluamos cada necesidad y te asesoramos sin compromiso.",
-      },
-    ]}
-  />
+  <div class="section-glow glow-faqs" aria-hidden="true">
+    <Faqs
+      title="Preguntas frecuentes"
+      mobileTitle="FAQs"
+      subtitle="Respuestas a las consultas más comunes sobre nuestras soluciones."
+      items={[
+        {
+          question: "Que tipo de frutos procesa la maquinaria?",
+          answer:
+            "Nuestros equipos estan disenados para nuez Chandler, nuez pecan, almendras, pistacho y avellanas, segun el requerimiento del cliente.",
+        },
+        {
+          question: "Las maquinas se adaptan a distintos volumenes de produccion?",
+          answer:
+            "Si. Desarrollamos soluciones para producciones medianas y grandes, con posibilidad de escalar lineas completas.",
+        },
+        {
+          question: "La fabricacion es nacional?",
+          answer:
+            "Si. Disenamos y fabricamos nuestros equipos en Villa Maria, Cordoba, lo que nos permite ofrecer tecnico cercano y repuestos.",
+        },
+        {
+          question: "Puedo comprar una sola maquina o necesito una linea completa?",
+          answer:
+            "Trabajamos tanto con maquinas individuales como con lineas completas de procesamiento. Cada solucion se adapta a la escala del productor.",
+        },
+        {
+          question: "Como se solicita una cotizacion?",
+          answer:
+            "Podes contactarnos a traves del formulario o al +549 3534 11-8602. Evaluamos cada necesidad y te asesoramos sin compromiso.",
+        },
+      ]}
+    />
+  </div>
 
   <!-- Closing CTA Band -->
   <section class="closing-cta">
+    <video
+      class="cta-video"
+      src="/dyfmaweb/recolector manual.mp4"
+      autoplay
+      loop
+      muted
+      playsinline
+    ></video>
+    <div class="cta-overlay"></div>
     <div class="u-container">
       <div class="cta-eyebrow" data-sy-reveal="fade">
         <span class="cta-eyebrow-line"></span>
-        <span>PRÓXIMO PASO</span>
+        <span>PROXIMO PASO</span>
       </div>
-      <h2 class="cta-title" data-sy-reveal="words">¿Listo para procesar mejor?</h2>
-      <p class="cta-text u-text" data-sy-reveal="lines">Hablá con nuestro equipo y diseñamos la solución ideal para tu producción.</p>
+      <h2 class="cta-title" data-sy-reveal="words">Listo para procesar mejor?</h2>
+      <p class="cta-text u-text" data-sy-reveal="lines">Hbla con nuestro equipo y disenamos la solucion ideal para tu produccion.</p>
       <div class="cta-actions">
-        <a href="tel:+5493534118602" class="cta-btn">
-          <span class="cta-btn-label">Llamar ahora</span>
-          <span class="cta-btn-phone u-mono">+549 3534 11-8602</span>
+        <a href="https://wa.me/5493534118602" target="_blank" rel="noopener" class="cta-btn cta-btn-wsp">
+          <svg class="wsp-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span class="cta-btn-label">WhatsApp</span>
+        </a>
+        <a href="/dyfmaweb/contacto" class="cta-btn cta-btn-contact">
+          <span class="cta-btn-label">Contacto</span>
         </a>
       </div>
     </div>
@@ -181,20 +181,92 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     z-index: 9;
   }
 
+  /* =========================================================
+     GLOW WRAPPERS
+     ========================================================= */
+  .section-glow {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-bg);
+  }
+
+  .section-glow::before {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-gallery::before {
+    width: 40rem;
+    height: 40rem;
+    top: -10rem;
+    right: -8rem;
+    background: radial-gradient(circle, rgba(242, 140, 40, 0.10), transparent 70%);
+  }
+
+  .glow-intro::before {
+    width: 35rem;
+    height: 35rem;
+    bottom: -8rem;
+    left: -6rem;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06), transparent 70%);
+  }
+
+  .glow-steps::before {
+    width: 30rem;
+    height: 30rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(242, 140, 40, 0.08), transparent 70%);
+  }
+
+  .glow-faqs::before {
+    width: 30rem;
+    height: 30rem;
+    top: -6rem;
+    right: -4rem;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06), transparent 70%);
+  }
+
+  /* =========================================================
+     CLOSING CTA
+     ========================================================= */
   .closing-cta {
-    background: var(--color-brand-1);
+    background: var(--color-bg);
     color: var(--color-white);
-    padding: 6rem 0;
+    padding: 5rem 0;
     text-align: center;
     position: relative;
     z-index: 9;
+    overflow: hidden;
+  }
+
+  .cta-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+  }
+
+  .cta-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(242, 140, 40, 0.78);
+    z-index: 1;
   }
 
   .closing-cta .u-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.25rem;
+    position: relative;
+    z-index: 2;
   }
 
   .cta-eyebrow {
@@ -206,7 +278,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     font-weight: 500;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.85);
   }
 
   .cta-eyebrow-line {
@@ -220,6 +292,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     --fs: var(--type-display);
     --lh: 1;
     --fw: 500;
+    font-family: var(--font-heading);
     font-size: var(--fs);
     color: var(--color-white);
     margin: 0;
@@ -227,8 +300,9 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
   }
 
   .cta-text {
+    font-family: var(--font-body);
     font-size: var(--font-size-lg);
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.9);
     max-width: 30em;
     margin: 0;
   }
@@ -236,22 +310,23 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
   .cta-actions {
     display: flex;
     gap: 1rem;
-    margin-top: 1rem;
+    margin-top: 0.75rem;
     flex-wrap: wrap;
     justify-content: center;
   }
 
   .cta-btn {
     display: inline-flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 0.2rem;
-    padding: 1rem 2rem;
+    gap: 0.5rem;
+    padding: 0.85rem 1.75rem;
     background: var(--color-white);
     color: var(--color-brand-1);
     border: 2px solid var(--color-white);
     border-radius: 0;
     text-decoration: none;
+    font-family: var(--font-body);
     font-weight: 600;
     font-size: var(--font-size-md);
     transition: all 0.2s ease;
@@ -260,6 +335,25 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
   .cta-btn:hover {
     background: transparent;
     color: var(--color-white);
+    border-color: var(--color-white);
+  }
+
+  .cta-btn-contact {
+    background: transparent;
+    color: var(--color-white);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+
+  .cta-btn-contact:hover {
+    background: var(--color-white);
+    color: var(--color-brand-1);
+    border-color: var(--color-white);
+  }
+
+  .wsp-icon {
+    width: 1.15em;
+    height: 1.15em;
+    flex-shrink: 0;
   }
 
   .cta-btn-label {
@@ -273,7 +367,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
 
   @media (--mq-tablet) {
     .closing-cta {
-      padding: 4rem 0;
+      padding: 3.5rem 0;
     }
 
     .cta-title {
@@ -282,6 +376,10 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
   }
 
   @media (--mq-phone) {
+    .closing-cta {
+      padding: 3rem 0;
+    }
+
     .cta-actions {
       flex-direction: column;
       width: 100%;

@@ -1,7 +1,6 @@
 // @ts-check
 import {
   defineConfig,
-  fontProviders,
 } from "astro/config";
 
 
@@ -11,26 +10,4 @@ export default defineConfig({
   base: "/dyfmaweb/",
   output: "static",
   scopedStyleStrategy: 'where',
-  experimental: {
-    fonts: [
-      {
-        provider: fontProviders.google(),
-        name: "Roboto Slab",
-        cssVariable: "--font-roboto-slab",
-        weights: ["100 900"],
-      },
-      {
-        provider: fontProviders.google(),
-        name: "Inter",
-        cssVariable: "--font-inter",
-        weights: ["100 900"],
-      },
-      {
-        provider: fontProviders.google(),
-        name: "Montserrat",
-        cssVariable: "--font-montserrat",
-        weights: ["100 900"],
-      },
-    ],
-  },
 });
