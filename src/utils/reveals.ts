@@ -58,6 +58,13 @@ ScrollTrigger.batch("[data-sy-reveal='fade']", {
   start: "top 85%",
 });
 
+ScrollTrigger.batch("[data-sy-reveal='']", {
+  onEnter: (batch) => {
+    batch.forEach((el) => el.classList.add("is-in"));
+  },
+  start: "top 90%",
+});
+
 export function manualRevealIn(elem: HTMLElement) {
   elem.dispatchEvent(new Event("reveal-in"));
 }

@@ -13,6 +13,25 @@ import Button from "../components/Button.astro";
         <p class="page-desc">
           DYFMA es una empresa argentina con más de 12 años de trayectoria, especializada en el desarrollo, fabricación e instalación de soluciones y maquinaria para la cosecha, procesamiento y agregado de valor de frutos secos.
         </p>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">+12</span>
+            <span class="stat-label">años de trayectoria</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">+200</span>
+            <span class="stat-label">equipos instalados</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">18</span>
+            <span class="stat-label">provincias argentinas</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">4</span>
+            <span class="stat-label">países de la región</span>
+          </div>
+        </div>
       </div>
 
       <!-- Story -->
@@ -37,6 +56,53 @@ import Button from "../components/Button.astro";
               <p class="location-detail">Parque Industrial, Logístico y Tecnológico</p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- Team -->
+      <section class="team">
+        <h2 class="section-title">Quiénes están detrás</h2>
+        <div class="team-grid">
+          <figure class="team-card">
+            <img
+              src="/dyfmaweb/melayMarcelo.jpeg"
+              alt="Marcelo Primo y Melania Sosa, fundadores de DYFMA"
+              width="800"
+              height="600"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span class="team-role u-mono">FUNDADORES</span>
+              <h3 class="team-name">Marcelo Primo y Melania Sosa</h3>
+              <p class="team-text">
+                Un ingeniero mecánico y una emprendedora que convirtieron un
+                taller en una fábrica industrial. Marcelo lidera el desarrollo
+                de producto; Melania impulsa la gestión y el vínculo con cada
+                productor.
+              </p>
+            </figcaption>
+          </figure>
+
+          <figure class="team-card team-card-equipo">
+            <img
+              src="/dyfmaweb/equipo.jpeg"
+              alt="El equipo de DYFMA en la planta de Villa María"
+              width="800"
+              height="600"
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>
+              <span class="team-role u-mono">EL EQUIPO</span>
+              <h3 class="team-name">Ingeniería, producción y soporte</h3>
+              <p class="team-text">
+                Detrás de cada máquina hay un equipo propio de ingenieros,
+                técnicos y soldadores que diseña, fabrica, instala y brinda
+                soporte — todo desde nuestra planta en Villa María, Córdoba.
+              </p>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
@@ -142,7 +208,7 @@ import Button from "../components/Button.astro";
     font-size: 2.5rem;
     font-weight: 500;
     line-height: 1.15;
-    color: var(--color-text);
+    color: var(--color-brand-1);
     margin: 1rem 0;
     max-width: 14em;
   }
@@ -152,6 +218,43 @@ import Button from "../components/Button.astro";
     color: var(--color-text-alt);
     line-height: 1.6;
     max-width: 30em;
+  }
+
+  /* Stats */
+  .stats {
+    display: grid;
+
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 1.5rem;
+
+    margin-top: 3rem;
+  }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.25rem;
+
+    padding: 1.25rem 1.5rem;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1;
+
+    color: var(--color-brand-1);
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+
+    color: var(--color-text-alt);
   }
 
   /* Story */
@@ -172,7 +275,7 @@ import Button from "../components/Button.astro";
     font-family: var(--font-heading);
     font-size: 1.5rem;
     font-weight: 500;
-    color: var(--color-text);
+    color: var(--color-brand-1);
     margin: 0 0 1.5rem;
   }
 
@@ -202,7 +305,7 @@ import Button from "../components/Button.astro";
     font-family: var(--font-heading);
     font-size: 1.2rem;
     font-weight: 500;
-    color: var(--color-text);
+    color: var(--color-brand-1);
     margin: 0;
   }
 
@@ -210,6 +313,87 @@ import Button from "../components/Button.astro";
     font-size: 0.85rem;
     color: var(--color-text-alt);
     margin: 0;
+  }
+
+  /* Team */
+  .team {
+    margin-bottom: 5rem;
+    padding-bottom: 5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .team-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 2rem;
+
+    margin-top: 2rem;
+  }
+
+  .team-card {
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    background: rgba(255, 255, 255, 0.02);
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .team-card img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    aspect-ratio: 4 / 3;
+
+    object-fit: cover;
+    object-position: center;
+
+    filter: grayscale(0.2) contrast(1.02);
+  }
+
+  .team-card-equipo img {
+    object-position: center;
+  }
+
+  .team-card figcaption {
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.4rem;
+
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .team-role {
+    font-size: 0.6rem;
+
+    color: var(--color-brand-1);
+  }
+
+  .team-name {
+    margin: 0;
+
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1.15;
+
+    color: var(--color-brand-1);
+  }
+
+  .team-text {
+    margin: 0.25rem 0 0;
+
+    font-size: 0.9rem;
+    line-height: 1.6;
+
+    color: var(--color-text-alt);
   }
 
   /* What we do */
@@ -240,7 +424,7 @@ import Button from "../components/Button.astro";
     font-family: var(--font-heading);
     font-size: 1.1rem;
     font-weight: 500;
-    color: var(--color-text);
+    color: var(--color-brand-1);
     margin: 0;
   }
 
@@ -279,7 +463,7 @@ import Button from "../components/Button.astro";
     font-family: var(--font-heading);
     font-size: 1rem;
     font-weight: 500;
-    color: var(--color-text);
+    color: var(--color-brand-1);
   }
 
   .fruit-botanical {
@@ -297,7 +481,7 @@ import Button from "../components/Button.astro";
     font-family: var(--font-heading);
     font-size: 2rem;
     font-weight: 500;
-    color: var(--color-text);
+    color: var(--color-brand-1);
     margin: 0 0 1rem;
   }
 
@@ -315,6 +499,14 @@ import Button from "../components/Button.astro";
     }
 
     .capabilities-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .team-grid {
       grid-template-columns: 1fr;
     }
 

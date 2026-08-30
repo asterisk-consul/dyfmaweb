@@ -11,17 +11,6 @@ export function getStaticPaths() {
 }
 
 const { machine } = Astro.props;
-
-// Cada spec se muestra como su propio subtítulo (label grande naranja + valor debajo),
-// igual que "Rendimiento" / "Dimensiones" en las fichas de referencia.
-// Si el valor trae varios ítems separados por " · ", se muestra como lista con ícono de engranaje
-// en vez de texto plano. "Dimensiones" siempre queda como texto plano, nunca como lista.
-const displaySpecs = machine.specs.map((spec) => {
-  const isDimension = /dimensi/i.test(spec.label);
-  const parts = spec.value.split(" · ").map((p) => p.trim());
-  const isList = !isDimension && parts.length > 1;
-  return { ...spec, isList, parts };
-});
 ---
 
 <Layout title={`${machine.name} — DYFMA`}>
@@ -41,37 +30,52 @@ const displaySpecs = machine.specs.map((spec) => {
         <div class="content">
           <span class="category-tag u-spec">{categoryLabels[machine.category]}</span>
           <h1 class="machine-title">{machine.name}</h1>
-          <p class="machine-name-en u-mono">{machine.nameEn}</p>
+          <p class="machine-subtitle">
+            {machine.subtitle ??
+              machine.specs.slice(0, 3).map((s) => s.value).join(" · ")}
+          </p>
           <p class="machine-desc">{machine.description}</p>
 
-          <!-- Cada spec es su propio subtítulo naranja (como "Rendimiento" / "Dimensiones" de la ficha).
-               Si el valor es una lista real (varios ítems separados por "·"), se muestra con íconos de engranaje. -->
-          <div class="specs-section">
-            <span class="specs-eyebrow u-spec">Especificaciones</span>
-
-            {displaySpecs.map((spec) => (
-              <div class="spec-block">
-                <h3 class="spec-subtitle">{spec.label}</h3>
-
-                {spec.isList ? (
-                  <ul class="spec-gear-list">
-                    {spec.parts.map((part) => (
-                      <li class="spec-gear-item">
-                        <svg class="spec-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                          <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" stroke-width="1.6"/>
-                          <path d="M19.4 13.5c.04-.33.06-.66.06-1s-.02-.67-.06-1l1.86-1.46a.75.75 0 0 0 .18-.95l-1.76-3.05a.75.75 0 0 0-.9-.33l-2.2.88a7.6 7.6 0 0 0-1.73-1l-.33-2.34a.75.75 0 0 0-.74-.65h-3.53a.75.75 0 0 0-.74.65l-.33 2.34a7.6 7.6 0 0 0-1.73 1l-2.2-.88a.75.75 0 0 0-.9.33L2.63 9.09a.75.75 0 0 0 .18.95L4.67 11.5c-.04.33-.06.66-.06 1s.02.67.06 1l-1.86 1.46a.75.75 0 0 0-.18.95l1.76 3.05c.19.32.58.45.9.33l2.2-.88c.52.42 1.1.76 1.73 1l.33 2.34c.05.37.37.65.74.65h3.53c.37 0 .69-.28.74-.65l.33-2.34a7.6 7.6 0 0 0 1.73-1l2.2.88c.32.12.71-.01.9-.33l1.76-3.05a.75.75 0 0 0-.18-.95L19.4 13.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                        </svg>
-                        <span class="u-mono">{part}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p class="spec-plain-value u-mono">{spec.value}</p>
-                )}
+          <!-- Specs table -->
+          <div class="specs-table">
+            {machine.specs.map((spec) => (
+              <div class="spec-row">
+                <span class="spec-label">{spec.label}</span>
+                <span class="spec-value u-mono">{spec.value}</span>
               </div>
             ))}
           </div>
 
+          <!-- Features -->
+          {machine.features && (
+            <ul class="features">
+              {machine.features.map((feature) => (
+                <li class="feature">
+                  <span class="feature-check">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M12 2.5 4 5.5v6c0 5 3.4 8.6 8 10 4.6-1.4 8-5 8-10v-6L12 2.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                      <path d="m8.5 12 2.5 2.5 4.5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                  <div>
+                    <h3 class="feature-title">{feature.title}</h3>
+                    <p class="feature-text">{feature.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <!-- Detail (expandible) -->
+          {machine.detail && (
+            <div class="detail" data-detail>
+              <p class="detail-text" data-detail-text>{machine.detail}</p>
+              <button type="button" class="detail-toggle" data-detail-toggle aria-expanded="false">
+                <span class="detail-toggle-more">Ver más</span>
+                <span class="detail-toggle-less">Ver menos</span>
+              </button>
+            </div>
+          )}
 
           <!-- CTA -->
           <div class="actions">
@@ -80,29 +84,82 @@ const displaySpecs = machine.specs.map((spec) => {
               url="/dyfmaweb/contacto"
               arrow
             />
-            <Button
-              title="Ver todas las máquinas"
-              url="/dyfmaweb/maquinas"
-              class="secondary"
-            />
+
+            {machine.pdf ? (
+              <a href={machine.pdf} download class="pdf-btn">
+                <svg class="pdf-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M12 3v12m0 0 4-4m-4 4-4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                Ficha técnica
+              </a>
+            ) : (
+              <Button
+                title="Ver todas las máquinas"
+                url="/dyfmaweb/maquinas"
+                class="secondary"
+              />
+            )}
           </div>
         </div>
 
-        <!-- Image + Quality card -->
+        <!-- Gallery + Quality card -->
         <div class="media">
-          <div class="image-placeholder">
-            {machine.image ? (
-              <img src={machine.image} alt={machine.name} class="machine-photo" />
-            ) : (
-              <>
-                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="10" y="10" width="80" height="80" rx="4" stroke="#D4D4D4" stroke-width="1" stroke-dasharray="4 4"/>
-                  <path d="M50 35 L65 55 L35 55 Z" stroke="#F47C2C" stroke-width="1.5" fill="none"/>
-                  <circle cx="50" cy="45" r="3" fill="#F47C2C"/>
-                </svg>
-                <span class="u-spec">Imagen pendiente</span>
-              </>
-            )}
+          <div class="gallery" data-gallery>
+            <div class="gallery-stage" data-gallery-open>
+              {machine.media.map((item, i) => (
+                <div class:list={["gallery-item", i === 0 && "is-active"]} data-index={i}>
+                  {item.type === "video" ? (
+                    <video
+                      src={item.src}
+                      muted
+                      loop
+                      playsinline
+                      preload="metadata"
+                    ></video>
+                  ) : (
+                    <img
+                      src={item.src}
+                      alt={`${machine.name} — imagen ${i + 1}`}
+                      width="800"
+                      height="600"
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  )}
+                </div>
+              ))}
+
+              {machine.media.length > 1 && (
+                <>
+                  <button type="button" class="gallery-arrow prev" data-gallery-prev aria-label="Anterior">
+                    &lsaquo;
+                  </button>
+                  <button type="button" class="gallery-arrow next" data-gallery-next aria-label="Siguiente">
+                    &rsaquo;
+                  </button>
+                </>
+              )}
+
+              <div class="gallery-counter u-mono">
+                <span data-gallery-current>01</span>
+                <span class="gallery-counter-sep">/</span>
+                <span>{String(machine.media.length).padStart(2, "0")}</span>
+              </div>
+
+              {machine.media.length > 1 && (
+                <div class="gallery-dots" role="tablist" aria-label="Galería">
+                  {machine.media.map((_, i) => (
+                    <button
+                      type="button"
+                      class:list={["gallery-dot", i === 0 && "is-active"]}
+                      data-gallery-dot={i}
+                      aria-label={`Ir a ${i + 1}`}
+                    ></button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <!-- Card CALIDAD DYFMA -->
@@ -125,6 +182,47 @@ const displaySpecs = machine.specs.map((spec) => {
       </a>
     </div>
   </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" data-lightbox hidden>
+    <button type="button" class="lightbox-close" data-lightbox-close aria-label="Cerrar">&#10005;</button>
+
+    <div class="lightbox-stage">
+      {machine.media.map((item, i) => (
+        <div class:list={["lightbox-item", i === 0 && "is-active"]} data-index={i}>
+          {item.type === "video" ? (
+            <video
+              src={item.src}
+              muted
+              loop
+              playsinline
+              controls
+              preload="metadata"
+            ></video>
+          ) : (
+            <img
+              src={item.src}
+              alt={`${machine.name} — imagen ${i + 1}`}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+        </div>
+      ))}
+
+      {machine.media.length > 1 && (
+        <>
+          <button type="button" class="gallery-arrow prev" data-lightbox-prev aria-label="Anterior">&lsaquo;</button>
+          <button type="button" class="gallery-arrow next" data-lightbox-next aria-label="Siguiente">&rsaquo;</button>
+          <div class="gallery-counter u-mono">
+            <span data-lightbox-current>01</span>
+            <span class="gallery-counter-sep">/</span>
+            <span>{String(machine.media.length).padStart(2, "0")}</span>
+          </div>
+        </>
+      )}
+    </div>
+  </div>
 </Layout>
 
 <style>
@@ -135,7 +233,7 @@ const displaySpecs = machine.specs.map((spec) => {
   }
 
   .container {
-    max-width: 1000px;
+    max-width: 1180px;
   }
 
   /* Breadcrumb */
@@ -179,7 +277,7 @@ const displaySpecs = machine.specs.map((spec) => {
   .content {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.75rem;
   }
 
   .category-tag {
@@ -194,7 +292,7 @@ const displaySpecs = machine.specs.map((spec) => {
     font-size: 2.5rem;
     font-weight: 500;
     line-height: 1.15;
-    color: var(--color-text);
+    color: var(--color-brand-1);
     margin: 0;
   }
 
@@ -204,84 +302,199 @@ const displaySpecs = machine.specs.map((spec) => {
     margin: 0;
   }
 
-  .machine-desc {
+  .machine-subtitle {
+    margin: 1rem 0 0;
+
     font-size: var(--font-size-lg);
-    color: var(--color-text-alt);
-    line-height: 1.6;
-  }
+    font-weight: 500;
 
-  /* Specs section */
-  .specs-section {
-    padding: 1.5rem 0;
-    border-top: 1px solid rgba(0,0,0,0.08);
-    border-bottom: 1px solid rgba(0,0,0,0.08);
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  /* Etiqueta chica de la sección (no compite con los subtítulos de cada dato) */
-  .specs-eyebrow {
-    color: var(--color-text-alt);
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  /* Cada dato es su propio bloque con subtítulo grande naranja, como "Rendimiento" / "Dimensiones" */
-  .spec-block {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .spec-subtitle {
-    font-family: var(--font-heading);
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: var(--color-brand-1);
-    margin: 0;
-    line-height: 1.2;
-  }
-
-  .spec-plain-value {
-    font-size: 0.95rem;
     color: var(--color-text);
-    margin: 0;
-    overflow-wrap: break-word;
   }
 
-  /* Lista real (varios ítems en el valor): se muestra con ícono de engranaje, uno por ítem */
-  .spec-gear-list {
+  .machine-desc {
+    margin: 1.25rem 0 0;
+
+    font-size: var(--font-size-md);
+    color: var(--color-text-alt);
+    line-height: 1.65;
+  }
+
+  /* Specs table */
+  .specs-table {
+
+
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .spec-row {
+    display: flex;
+
+    align-items: baseline;
+    justify-content: space-between;
+
+    gap: 1.5rem;
+
+    padding: 0.5rem 0;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .spec-label {
+    font-size: 0.75rem;
+
+    color: var(--color-text-alt);
+
+    flex-shrink: 0;
+  }
+
+  .spec-value {
+    font-size: 0.62rem;
+    line-height: 1.5;
+
+    color: var(--color-white);
+
+    text-align: right;
+
+    overflow-wrap: break-word;
+
+    min-width: 0;
+  }
+
+  /* Features */
+  .features {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    margin: 0;
+
+    gap: 1.25rem;
+
+    margin: 2rem 0 0;
+
     padding: 0;
+
     list-style: none;
   }
 
-  .spec-gear-item {
+  .feature {
     display: flex;
-    align-items: flex-start;
-    gap: 0.6rem;
-    font-size: 0.92rem;
-    color: var(--color-text);
+
+    gap: 0.9rem;
   }
 
-  .spec-icon {
-    width: 20px;
-    height: 20px;
+  .feature-check {
+    display: grid;
+    place-items: center;
+
+    width: 1.4rem;
+    height: 1.4rem;
+
     flex-shrink: 0;
+
     color: var(--color-brand-1);
-    margin-top: 0.1rem;
+  }
+
+  .feature-check svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .feature-title {
+    margin: 0;
+
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+
+    color: var(--color-white);
+  }
+
+  .feature-text {
+    margin: 0.25rem 0 0;
+
+    font-size: var(--font-size-sm);
+    line-height: 1.55;
+
+    color: var(--color-text-alt);
+  }
+
+  /* Detail (expandible) */
+  .detail {
+    margin-top: 2rem;
+  }
+
+  .detail-text {
+    margin: 0;
+
+    font-size: var(--font-size-sm);
+    line-height: 1.65;
+
+    color: var(--color-text-alt);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    transition: none;
+  }
+
+  .detail.is-open .detail-text {
+    display: block;
+
+    -webkit-line-clamp: unset;
+  }
+
+  .detail-toggle {
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-top: 0.75rem;
+
+    padding: 0;
+
+    border: none;
+    background: none;
+
+    font-family: var(--font-body);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+
+    color: var(--color-brand-1);
+
+    cursor: pointer;
+  }
+
+  .detail-toggle:hover {
+    text-decoration: underline;
+  }
+
+  .detail .detail-toggle-less {
+    display: none;
+  }
+
+  .detail.is-open .detail-toggle-less {
+    display: inline;
+  }
+
+  .detail.is-open .detail-toggle-more {
+    display: none;
   }
 
   /* Actions */
   .actions {
     display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
     gap: 1rem;
+
     margin-top: 1rem;
+  }
+
+  .actions :global(.btn) {
+    white-space: nowrap;
   }
 
   .actions :global(.secondary) {
@@ -304,32 +517,321 @@ const displaySpecs = machine.specs.map((spec) => {
     gap: 1rem;
   }
 
-  .image-placeholder {
-    aspect-ratio: 1;
-    background: rgba(0,0,0,0.02);
-    border: 1px solid rgba(0,0,0,0.06);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
+  /* Gallery */
+  .gallery {
+    position: relative;
   }
 
-  .image-placeholder svg {
-    width: 120px;
-    height: 120px;
+  .gallery-stage {
+    position: relative;
+
+    aspect-ratio: 1;
+
+    background: rgba(0, 0, 0, 0.02);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    overflow: hidden;
+
+    cursor: zoom-in;
+  }
+
+  .gallery-item {
+    position: absolute;
+
+    inset: 0;
+
+    opacity: 0;
+
+    transition: opacity 400ms ease;
+
+    pointer-events: none;
+  }
+
+  .gallery-item.is-active {
+    opacity: 1;
+  }
+
+  .gallery-item img,
+  .gallery-item video {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Arrows — appear on hover */
+  .gallery-arrow {
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: grid;
+    place-items: center;
+
+    width: 2.75rem;
+    height: 2.75rem;
+
+    padding: 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    background: rgba(17, 17, 17, 0.75);
+
+    color: var(--color-white);
+
+    font-size: 1.4rem;
+    line-height: 1;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    transition: opacity 0.25s ease, background 0.2s ease, color 0.2s ease;
+
+    z-index: 3;
+  }
+
+  .gallery-arrow.prev {
+    left: 0.75rem;
+  }
+
+  .gallery-arrow.next {
+    right: 0.75rem;
+  }
+
+  .gallery-arrow:hover,
+  .gallery-arrow:focus-visible {
+    background: var(--color-brand-1);
+    color: var(--color-white);
+
+    border-color: var(--color-brand-1);
+  }
+
+  .gallery-stage:hover .gallery-arrow,
+  .gallery-stage:focus-within .gallery-arrow,
+  .lightbox:hover .gallery-arrow,
+  .lightbox:focus-within .gallery-arrow {
+    opacity: 1;
+  }
+
+  /* Counter */
+  .gallery-counter {
+    position: absolute;
+
+    right: 0.75rem;
+    bottom: 0.75rem;
+
+    display: flex;
+
+    gap: 0.35rem;
+
+    padding: 0.3rem 0.6rem;
+
+    background: rgba(17, 17, 17, 0.75);
+
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+
+    color: var(--color-white);
+
+    z-index: 3;
+
+    pointer-events: none;
+  }
+
+  .gallery-counter-sep {
     opacity: 0.5;
   }
 
-  .image-placeholder span {
-    font-size: 0.65rem;
-    color: var(--color-text-alt);
+  /* Dots */
+  .gallery-dots {
+    position: absolute;
+
+    left: 50%;
+    bottom: 0.75rem;
+
+    transform: translateX(-50%);
+
+    display: flex;
+
+    gap: 0.4rem;
+
+    z-index: 3;
   }
 
-  .machine-photo {
+  .gallery-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.35);
+
+    cursor: pointer;
+
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .gallery-dot.is-active {
+    background: var(--color-brand-1);
+
+    transform: scale(1.25);
+  }
+
+  /* PDF button */
+  .pdf-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.6rem;
+
+    padding: 0.875em 1.5em;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    color: var(--color-white);
+
+    white-space: nowrap;
+
+    text-decoration: none;
+
+    font-family: var(--font-body);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .pdf-btn:hover,
+  .pdf-btn:focus {
+    border-color: var(--color-brand-1);
+    color: var(--color-brand-1);
+  }
+
+  .pdf-icon {
+    width: 1.1em;
+    height: 1.1em;
+
+    flex-shrink: 0;
+  }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    background: rgba(0, 0, 0, 0.94);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox-stage {
+    position: relative;
+
     width: 100%;
     height: 100%;
-    object-fit: cover;
+
+    max-width: min(92vw, 1100px);
+    max-height: 92vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-item {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+
+    transition: opacity 300ms ease;
+
+    pointer-events: none;
+  }
+
+  .lightbox-item.is-active {
+    opacity: 1;
+
+    pointer-events: auto;
+  }
+
+  .lightbox-item img,
+  .lightbox-item video {
+    max-width: 100%;
+    max-height: 92vh;
+
+    width: auto;
+    height: auto;
+
+    object-fit: contain;
+  }
+
+  /* Always visible inside the lightbox (not hover-only) */
+  .lightbox .gallery-arrow,
+  .lightbox-close {
+    opacity: 1;
+  }
+
+  .lightbox-close {
+    position: absolute;
+
+    top: 1.25rem;
+    right: 1.25rem;
+
+    display: grid;
+    place-items: center;
+
+    width: 2.75rem;
+    height: 2.75rem;
+
+    padding: 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    background: rgba(17, 17, 17, 0.75);
+
+    color: var(--color-white);
+
+    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    z-index: 4;
+
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .lightbox-close:hover {
+    background: var(--color-brand-1);
+
+    border-color: var(--color-brand-1);
   }
 
   /* Card CALIDAD DYFMA */
@@ -424,4 +926,171 @@ const displaySpecs = machine.specs.map((spec) => {
       font-size: 1.1rem;
     }
   }
+  .lightbox.is-idle .gallery-arrow,
+  .lightbox.is-idle .lightbox-close,
+  .lightbox.is-idle .gallery-counter {
+    opacity: 0;
+
+    pointer-events: none;
+  }
+
+  .lightbox-close,
+  .lightbox .gallery-arrow,
+  .lightbox .gallery-counter {
+    transition: opacity 0.3s ease, background 0.2s ease, color 0.2s ease;
+  }
 </style>
+
+<script>
+  function initGallery() {
+    const gallery = document.querySelector<HTMLElement>("[data-gallery]");
+    const lightbox = document.querySelector<HTMLElement>("[data-lightbox]");
+    if (!gallery || !lightbox) return;
+
+    const stageItems = Array.from(gallery.querySelectorAll<HTMLElement>(".gallery-item"));
+    const lightItems = Array.from(lightbox.querySelectorAll<HTMLElement>(".lightbox-item"));
+    const dots = Array.from(gallery.querySelectorAll<HTMLElement>("[data-gallery-dot]"));
+    const stageCounter = gallery.querySelector<HTMLElement>("[data-gallery-current]");
+    const lightCounter = lightbox.querySelector<HTMLElement>("[data-lightbox-current]");
+    const total = stageItems.length;
+
+    let index = 0;
+
+    const pad = (n: number) => String(n + 1).padStart(2, "0");
+
+    function setActive(item: HTMLElement, i: number) {
+      const media = item.querySelector("video, img") as HTMLVideoElement | HTMLImageElement;
+      if (media && media.tagName === "VIDEO") media.play().catch(() => {});
+    }
+
+    function pauseItem(item: HTMLElement) {
+      const media = item.querySelector("video") as HTMLVideoElement | null;
+      if (media) {
+        media.pause();
+        media.currentTime = 0;
+      }
+    }
+
+    function show(i: number) {
+      index = (i + total) % total;
+
+      stageItems.forEach((item, j) => {
+        const active = j === index;
+        item.classList.toggle("is-active", active);
+        if (active) setActive(item, j);
+        else pauseItem(item);
+      });
+
+      lightItems.forEach((item, j) => {
+        const active = j === index;
+        item.classList.toggle("is-active", active);
+        if (active) setActive(item, j);
+        else if (!lightbox.hidden) pauseItem(item);
+      });
+
+      dots.forEach((dot, j) => dot.classList.toggle("is-active", j === index));
+
+      if (stageCounter) stageCounter.textContent = pad(index);
+      if (lightCounter) lightCounter.textContent = pad(index);
+    }
+
+    const next = () => show(index + 1);
+    const prev = () => show(index - 1);
+
+    gallery.querySelectorAll("[data-gallery-next]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); next(); }));
+    gallery.querySelectorAll("[data-gallery-prev]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); prev(); }));
+    dots.forEach((dot) => dot.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); show(Number((dot as HTMLElement).dataset.galleryDot)); }));
+
+    // Lightbox
+    function openLightbox() {
+      lightbox.hidden = false;
+      document.body.style.overflow = "hidden";
+      wake();
+      show(index);
+    }
+
+    function closeLightbox() {
+      lightbox.hidden = true;
+      document.body.style.overflow = "";
+      lightItems.forEach(pauseItem);
+      show(index);
+    }
+
+    gallery.querySelector("[data-gallery-open]")?.addEventListener("click", openLightbox);
+    lightbox.querySelector("[data-lightbox-close]")?.addEventListener("click", closeLightbox);
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    lightbox.querySelector("[data-lightbox-next]")?.addEventListener("click", next);
+    lightbox.querySelector("[data-lightbox-prev]")?.addEventListener("click", prev);
+
+    document.addEventListener("keydown", (e) => {
+      if (!lightbox.hidden) {
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowRight") next();
+        if (e.key === "ArrowLeft") prev();
+        return;
+      }
+      const rect = gallery.getBoundingClientRect();
+      const inView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (inView) {
+        if (e.key === "ArrowRight") next();
+        if (e.key === "ArrowLeft") prev();
+      }
+    });
+
+    // Auto-hide controls when mouse is idle
+    let idleTimer: ReturnType<typeof setTimeout>;
+
+    function wake() {
+      lightbox.classList.remove("is-idle");
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        if (!lightbox.hidden) lightbox.classList.add("is-idle");
+      }, 2500);
+    }
+
+    lightbox.addEventListener("mousemove", wake);
+    lightbox.addEventListener("touchstart", wake, { passive: true });
+    lightbox.addEventListener("mouseleave", () => {
+      clearTimeout(idleTimer);
+      lightbox.classList.add("is-idle");
+    });
+
+
+    // Swipe (touch)
+    let startX = 0;
+    let tracking = false;
+
+    function bindSwipe(el: HTMLElement) {
+      el.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+        tracking = true;
+      }, { passive: true });
+      el.addEventListener("touchend", (e) => {
+        if (!tracking) return;
+        tracking = false;
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
+      }, { passive: true });
+    }
+
+    bindSwipe(gallery.querySelector<HTMLElement>(".gallery-stage")!);
+    if (total > 1) bindSwipe(lightbox);
+
+    // Autoplay first item if video
+    show(0);
+  }
+
+  initGallery();
+
+  // Detail expand/collapse
+  const detail = document.querySelector("[data-detail]");
+  if (detail) {
+    const toggle = detail.querySelector("[data-detail-toggle]");
+    toggle?.addEventListener("click", () => {
+      const open = detail.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", String(open));
+    });
+  }
+</script>

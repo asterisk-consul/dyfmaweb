@@ -18,7 +18,7 @@
 }
 
 %u-text {
-  font: var(--fw, 400) var(--fs, var(--font-size-base)) / var(--fh, 1.5) var(--font-heading);
+  font: var(--fw, 400) var(--fs, var(--font-size-base)) / var(--fh, 1.5) var(--font-body);
   letter-spacing: var(--ls, -0.01em);
 }
 

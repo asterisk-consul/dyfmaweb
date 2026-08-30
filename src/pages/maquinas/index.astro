@@ -11,7 +11,16 @@ const grouped = machines.reduce((acc, m) => {
   return acc;
 }, {} as Record<MachineCategory, typeof machines>);
 
-const categories: MachineCategory[] = ["cosecha", "partido", "limpieza", "lineas", "envasado"];
+const categories: MachineCategory[] = [
+  "cosecha",
+  "partido",
+  "limpieza",
+  "secado",
+  "lineas",
+  "procesamiento",
+  "envasado",
+  "modulos",
+];
 ---
 
 <Layout title="Máquinas — DYFMA">
@@ -35,13 +44,45 @@ const categories: MachineCategory[] = ["cosecha", "partido", "limpieza", "lineas
               <div class="machines-grid">
                 {grouped[cat].map((machine) => (
                   <a href={`/dyfmaweb/maquinas/${machine.id}`} class="machine-card">
-                    <div class="card-image">
-                      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="10" y="10" width="80" height="80" rx="4" stroke="#D4D4D4" stroke-width="1" stroke-dasharray="4 4"/>
-                        <path d="M50 35 L65 55 L35 55 Z" stroke="#F28C28" stroke-width="1.5" fill="none"/>
-                        <circle cx="50" cy="45" r="3" fill="#F28C28"/>
-                      </svg>
+                    <div class="card-media" data-has-video={machine.video ? "" : undefined}>
+                      {machine.image ? (
+                        <img
+                          src={machine.image}
+                          alt={machine.name}
+                          width="600"
+                          height="450"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : machine.video ? (
+                        <video
+                          class="hover-video"
+                          src={machine.video}
+                          muted
+                          loop
+                          playsinline
+                          preload="metadata"
+                        ></video>
+                      ) : (
+                        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect x="10" y="10" width="80" height="80" rx="4" stroke="#D4D4D4" stroke-width="1" stroke-dasharray="4 4"/>
+                          <path d="M50 35 L65 55 L35 55 Z" stroke="#F28C28" stroke-width="1.5" fill="none"/>
+                          <circle cx="50" cy="45" r="3" fill="#F28C28"/>
+                        </svg>
+                      )}
+                      {machine.video && machine.image ? (
+                        <video
+                          class="hover-video"
+                          src={machine.video}
+                          muted
+                          loop
+                          playsinline
+                          preload="metadata"
+                        ></video>
+                      ) : null}
+                      {machine.video ? <span class="media-badge u-mono">VIDEO</span> : null}
                     </div>
+
                     <div class="card-content">
                       <span class="card-name">{machine.name}</span>
                       <span class="card-name-en u-mono">{machine.nameEn}</span>
@@ -135,53 +176,122 @@ const categories: MachineCategory[] = ["cosecha", "partido", "limpieza", "lineas
 
   .machines-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
   }
 
   .machine-card {
+    position: relative;
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem;
+    flex-direction: column;
     background: rgba(255,255,255,0.02);
     border: 1px solid rgba(255,255,255,0.06);
     text-decoration: none;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
   }
 
   .machine-card:hover {
     border-color: var(--color-brand-1);
     background: rgba(242, 140, 40, 0.02);
+    transform: translateY(-2px);
   }
 
-  .card-image {
-    width: 60px;
-    height: 60px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  /* Media */
+  .card-media {
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 4 / 3;
+
+    overflow: hidden;
+
+    background: rgba(0, 0, 0, 0.02);
   }
 
-  .card-image svg {
+  .card-media img,
+  .card-media video,
+  .card-media svg {
+    display: block;
+
     width: 100%;
     height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transition: transform 0.4s var(--ease-out-cubic);
+  }
+
+  .card-media svg {
+    object-fit: contain;
+
+    padding: 2rem;
+  }
+
+  .machine-card:hover .card-media img,
+  .machine-card:hover .card-media video {
+    transform: scale(1.04);
+  }
+
+  /* Hover video preview — layered above the image, fades in on hover */
+  .card-media .hover-video {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    opacity: 0;
+
+    transition: opacity 0.3s ease, transform 0.4s var(--ease-out-cubic);
+
+    pointer-events: none;
+  }
+
+  .machine-card:hover .hover-video,
+  .machine-card:focus-visible .hover-video {
+    opacity: 1;
+  }
+
+  .media-badge {
+    position: absolute;
+
+    top: 0.6rem;
+    left: 0.6rem;
+
+    padding: 0.3rem 0.6rem;
+
+    background: rgba(17, 17, 17, 0.85);
+
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+
+    color: var(--color-brand-1);
+
+    pointer-events: none;
   }
 
   .card-content {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
+    gap: 0.25rem;
+
+    padding: 1.1rem 1.25rem 1.25rem;
+
     min-width: 0;
   }
 
   .card-name {
     font-family: var(--font-heading);
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     font-weight: 500;
-    color: var(--color-text);
+    line-height: 1.15;
+    color: var(--color-brand-1);
   }
 
   .card-name-en {
@@ -191,11 +301,17 @@ const categories: MachineCategory[] = ["cosecha", "partido", "limpieza", "lineas
 
   .card-spec {
     font-size: 0.6rem;
+    line-height: 1.6;
     color: var(--color-text-alt);
     opacity: 0.7;
   }
 
   .card-arrow {
+    position: absolute;
+
+    right: 1rem;
+    bottom: 1.1rem;
+
     color: var(--color-text-alt);
     font-size: 1.2rem;
     transition: color 0.2s ease, transform 0.2s ease;
@@ -245,3 +361,32 @@ const categories: MachineCategory[] = ["cosecha", "partido", "limpieza", "lineas
     }
   }
 </style>
+
+<script>
+  // Hover video preview: plays the card video on hover, pauses + resets on leave.
+  // Videos only load when first hovered (preload="metadata"), so the listing stays light.
+  function initHoverPreviews() {
+    document
+      .querySelectorAll<HTMLElement>(".machine-card[data-has-video], .machine-card:has(.hover-video)")
+      .forEach((card) => {
+        const video = card.querySelector("video.hover-video");
+        if (!video || card.dataset.previewBound) return;
+        card.dataset.previewBound = "true";
+
+        const start = () => {
+          video.play().catch(() => {});
+        };
+        const stop = () => {
+          video.pause();
+          video.currentTime = 0;
+        };
+
+        card.addEventListener("mouseenter", start);
+        card.addEventListener("focusin", start);
+        card.addEventListener("mouseleave", stop);
+        card.addEventListener("focusout", stop);
+      });
+  }
+
+  initHoverPreviews();
+</script>

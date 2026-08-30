@@ -29,6 +29,22 @@ import Button from "../components/Button.astro";
               <a href="mailto:info@dyfma.ar" class="detail-value detail-link">info@dyfma.ar</a>
             </div>
             <div class="detail-item">
+              <span class="detail-label u-spec">Instagram</span>
+              <a
+                href="https://www.instagram.com/dyfma?igsi=MXZhc2k2ZmMwb29tdw=="
+                target="_blank"
+                rel="noopener"
+                class="detail-value detail-link detail-instagram"
+              >
+                <svg class="ig-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+                <span>@dyfma</span>
+              </a>
+            </div>
+            <div class="detail-item">
               <span class="detail-label u-spec">Actividad</span>
               <span class="detail-value">Diseño y fabricación de maquinaria para frutos secos</span>
             </div>
@@ -116,15 +132,15 @@ import Button from "../components/Button.astro";
           <!-- Success state -->
           <div class="form-success" id="form-success" hidden>
             <p class="success-title">Consulta lista para enviar</p>
-            <p class="success-text">Se abrió tu cliente de email con los datos de la consulta. Si no se abrió automáticamente, copiá el mensaje y envialo a <a href="mailto:info@dyfma.ar">info@dyfma.ar</a>.</p>
+            <p class="success-text">Se abrió WhatsApp con tu consulta cargada. Si no se abrió automáticamente, escribinos directo a <a href="https://wa.me/5493534118602" target="_blank" rel="noopener">+549 3534 11-8602</a>.</p>
             <div class="success-actions">
-              <a href="https://wa.me/5493534118602?text=Hola%20DYFMA%2C%20quiero%20consultar%20por%20una%20m%C3%A1quina" class="success-link" target="_blank" rel="noopener">O escribinos por WhatsApp</a>
+              <a href="mailto:info@dyfma.ar" class="success-link">O escribinos por email</a>
               <button type="button" class="success-retry" id="form-retry">Enviar otra consulta</button>
             </div>
           </div>
 
           <div class="actions" id="form-actions">
-            <Button title="Enviar consulta" arrow submit />
+            <Button title="Enviar consulta" arrow type="submit" />
           </div>
         </form>
       </div>
@@ -171,7 +187,7 @@ import Button from "../components/Button.astro";
     font-size: 2.5rem;
     font-weight: 500;
     line-height: 1.15;
-    color: var(--color-text);
+    color: var(--color-brand-1);
     margin: 0;
   }
 
@@ -215,6 +231,21 @@ import Button from "../components/Button.astro";
   .detail-link:hover,
   .detail-link:focus {
     color: var(--color-brand-1);
+  }
+
+  .detail-instagram {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 0.5rem;
+  }
+
+  .ig-icon {
+    width: 1rem;
+    height: 1rem;
+
+    flex-shrink: 0;
   }
 
   /* Form */
@@ -442,13 +473,24 @@ import Button from "../components/Button.astro";
     });
   });
 
-  function buildMailto(): string {
+  function buildWhatsAppUrl(): string {
     const d = Object.fromEntries(new FormData(form).entries());
-    const subject = encodeURIComponent(`Consulta DYFMA — ${d.fruit || "fruto"} — ${d.stage || "etapa"}`);
-    const body = encodeURIComponent(
-      `Nombre: ${d.name}\nPaís: ${d.country}\nEmail: ${d.email}\nTeléfono: ${d.phone || "—"}\n\nFruto: ${d.fruit}\nVolumen: ${d.volume || "—"}\nEtapa: ${d.stage}\n\nMensaje:\n${d.message}`
-    );
-    return `mailto:info@dyfma.ar?subject=${subject}&body=${body}`;
+    const lines = [
+      "*Nueva consulta — web DYFMA*",
+      "",
+      `*Nombre / Empresa:* ${d.name}`,
+      `*País:* ${d.country}`,
+      `*Email:* ${d.email}`,
+      `*Teléfono:* ${d.phone || "—"}`,
+      "",
+      `*Fruto:* ${d.fruit}`,
+      `*Volumen:* ${d.volume || "—"}`,
+      `*Etapa:* ${d.stage}`,
+      "",
+      `*Mensaje:*`,
+      d.message,
+    ];
+    return `https://wa.me/5493534118602?text=${encodeURIComponent(lines.join("\n"))}`;
   }
 
   form.addEventListener("submit", (e) => {
@@ -462,7 +504,7 @@ import Button from "../components/Button.astro";
       return;
     }
 
-    window.location.href = buildMailto();
+    window.open(buildWhatsAppUrl(), "_blank", "noopener");
     form.hidden = true;
     successEl.hidden = false;
     actionsEl.hidden = true;

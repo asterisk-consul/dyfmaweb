@@ -5,12 +5,13 @@ import type { Link } from "../types";
 interface Props {
   title: string;
   text: string;
+  textExtra?: string;
   cta?: Link;
   image?: { src: string; alt: string };
   class?: string;
 }
 
-const { title, text, cta, image, class: className } = Astro.props;
+const { title, text, textExtra, cta, image, class: className } = Astro.props;
 ---
 
 <section class:list={["introducing", className]}>
@@ -35,6 +36,12 @@ const { title, text, cta, image, class: className } = Astro.props;
         <p class="intro-text u-text" data-sy-reveal="lines">
           {text}
         </p>
+
+        {textExtra ? (
+          <p class="intro-text" data-sy-reveal="lines">
+            {textExtra}
+          </p>
+        ) : null}
 
         {cta ? (
           <div class="cta-wrapper">
@@ -166,13 +173,15 @@ const { title, text, cta, image, class: className } = Astro.props;
 
   max-width: 11em;
 
+  font-family: var(--font-heading);
+
   font-size: var(--fs);
   font-weight: var(--fw);
   line-height: var(--lh);
 
-  letter-spacing: -0.035em;
+  letter-spacing: -0.01em;
 
-  color: var(--color-text);
+  color: var(--color-brand-1);
 }
 
 
@@ -185,10 +194,16 @@ const { title, text, cta, image, class: className } = Astro.props;
 
   margin: 1.75rem 0 0;
 
+  font-family: var(--font-body);
+
   font-size: var(--font-size-lg);
   line-height: 1.55;
 
   color: var(--color-text-alt);
+}
+
+.intro-text + .intro-text {
+  margin-top: 1rem;
 }
 
 
@@ -338,7 +353,7 @@ const { title, text, cta, image, class: className } = Astro.props;
 
   width: 100%;
 
-  min-height: 28rem;
+  min-height: 32rem;
 
   display: flex;
   align-items: center;
@@ -390,6 +405,26 @@ const { title, text, cta, image, class: className } = Astro.props;
 
 
 /* =========================================================
+   VIDEO (slot) — fills the whole media frame
+   ========================================================= */
+
+.media :global(video) {
+  position: absolute;
+
+  inset: 0;
+
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  z-index: 1;
+}
+
+
+/* =========================================================
    ORANGE ACCENT
    ========================================================= */
 
@@ -408,6 +443,26 @@ const { title, text, cta, image, class: className } = Astro.props;
   z-index: 4;
 
   pointer-events: none;
+}
+
+
+/* =========================================================
+   LAPTOP (988px – 1536px)
+   ========================================================= */
+
+@media (--mq-desktop-md) {
+
+  .introducing {
+    padding: clamp(5rem, 8vw, 8rem) 0;
+  }
+
+  .inner {
+    gap: 3.5rem;
+  }
+
+  .media-content {
+    min-height: 26rem;
+  }
 }
 
 
@@ -461,7 +516,7 @@ const { title, text, cta, image, class: className } = Astro.props;
   }
 
   .media-content {
-    min-height: 24rem;
+    min-height: 28rem;
   }
 }
 

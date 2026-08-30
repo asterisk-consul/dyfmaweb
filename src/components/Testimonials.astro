@@ -1,0 +1,731 @@
+---
+interface Testimonial {
+  video: string;
+  name: string;
+  role: string;
+}
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  items: Testimonial[];
+  class?: string;
+}
+
+const { title, subtitle, items, class: className } = Astro.props;
+---
+
+<section class:list={["testimonials", className]}>
+  <div class="u-container container">
+    <div class="head">
+      <div class="u-eyebrow" data-sy-reveal="fade">
+        <span class="u-eyebrow-line"></span>
+        <span>TESTIMONIOS</span>
+      </div>
+
+      <h2 class="section-title" data-sy-reveal="words">
+        {title}
+      </h2>
+
+      {subtitle && <p class="section-desc" data-sy-reveal="fade">{subtitle}</p>}
+    </div>
+
+    <div class="rail-wrap">
+      <div class="rail" data-rail data-sy-reveal="fade">
+        {
+          items.map((item, i) => (
+            <figure class="card" data-card>
+              <div class="card-media">
+                <video
+                  src={item.video}
+                  muted
+                  loop
+                  playsinline
+                  preload="metadata"
+                  aria-label={`Testimonio de ${item.name}`}
+                />
+                <div class="card-shade" aria-hidden="true" />
+
+                <span class="card-quote" aria-hidden="true">&#8220;</span>
+
+                <button
+                  type="button"
+                  class="card-play"
+                  data-play
+                  aria-label={`Reproducir testimonio ${i + 1} con sonido`}
+                >
+                  <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M8 5.5v13l11-6.5-11-6.5Z" />
+                  </svg>
+                  <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M7 5h3.5v14H7V5Zm6.5 0H17v14h-3.5V5Z" />
+                  </svg>
+                </button>
+
+                <figcaption>
+                  <span class="card-name">{item.name}</span>
+                  <span class="card-role u-mono">{item.role}</span>
+                </figcaption>
+              </div>
+            </figure>
+          ))
+        }
+      </div>
+
+      {items.length > 3 && (
+        <>
+          <button type="button" class="rail-arrow prev" data-rail-prev aria-label="Anterior">&lsaquo;</button>
+          <button type="button" class="rail-arrow next" data-rail-next aria-label="Siguiente">&rsaquo;</button>
+        </>
+      )}
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" data-lightbox hidden>
+    <button type="button" class="lightbox-close" data-lb-close aria-label="Cerrar">&#10005;</button>
+
+    <div class="lightbox-stage">
+      <video class="lightbox-video" data-lb-video muted loop playsinline controls preload="metadata"></video>
+
+      <button type="button" class="rail-arrow prev" data-lb-prev aria-label="Anterior">&lsaquo;</button>
+      <button type="button" class="rail-arrow next" data-lb-next aria-label="Siguiente">&rsaquo;</button>
+    </div>
+
+    <div class="lightbox-caption">
+      <span class="card-name" data-lb-name></span>
+      <span class="card-role u-mono" data-lb-role></span>
+    </div>
+
+    <div class="lightbox-counter u-mono">
+      <span data-lb-current>01</span>
+      <span class="lb-sep">/</span>
+      <span data-lb-total>00</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials {
+    padding: clamp(5rem, 9vw, 8rem) 0;
+
+    overflow: hidden;
+  }
+
+  .head {
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    --fs: var(--type-display);
+
+    margin: 1.25rem 0 0;
+
+    max-width: 11em;
+
+    font-family: var(--font-heading);
+
+    font-size: var(--fs);
+    font-weight: 500;
+    line-height: 0.98;
+
+    letter-spacing: -0.01em;
+
+    color: var(--color-brand-1);
+  }
+
+  .section-desc {
+    margin: 1.25rem 0 0;
+
+    max-width: 34em;
+
+    font-size: var(--font-size-lg);
+    line-height: 1.55;
+
+    color: var(--color-text-alt);
+  }
+
+  /* Rail */
+  .rail-wrap {
+    position: relative;
+  }
+
+  .rail {
+    display: flex;
+
+    gap: 1.25rem;
+
+    overflow-x: auto;
+
+    scroll-snap-type: x mandatory;
+
+    scrollbar-width: none;
+  }
+
+  .rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card {
+    flex: 0 0 auto;
+
+    width: clamp(13.5rem, 24vw, 16.5rem);
+
+    margin: 0;
+
+    scroll-snap-align: start;
+  }
+
+  .card-media {
+    position: relative;
+
+    aspect-ratio: 9 / 16;
+
+    overflow: hidden;
+
+    background: rgba(0, 0, 0, 0.02);
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    transition: border-color 0.25s ease;
+  }
+
+  .card:hover .card-media,
+  .card:focus-within .card-media {
+    border-color: rgba(242, 140, 40, 0.45);
+  }
+
+  .card-media video {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    transition: transform 0.4s var(--ease-out-cubic);
+  }
+
+  .card:hover .card-media video {
+    transform: scale(1.03);
+  }
+
+  /* Bottom gradient for caption */
+  .card-shade {
+    position: absolute;
+
+    inset: 55% 0 0;
+
+    background: linear-gradient(
+      to top,
+      rgba(17, 17, 17, 0.9),
+      rgba(17, 17, 17, 0.45) 45%,
+      transparent
+    );
+
+    pointer-events: none;
+
+    z-index: 1;
+  }
+
+  /* Big decorative quote */
+  .card-quote {
+    position: absolute;
+
+    top: 0.5rem;
+    right: 1rem;
+
+    font-family: var(--font-heading);
+    font-size: 4.5rem;
+    line-height: 1;
+
+    color: rgba(242, 140, 40, 0.85);
+
+    pointer-events: none;
+
+    z-index: 2;
+  }
+
+  /* Play / pause button */
+  .card-play {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    display: grid;
+    place-items: center;
+
+    width: 3.25rem;
+    height: 3.25rem;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(242, 140, 40, 0.92);
+
+    color: var(--color-white);
+
+    cursor: pointer;
+
+    z-index: 3;
+
+    transition: transform 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+  }
+
+  .card-play:hover {
+    transform: translate(-50%, -50%) scale(1.08);
+
+    background: var(--color-brand-1);
+  }
+
+  .card-play svg {
+    width: 1.4rem;
+    height: 1.4rem;
+  }
+
+  .card-play .icon-play {
+    margin-left: 0.15rem;
+  }
+
+  .card-play .icon-pause {
+    display: none;
+  }
+
+  /* Playing state: smaller button, moves to top-left */
+  .card.is-playing .card-play {
+    left: auto;
+    top: auto;
+
+    transform: none;
+
+    right: 0.6rem;
+    bottom: 4.4rem;
+
+    width: 2.25rem;
+    height: 2.25rem;
+
+    background: rgba(17, 17, 17, 0.7);
+  }
+
+  .card.is-playing .card-play:hover {
+    transform: scale(1.08);
+
+    background: rgba(17, 17, 17, 0.9);
+  }
+
+  .card.is-playing .card-play .icon-play {
+    display: none;
+  }
+
+  .card.is-playing .card-play .icon-pause {
+    display: block;
+
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Caption over video */
+  figcaption {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.2rem;
+
+    padding: 1rem 1.1rem 1.1rem;
+
+    z-index: 2;
+
+    pointer-events: none;
+  }
+
+  .card-name {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.1;
+
+    color: var(--color-white);
+  }
+
+  .card-role {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+
+    color: var(--color-brand-1);
+  }
+
+  /* Side arrows */
+  .rail-arrow {
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    display: grid;
+    place-items: center;
+
+    width: 2.75rem;
+    height: 2.75rem;
+
+    padding: 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    background: rgba(17, 17, 17, 0.8);
+
+    color: var(--color-white);
+
+    font-size: 1.4rem;
+    line-height: 1;
+
+    cursor: pointer;
+
+    z-index: 4;
+
+    opacity: 0;
+
+    transition: opacity 0.25s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .rail-arrow.prev {
+    left: -1.25rem;
+  }
+
+  .rail-arrow.next {
+    right: -1.25rem;
+  }
+
+  .rail-wrap:hover .rail-arrow,
+  .rail-arrow:focus-visible {
+    opacity: 1;
+  }
+
+  .rail-arrow:hover {
+    background: var(--color-brand-1);
+
+    border-color: var(--color-brand-1);
+  }
+
+  @media (--mq-tablet) {
+    .section-title {
+      --fs: var(--type-display-md);
+    }
+
+    .rail-arrow.prev {
+      left: 0.25rem;
+    }
+
+    .rail-arrow.next {
+      right: 0.25rem;
+    }
+
+    .rail-arrow {
+      opacity: 1;
+    }
+  }
+
+  @media (--mq-phone) {
+    .testimonials {
+      padding: 4rem 0;
+    }
+
+    .section-title {
+      --fs: var(--type-title);
+
+      line-height: 1.02;
+    }
+
+    .card {
+      width: 11.5rem;
+    }
+
+    .card-quote {
+      font-size: 3.25rem;
+    }
+  }
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 100;
+
+    background: rgba(0, 0, 0, 0.95);
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 1rem;
+
+    padding: 2rem;
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox-stage {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    max-width: min(92vw, 460px);
+    max-height: 82vh;
+  }
+
+  .lightbox-video {
+    display: block;
+
+    width: 100%;
+    max-height: 82vh;
+
+    object-fit: contain;
+  }
+
+  .lightbox-caption {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 0.2rem;
+
+    text-align: center;
+  }
+
+  .lightbox-counter {
+    display: flex;
+
+    gap: 0.35rem;
+
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .lb-sep {
+    opacity: 0.5;
+  }
+
+  /* Always visible inside the lightbox (not hover-only) */
+  .lightbox .rail-arrow {
+    opacity: 1;
+  }
+
+  .lightbox-close {
+    position: absolute;
+
+    top: 1.25rem;
+    right: 1.25rem;
+
+    display: grid;
+    place-items: center;
+
+    width: 2.75rem;
+    height: 2.75rem;
+
+    padding: 0;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    background: rgba(17, 17, 17, 0.75);
+
+    color: var(--color-white);
+
+    font-size: 1.1rem;
+
+    cursor: pointer;
+
+    z-index: 4;
+
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .lightbox-close:hover {
+    background: var(--color-brand-1);
+
+    border-color: var(--color-brand-1);
+  }
+  .lightbox.is-idle .rail-arrow,
+  .lightbox.is-idle .lightbox-close,
+  .lightbox.is-idle .lightbox-caption,
+  .lightbox.is-idle .lightbox-counter {
+    opacity: 0;
+
+    pointer-events: none;
+  }
+
+  .lightbox-caption,
+  .lightbox-counter,
+  .lightbox-close {
+    transition: opacity 0.3s ease;
+  }
+</style>
+
+<script>
+  function initTestimonials() {
+    const rail = document.querySelector<HTMLElement>("[data-rail]");
+    const lightbox = document.querySelector<HTMLElement>("[data-lightbox]");
+    if (!rail || !lightbox) return;
+
+    const videos = Array.from(rail.querySelectorAll<HTMLVideoElement>("video"));
+    const cards = Array.from(rail.querySelectorAll<HTMLElement>("[data-card]"));
+
+    const lbVideo = lightbox.querySelector<HTMLVideoElement>("[data-lb-video]")!;
+    const lbName = lightbox.querySelector<HTMLElement>("[data-lb-name]")!;
+    const lbRole = lightbox.querySelector<HTMLElement>("[data-lb-role]")!;
+    const lbCurrent = lightbox.querySelector<HTMLElement>("[data-lb-current]")!;
+    const lbTotal = lightbox.querySelector<HTMLElement>("[data-lb-total]")!;
+
+    lbTotal.textContent = String(videos.length).padStart(2, "0");
+
+    let index = 0;
+    const pad = (n: number) => String(n + 1).padStart(2, "0");
+
+    function pauseAllInline() {
+      videos.forEach((v) => {
+        v.pause();
+        v.muted = true;
+        v.currentTime = 0;
+        v.controls = false;
+        v.closest(".card")?.classList.remove("is-playing");
+      });
+    }
+
+    function show(i: number, autoplay = true) {
+      index = (i + videos.length) % videos.length;
+
+      const card = cards[index];
+      const src = card?.querySelector("video")?.getAttribute("src");
+      const name = card?.querySelector(".card-name")?.textContent ?? "";
+      const role = card?.querySelector(".card-role")?.textContent ?? "";
+
+      lbVideo.src = src ?? "";
+      lbName.textContent = name;
+      lbRole.textContent = role;
+      lbCurrent.textContent = pad(index);
+
+      wake();
+      if (autoplay) {
+        lbVideo.muted = false;
+        lbVideo.play().catch(() => {});
+      }
+    }
+
+    function open(i: number) {
+      pauseAllInline();
+      lightbox.hidden = false;
+      document.body.style.overflow = "hidden";
+      show(i);
+    }
+
+    function close() {
+      lbVideo.pause();
+      lightbox.hidden = true;
+      document.body.style.overflow = "";
+    }
+
+    const next = () => show(index + 1);
+    const prev = () => show(index - 1);
+
+    // Card play buttons open the lightbox
+    cards.forEach((card, i) => {
+      const btn = card.querySelector<HTMLElement>("[data-play]");
+      btn?.addEventListener("click", () => open(i));
+
+      // Hover: muted inline preview
+      card.addEventListener("mouseenter", () => {
+        const v = card.querySelector("video");
+        if (v && v.paused) v.play().catch(() => {});
+      });
+      card.addEventListener("mouseleave", () => {
+        const v = card.querySelector("video");
+        if (v && !card.classList.contains("is-playing")) {
+          v.pause();
+          v.currentTime = 0;
+        }
+      });
+    });
+
+    // Lightbox controls
+    lightbox.querySelector("[data-lb-close]")?.addEventListener("click", close);
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) close();
+    });
+    lightbox.querySelector("[data-lb-next]")?.addEventListener("click", next);
+    lightbox.querySelector("[data-lb-prev]")?.addEventListener("click", prev);
+
+    document.addEventListener("keydown", (e) => {
+      if (lightbox.hidden) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") prev();
+    });
+
+    // Swipe in lightbox
+    let startX = 0;
+    let tracking = false;
+    lightbox.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+      tracking = true;
+    }, { passive: true });
+    lightbox.addEventListener("touchend", (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) (dx < 0 ? next : prev)();
+    }, { passive: true });
+
+    // Auto-hide controls when mouse is idle
+    let idleTimer: ReturnType<typeof setTimeout>;
+
+    function wake() {
+      lightbox.classList.remove("is-idle");
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        if (!lightbox.hidden) lightbox.classList.add("is-idle");
+      }, 2500);
+    }
+
+    lightbox.addEventListener("mousemove", wake);
+    lightbox.addEventListener("touchstart", wake, { passive: true });
+    lightbox.addEventListener("mouseleave", () => {
+      clearTimeout(idleTimer);
+      lightbox.classList.add("is-idle");
+    });
+
+
+    // Rail arrows
+    const step = () => {
+      const card = rail.querySelector<HTMLElement>(".card");
+      return card ? card.offsetWidth + 20 : 300;
+    };
+
+    document.querySelector("[data-rail-prev]")?.addEventListener("click", () => rail.scrollBy({ left: -step(), behavior: "smooth" }));
+    document.querySelector("[data-rail-next]")?.addEventListener("click", () => rail.scrollBy({ left: step(), behavior: "smooth" }));
+  }
+
+  initTestimonials();
+</script>
