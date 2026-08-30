@@ -35,7 +35,13 @@ export interface Machine {
 }
 
 function firstImage(m: Machine): string | undefined {
-  return m.media.find((item) => item.type === "image")?.src;
+  // If the machine has no photo, fall back to the first frame of its first video
+  // (posters are generated as <video-src>.jpg next to each video).
+  const img = m.media.find((item) => item.type === "image")?.src;
+  if (img) return img;
+
+  const video = m.media.find((item) => item.type === "video")?.src;
+  return video ? `${video}.jpg` : undefined;
 }
 
 function firstVideo(m: Machine): string | undefined {
@@ -155,10 +161,9 @@ const rawMachines: Machine[] = [
     detail:
       "La limpiadora a campo facilita la separación de la materia verde (hojas, rueznos, tierra) de la nuez pecán, sumado a que aumenta la materia orgánica en el monte dejándole al árbol lo que es del árbol. Por otro lado separa también los rueznos cerrados que luego se inspeccionan visualmente: ahí se detecta el ruezno cerrado, que es una nuez vacía de la que por maduración aún no abrió pero su nuez está buena.",
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo.jpeg" },
       { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo-2.jpeg" },
+      { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo.jpeg" },
       { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo-3.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo-4.webp" },
       { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo.mp4" },
       { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo-2.mp4" },
       { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo-3.mp4" },
@@ -224,7 +229,6 @@ const rawMachines: Machine[] = [
       { title: "Listo antes de cosecha", text: "Prepará tu producción a tiempo y evitá cuellos de botella en el proceso." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/descapotadora.jpeg" },
       { type: "video", src: "/dyfmaweb/maquinas/descapotadora.mp4" },
     ],
     specs: [
@@ -413,7 +417,7 @@ const rawMachines: Machine[] = [
       { title: "Multi-fruto", text: "Apta para nuez Chandler, pecán, almendra y avellana." },
       { title: "Listo para comercializar", text: "El paso final para llevar tu producto al mercado con presentación profesional." },
     ],
-    media: [{ type: "image", src: "/dyfmaweb/1.webp" }],
+    media: [{ type: "image", src: "/dyfmaweb/maquinas/evasadoraalvacio.jpeg" }],
     pdf: "/dyfmaweb/maquinas/envasadora.pdf",
     specs: [
       { label: "Códigos", value: "EVLP-600 | EVLP-500" },

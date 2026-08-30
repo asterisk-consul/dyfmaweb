@@ -77,32 +77,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
       <LatamMapGraphic slot="media" />
     </Introducing>
   </div>
-
-  <div class="section-glow glow-steps" aria-hidden="true">
-    <StepsTimeline
-      title="Como trabajamos"
-      items={[
-        {
-          title: "Fabricamos",
-          text: "Disenamos y fabricamos nuestras propias soluciones en Villa Maria, Cordoba. Cada maquina nace de una necesidad real del productor.",
-          video: "/dyfmaweb/Fabricacion.mp4",
-        },
-        {
-          title: "Resolvemos",
-          text: "Partimos de las necesidades de cada productor para desarrollar la tecnologia adecuada. Asesoramiento personalizado sin presion de venta.",
-          image: "/dyfmaweb/3.webp",
-        },
-        {
-          title: "Prueba en maquina",
-          text: "Probamos tu solucion con tu propio fruto antes de entregarla. Rendimiento, calidad y funcionamiento verificados en planta — el resultado, comprobado.",
-          video: "/dyfmaweb/pruebaMaquina.mp4",
-        },
-      ]}
-      class="section-connector"
-    />
-  </div>
-
-  <div class="section-glow glow-canje" aria-hidden="true">
+    <div class="section-glow glow-canje" aria-hidden="true">
     <section class="canje">
       <div class="u-container">
         <div class="canje-grid">
@@ -147,6 +122,45 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     </section>
   </div>
 
+  <div class="section-glow glow-steps" aria-hidden="true">
+    <StepsTimeline
+      title="Como trabajamos"
+      items={[
+        {
+          title: "Fabricamos",
+          text: "Disenamos y fabricamos nuestras propias soluciones en Villa Maria, Cordoba. Cada maquina nace de una necesidad real del productor.",
+          video: "/dyfmaweb/Fabricacion.mp4",
+        },
+        {
+          title: "Resolvemos",
+          text: "Partimos de las necesidades de cada productor para desarrollar la tecnologia adecuada. Asesoramiento personalizado sin presion de venta.",
+          image: "/dyfmaweb/3.webp",
+        },
+        {
+          title: "Prueba en Fabrica",
+          text: "Probamos tu solucion con tu propio fruto antes de entregarla. Rendimiento, calidad y funcionamiento verificados en planta — el resultado, comprobado.",
+          video: "/dyfmaweb/pruebaMaquina.mp4",
+        },
+      ]}
+      class="section-connector"
+    />
+  </div>
+
+    <Testimonials
+    title="Los productores hablan"
+    subtitle="Historias reales de quienes trabajan todos los días con nuestras máquinas."
+    items={[
+      { video: "/dyfmaweb/testimonios/testimonio-1.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 01" },
+      { video: "/dyfmaweb/testimonios/testimonio-2.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 02" },
+      { video: "/dyfmaweb/testimonios/testimonio-3.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 03" },
+      { video: "/dyfmaweb/testimonios/testimonio-4.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 04" },
+      { video: "/dyfmaweb/testimonios/testimonio-5.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 05" },
+      { video: "/dyfmaweb/testimonios/testimonio-6.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 06" },
+      { video: "/dyfmaweb/testimonios/testimonio-7.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 07" },
+    ]}
+    class="section-connector"
+  />
+
   <Statements
     items={[
       {
@@ -165,20 +179,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     class="section-connector"
   />
 
-  <Testimonials
-    title="Los productores hablan"
-    subtitle="Historias reales de quienes trabajan todos los días con nuestras máquinas."
-    items={[
-      { video: "/dyfmaweb/testimonios/testimonio-1.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 01" },
-      { video: "/dyfmaweb/testimonios/testimonio-2.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 02" },
-      { video: "/dyfmaweb/testimonios/testimonio-3.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 03" },
-      { video: "/dyfmaweb/testimonios/testimonio-4.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 04" },
-      { video: "/dyfmaweb/testimonios/testimonio-5.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 05" },
-      { video: "/dyfmaweb/testimonios/testimonio-6.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 06" },
-      { video: "/dyfmaweb/testimonios/testimonio-7.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 07" },
-    ]}
-    class="section-connector"
-  />
+
 
   <TextMarquee
     class="marquee"

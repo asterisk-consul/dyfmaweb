@@ -39,14 +39,27 @@ import Button from "../components/Button.astro";
         <div class="story-grid">
           <div class="story-content">
             <h2 class="section-title">Nuestra historia</h2>
-            <p>
-              DYFMA fue fundada por Marcelo Primo, ingeniero mecánico, y Melania Sosa. Juntos desarrollaron la empresa desde un taller hasta una fábrica industrial radicada en el Parque Industrial, Logístico y Tecnológico de Villa María, Córdoba.
+            <p class="story-lead">
+              DYFMA no empezó en una oficina. Empezó con muchos viajes:
+              conociendo productores, escuchando y entendiendo la realidad de
+              cada uno de ellos. Y con muchas horas en la fábrica — prueba,
+              error y volver a empezar.
             </p>
             <p>
-              A lo largo de más de 12 años, desarrollamos e instalado máquinas y líneas de procesamiento en más de 200 puntos del país, con presencia en 18 provincias argentinas.
+              <strong>Marcelo Primo:</strong> "Para los que no me conocen, soy
+              Marcelo Primo y hace más de 12 años fundé DYFMA, siempre con una
+              idea clara: hacer máquinas que les sirvan a los productores."
             </p>
             <p>
-              Nuestro trabajo también ha trascendido las fronteras: contamos con equipos exportados a Brasil, Uruguay, Paraguay y Chile. Nuestro objetivo es consolidarnos como referentes en América Latina en soluciones de ingeniería y maquinaria para el procesamiento de frutos secos.
+              <strong>Melania Sosa:</strong> "Soy Melania, hace poco me sumé
+              como socia. Además de ser pareja, trabajamos juntos en el equipo
+              de DYFMA, combinando experiencia y nuevas ideas. Y algo que para
+              nosotros es clave: todos los días seguimos aprendiendo de
+              nuestros clientes."
+            </p>
+            <p>
+              Después de más de 12 años, DYFMA sigue creciendo: desarrollando
+              maquinaria para productores de todo el país y todo el mundo.
             </p>
           </div>
           <div class="story-visual">
@@ -283,6 +296,21 @@ import Button from "../components/Button.astro";
     color: var(--color-text-alt);
     line-height: 1.7;
     margin-bottom: 1rem;
+  }
+
+  .story-content strong {
+    color: var(--color-white);
+    font-weight: 600;
+  }
+
+  .story-lead {
+    font-size: var(--font-size-lg) !important;
+    line-height: 1.6 !important;
+    color: var(--color-text) !important;
+
+    padding-left: 1.25rem;
+
+    border-left: 2px solid var(--color-brand-1);
   }
 
   .location-card {
