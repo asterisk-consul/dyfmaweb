@@ -153,11 +153,15 @@ const { title, items, class: className } = Astro.props;
         current = index;
       };
 
+      const isMobile = window.matchMedia("(max-width: 987px)");
+      const pinDistance = () =>
+        `+=${window.innerHeight * items.length * (isMobile.matches ? 0.45 : 0.85)}`;
+
       ScrollTrigger.create({
         trigger: itemsWrapper,
         pin: wrapper,
         start: "top top",
-        end: () => `+=${window.innerHeight * items.length * 0.85}`,
+        end: pinDistance,
         anticipatePin: 1,
         invalidateOnRefresh: true,
 
@@ -170,6 +174,8 @@ const { title, items, class: className } = Astro.props;
           setActive(index);
         },
       });
+
+      isMobile.addEventListener("change", () => ScrollTrigger.refresh());
 
       const refresh = () => ScrollTrigger.refresh();
 

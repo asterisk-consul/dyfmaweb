@@ -139,7 +139,10 @@ const cardSpecs = (m: Machine) => {
     }
 
     tabs.forEach(function(t) {
-      t.addEventListener("click", function() { activateTab(t.dataset.tab); });
+      t.addEventListener("click", function() {
+        activateTab(t.dataset.tab);
+        t.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      });
     });
 
     var firstActive = document.querySelector("[data-tab].active");
@@ -470,8 +473,46 @@ const cardSpecs = (m: Machine) => {
 
   .tab-label { font-size: 0.7rem; }
 
+  /* Tabs deslizables horizontalmente */
+  .tab-bar {
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tab-btn {
+    scroll-snap-align: center;
+    flex-shrink: 0;
+  }
+
+  /* Carrusel de máquinas con swipe */
   .tab-panel.active {
-    grid-template-columns: 1fr;
+    display: flex;
+
+    overflow-x: auto;
+
+    scroll-snap-type: x mandatory;
+
+    -webkit-overflow-scrolling: touch;
+
+    gap: 1rem;
+
+    padding: 2rem 1rem 1rem;
+
+    margin: 0 -1rem;
+
+    scrollbar-width: none;
+  }
+
+  .tab-panel.active::-webkit-scrollbar { display: none; }
+
+  .tab-panel.active .machine-card {
+    flex: 0 0 min(82%, 20rem);
+
+    scroll-snap-align: center;
+  }
+
+  .card-desc {
+    -webkit-line-clamp: 2;
   }
 }
 </style>

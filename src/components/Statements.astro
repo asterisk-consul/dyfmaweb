@@ -78,21 +78,51 @@ const { items, class: className } = Astro.props;
 
   class SyStatements extends HTMLElement {
     connectedCallback() {
-      const isTablet = window.matchMedia("(max-width: 987px)");
-      if (isTablet.matches) return;
-
       const inner = this.querySelector<HTMLElement>(".inner")!;
       const boxes = Array.from(this.querySelectorAll<HTMLElement>(".box"));
       if (boxes.length < 2) return;
 
-      const initRotation = 35;
-      const theta = (initRotation * Math.PI) / 180;
-      const factor = Math.abs(Math.cos(theta)) + Math.abs(Math.sin(theta));
-      const sizes = [0, 0];
+      const mm = gsap.matchMedia();
 
-      boxes.forEach((box, i) => {
-        gsap.set(box, { zIndex: boxes.length - i });
+      // Mobile / tablet — reveal de entrada por scroll
+      mm.add("(max-width: 987px)", () => {
+        boxes.forEach((box, i) => {
+          if (i === 0) return;
+
+          const h = box.querySelector("h2");
+          const p = box.querySelector("p");
+          const eyebrow = box.querySelector(".box-eyebrow");
+
+          const tl = gsap.timeline({
+            scrollTrigger: { trigger: box, start: "top 72%" },
+          });
+
+          if (eyebrow) tl.from(eyebrow, { opacity: 0, duration: 0.4 });
+          if (h)
+            tl.from(
+              h,
+              { yPercent: 60, opacity: 0, duration: 0.5, ease: "power3.out" },
+              "<0.05",
+            );
+          if (p)
+            tl.from(
+              p,
+              { yPercent: 30, opacity: 0, duration: 0.5, ease: "power3.out" },
+              "<0.1",
+            );
+        });
       });
+
+      // Desktop — pin + wipe rotado (sin cambios)
+      mm.add("(min-width: 988px)", () => {
+        const initRotation = 35;
+        const theta = (initRotation * Math.PI) / 180;
+        const factor = Math.abs(Math.cos(theta)) + Math.abs(Math.sin(theta));
+        const sizes = [0, 0];
+
+        boxes.forEach((box, i) => {
+          gsap.set(box, { zIndex: boxes.length - i });
+        });
 
       const count = boxes.length;
 
@@ -157,6 +187,7 @@ const { items, class: className } = Astro.props;
             },
           },
         );
+      });
       });
     }
   }
@@ -293,10 +324,27 @@ const { items, class: className } = Astro.props;
   }
 
   @media (--mq-tablet) {
+    .inner {
+      display: block;
+      height: auto;
+    }
+
     .box {
       height: auto;
       min-height: 80vh;
       padding: 4rem 1.5rem;
+      grid-row: auto;
+      grid-column: auto;
+    }
+
+    h2 {
+      --fs: clamp(1.9rem, 8vw, 3rem);
+    }
+
+    p {
+      --fs: var(--font-size-md);
+      max-width: 26em;
+      padding: 0 0.5rem;
     }
 
     .box:nth-child(2) {
