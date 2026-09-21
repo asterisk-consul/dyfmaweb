@@ -45,6 +45,32 @@ import Button from "../components/Button.astro";
               </a>
             </div>
             <div class="detail-item">
+              <span class="detail-label u-spec">YouTube</span>
+              <a
+                href="https://www.youtube.com/@Dyfma-ingenieria"
+                target="_blank"
+                rel="noopener"
+                class="detail-value detail-link detail-youtube"
+              >
+                <svg class="yt-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/>
+                </svg>
+                <span>@Dyfma-ingenieria</span>
+              </a>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label u-spec">BNA Conecta</span>
+              <a
+                href="https://bnaconecta.com.ar/Dyfma_SAS"
+                target="_blank"
+                rel="noopener"
+                class="detail-value detail-link detail-bna"
+              >
+                <img class="bna-logo" src="/dyfmaweb/logo-primary2.svg" alt="BNA Conecta" />
+                <span>Dyfma_SAS</span>
+              </a>
+            </div>
+            <div class="detail-item">
               <span class="detail-label u-spec">Actividad</span>
               <span class="detail-value">Diseño y fabricación de maquinaria para frutos secos</span>
             </div>
@@ -233,7 +259,9 @@ import Button from "../components/Button.astro";
     color: var(--color-brand-1);
   }
 
-  .detail-instagram {
+  .detail-instagram,
+  .detail-youtube,
+  .detail-bna {
     display: inline-flex;
 
     align-items: center;
@@ -241,9 +269,17 @@ import Button from "../components/Button.astro";
     gap: 0.5rem;
   }
 
-  .ig-icon {
+  .ig-icon,
+  .yt-icon {
     width: 1rem;
     height: 1rem;
+
+    flex-shrink: 0;
+  }
+
+  .bna-logo {
+    height: 1.1rem;
+    width: auto;
 
     flex-shrink: 0;
   }

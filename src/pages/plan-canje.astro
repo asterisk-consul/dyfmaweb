@@ -40,10 +40,10 @@ import Button from "../components/Button.astro";
 
         <div class="hero-media" data-sy-reveal="fade">
           <img
-            src="/dyfmaweb/plancanje.jpeg"
+            src="/dyfmaweb/plancanje.webp"
             alt="Plan Canje DYFMA — entregá tu máquina usada y renová por una nueva"
-            width="800"
-            height="600"
+            width="1024"
+            height="1536"
             loading="eager"
             decoding="async"
           />
@@ -324,9 +324,11 @@ import Button from "../components/Button.astro";
   .hero-media {
     position: relative;
 
-    height: 100%;
+    width: min(100%, 22rem);
 
-    min-height: 24rem;
+    aspect-ratio: 2 / 3;
+
+    margin: 0 auto;
   }
 
   .hero-media img {
@@ -340,7 +342,7 @@ import Button from "../components/Button.astro";
     height: 100%;
 
     object-fit: cover;
-    object-position: center top;
+    object-position: center;
 
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.07));
   }
@@ -596,8 +598,6 @@ import Button from "../components/Button.astro";
     }
 
     .hero-media {
-      width: min(100%, 32rem);
-
       margin: 0 auto;
     }
 

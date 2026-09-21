@@ -16,7 +16,7 @@ const year = new Date().getFullYear();
         <!-- Brand -->
         <div class="brand">
           <a class="logo" href="/dyfmaweb/" aria-label="DYFMA — inicio">
-            <img src="/dyfmaweb/logo.svg" alt="DYFMA" />
+            <img src="/dyfmaweb/logofooter.png" alt="DYFMA" />
           </a>
 
           <p class="claim">
@@ -49,6 +49,26 @@ const year = new Date().getFullYear();
               <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
             </svg>
             <span>@dyfma</span>
+          </a>
+          <a
+            href="https://www.youtube.com/@Dyfma-ingenieria"
+            target="_blank"
+            rel="noopener"
+            class="contact-link contact-youtube"
+          >
+            <svg class="yt-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8ZM9.6 15.6V8.4l6.2 3.6-6.2 3.6Z"/>
+            </svg>
+            <span>@Dyfma-ingenieria</span>
+          </a>
+          <a
+            href="https://bnaconecta.com.ar/Dyfma_SAS"
+            target="_blank"
+            rel="noopener"
+            class="contact-link contact-bna"
+          >
+            <img class="bna-logo" src="/dyfmaweb/logo-primary2.svg" alt="BNA Conecta" />
+            <span>Dyfma_SAS</span>
           </a>
           <span class="contact-muted">Ruta Nac. N° 9 — Parque Industrial — Villa María, Córdoba</span>
         </div>
@@ -144,7 +164,6 @@ const year = new Date().getFullYear();
     img {
       height: 2.25rem;
       width: auto;
-      filter: brightness(0) invert(1);
     }
   }
 
@@ -223,7 +242,9 @@ const year = new Date().getFullYear();
     max-width: 22em;
   }
 
-  .contact-instagram {
+  .contact-instagram,
+  .contact-youtube,
+  .contact-bna {
     display: inline-flex;
 
     align-items: center;
@@ -231,9 +252,17 @@ const year = new Date().getFullYear();
     gap: 0.5rem;
   }
 
-  .ig-icon {
+  .ig-icon,
+  .yt-icon {
     width: 1rem;
     height: 1rem;
+
+    flex-shrink: 0;
+  }
+
+  .bna-logo {
+    height: 1.1rem;
+    width: auto;
 
     flex-shrink: 0;
   }

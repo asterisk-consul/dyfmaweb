@@ -1,12 +1,8 @@
 export type MachineCategory =
   | "cosecha"
-  | "partido"
-  | "limpieza"
-  | "secado"
-  | "lineas"
-  | "procesamiento"
-  | "envasado"
-  | "modulos";
+  | "poscosecha"
+  | "pelado-partido"
+  | "post-pelado";
 
 export interface MachineMedia {
   type: "image" | "video";
@@ -65,6 +61,7 @@ const rawMachines: Machine[] = [
       { title: "Vareo preciso", text: "La linga de acero con excéntrico genera un vaivén que se transmite directo a la rama, sin dañar el árbol." },
     ],
     media: [
+      { type: "image", src: "/dyfmaweb/maquinas/remecedor.webp" },
       { type: "image", src: "/dyfmaweb/maquinas/remecedor.jpeg" },
       { type: "video", src: "/dyfmaweb/maquinas/remecedor.mp4" },
       { type: "video", src: "/dyfmaweb/maquinas/remecedor-2.mp4" },
@@ -95,6 +92,7 @@ const rawMachines: Machine[] = [
       { title: "Uso intensivo", text: "Estructura metálica reforzada y mango de madera liviano, pensado para jornadas completas." },
     ],
     media: [
+      {type: "image", src: "/dyfmaweb/maquinas/recolector de mano(principal).webp" },
       { type: "image", src: "/dyfmaweb/maquinas/recolector.jpeg" },
       { type: "image", src: "/dyfmaweb/maquinas/recolector-2.jpeg" },
       { type: "image", src: "/dyfmaweb/maquinas/recolector-3.jpeg" },
@@ -112,7 +110,7 @@ const rawMachines: Machine[] = [
     id: "partidora-pecan-avellana",
     name: "Partidora de Nuez Pecán y Avellanas",
     nameEn: "Pecan & Hazelnut Cracker",
-    category: "partido",
+    category: "pelado-partido",
     description:
       "Máquina para el partido de nuez pecán y avellanas con separador de cáscara regulable. Construcción en chapa acero SAE 1010 con pintura epoxi horneada. Muy bajo mantenimiento y alta eficiencia.",
     descriptionEn:
@@ -124,8 +122,8 @@ const rawMachines: Machine[] = [
       { title: "Bajo mantenimiento", text: "Construcción en chapa SAE 1010 con pintura epoxi horneada, pensada para durar." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/partidora.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/partidora-2.jpeg" },
+      { type: "image", src: "/dyfmaweb/maquinas/partidora1.webp" },
+      { type: "image", src: "/dyfmaweb/maquinas/partidora2.webp" },
       { type: "image", src: "/dyfmaweb/maquinas/partidora-3.jpeg" },
       { type: "image", src: "/dyfmaweb/maquinas/partidora-4.jpeg" },
     ],
@@ -147,7 +145,7 @@ const rawMachines: Machine[] = [
     id: "limpiadora-campo",
     name: "Limpiadora a Campo",
     nameEn: "Field Cleaner",
-    category: "limpieza",
+    category: "poscosecha",
     description:
       "Unidad autónoma para limpieza primaria en el campo: separa la materia verde (hojas, rueznos, tierra) de la nuez pecán mediante zaranda vibratoria y turbina centrífuga. Devuelve la materia orgánica al monte y separa los rueznos cerrados para su inspección visual.",
     descriptionEn:
@@ -161,9 +159,9 @@ const rawMachines: Machine[] = [
     detail:
       "La limpiadora a campo facilita la separación de la materia verde (hojas, rueznos, tierra) de la nuez pecán, sumado a que aumenta la materia orgánica en el monte dejándole al árbol lo que es del árbol. Por otro lado separa también los rueznos cerrados que luego se inspeccionan visualmente: ahí se detecta el ruezno cerrado, que es una nuez vacía de la que por maduración aún no abrió pero su nuez está buena.",
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo-2.jpeg" },
+      { type: "image", src: "/dyfmaweb/maquinas/limpiadorea de campo.webp" },
+      { type: "image", src: "/dyfmaweb/maquinas/recolectora.webp"},
       { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo-3.jpeg" },
       { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo.mp4" },
       { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo-2.mp4" },
       { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo-3.mp4" },
@@ -185,7 +183,7 @@ const rawMachines: Machine[] = [
     id: "horno-deshidratador",
     name: "Horno Deshidratador",
     nameEn: "Dehydrating Oven",
-    category: "secado",
+    category: "poscosecha",
     description:
       "Horno de secado o deshidratador de 500 kg de capacidad por ciclo, diseñado para lograr un secado controlado y homogéneo en todo tipo de frutos secos, preservando sus propiedades y optimizando los tiempos de proceso.",
     descriptionEn:
@@ -214,49 +212,58 @@ const rawMachines: Machine[] = [
     ],
   },
   {
-    id: "descapotadora-almendras",
-    name: "Descapotadora de Almendras",
-    nameEn: "Almond Huller",
-    category: "procesamiento",
-    description:
-      "Descapotadora de almendras diseñada para trabajar con eficiencia, potencia y continuidad cuando más lo necesitás. Prepará tu producción antes de que arranque la cosecha y evitá cuellos de botella en el proceso.",
-    descriptionEn:
-      "Almond huller designed for efficient, high-power continuous operation. Prepare your production before harvest and avoid bottlenecks.",
-    subtitle: "650–800 kg/h · motor 3 HP · caudal regulable",
-    features: [
-      { title: "Alto rendimiento", text: "De 650 a 800 kg por hora de trabajo continuo." },
-      { title: "Caudal regulable", text: "Regulación de entrada para trabajar al ritmo de tu línea." },
-      { title: "Listo antes de cosecha", text: "Prepará tu producción a tiempo y evitá cuellos de botella en el proceso." },
-    ],
-    media: [
-      { type: "video", src: "/dyfmaweb/maquinas/descapotadora.mp4" },
-    ],
-    specs: [
-      { label: "Fruto", value: "Almendra" },
-      { label: "Capacidad", value: "650–800 kg/h" },
-      { label: "Motor", value: "3 HP" },
-      { label: "Tensión", value: "Trifásica / Monofásica" },
-      { label: "Regulación", value: "Caudal de entrada regulable" },
-      { label: "Construcción", value: "Robusta para trabajo intensivo" },
-    ],
-  },
-  {
     id: "despelonadora",
-    name: "Despelonadora",
-    nameEn: "Skin Remover",
-    category: "procesamiento",
+    name: "Despelonadora de Almendra",
+    nameEn: "Almond Skin Remover",
+    category: "poscosecha",
     description:
-      "Equipo para el despelado de frutos secos: retira la piel del producto procesado de manera uniforme, preparándolo para las etapas siguientes de clasificación y envasado.",
+      "Equipo para el despelado de almendras: retira la piel del producto procesado de manera uniforme, preparándolo para las etapas siguientes de clasificación y envasado.",
     descriptionEn:
-      "Equipment for removing the skin of processed nuts, uniformly preparing the product for the next classification and packing stages.",
-    subtitle: "Despelado uniforme · integrable a líneas",
+      "Almond skin removal equipment: uniformly removes the skin of the processed product, preparing it for the next classification and packing stages.",
+    subtitle: "DALL 1050 · despelado uniforme · integrable a líneas",
     features: [
       { title: "Despelado uniforme", text: "Retira la piel del producto procesado de manera pareja." },
       { title: "Integrable", text: "Se incorpora a líneas de procesamiento existentes." },
       { title: "Fabricación nacional", text: "Diseñada y fabricada en Villa María, Córdoba." },
     ],
-    media: [{ type: "image", src: "/dyfmaweb/maquinas/despelonadora.jpeg" }],
+    media: [
+      { type: "image", src: "/dyfmaweb/maquinas/despelonadora-1.webp" },
+      { type: "image", src: "/dyfmaweb/maquinas/despelonadora.jpeg" },
+      { type: "video", src: "/dyfmaweb/maquinas/descapotadora.mp4" },
+    ],
     specs: [
+      { label: "Código", value: "DALL 1050" },
+      { label: "Fruto", value: "Almendra" },
+      { label: "Aplicación", value: "Despelado de frutos secos" },
+      { label: "Integración", value: "Adaptable a líneas de procesamiento" },
+      { label: "Construcción", value: "Fabricación nacional DYFMA" },
+    ],
+  },
+  {
+    id: "despelonadora-nuez-chandler",
+    name: "Despelonadora de Nuez Chandler",
+    nameEn: "Chandler Walnut Skin Remover",
+    category: "poscosecha",
+    description:
+      "Equipo para el despelado de nuez Chandler: retira la piel del producto procesado de manera uniforme, dejándolo preparado para las etapas siguientes de clasificación y envasado.",
+    descriptionEn:
+      "Chandler walnut skin removal equipment: uniformly removes the skin of the processed product, leaving it ready for the next classification and packing stages.",
+    subtitle: "DNLL 950 · despelado uniforme · integrable a líneas",
+    features: [
+      { title: "Despelado uniforme", text: "Retira la piel de la nuez Chandler de manera pareja y constante." },
+      { title: "Integrable", text: "Se incorpora a líneas de procesamiento existentes." },
+      { title: "Fabricación nacional", text: "Diseñada y fabricada en Villa María, Córdoba." },
+    ],
+    media: [
+      { type: "image", src: "/dyfmaweb/maquinas/despelonadora-nuez-chandler.jpeg" },
+      { type: "video", src: "/dyfmaweb/maquinas/depelonadoraNuez1.mp4" },
+      { type: "video", src: "/dyfmaweb/maquinas/depelonadoraNuez2.mp4" },
+      { type: "video", src: "/dyfmaweb/maquinas/depelonadoraNuez3.mp4" },
+
+    ],
+    specs: [
+      { label: "Código", value: "DNLL 950" },
+      { label: "Fruto", value: "Nuez Chandler" },
       { label: "Aplicación", value: "Despelado de frutos secos" },
       { label: "Integración", value: "Adaptable a líneas de procesamiento" },
       { label: "Construcción", value: "Fabricación nacional DYFMA" },
@@ -266,7 +273,7 @@ const rawMachines: Machine[] = [
     id: "linea-limpieza",
     name: "Línea de Limpieza",
     nameEn: "Cleaning Line",
-    category: "lineas",
+    category: "poscosecha",
     description:
       "Línea integral para la limpieza de frutos secos desde la recepción de la cosecha: carro con clapeta de descarga, lagar de recepción de 1 TN, distribución y elevación, saca palos + saca hojas, pre-cleaner y mesa de inspección. Menos tareas manuales y producto listo para continuar su transformación.",
     descriptionEn:
@@ -306,7 +313,7 @@ const rawMachines: Machine[] = [
     id: "linea-semi-industrial",
     name: "Línea Semi-Industrial",
     nameEn: "Semi-Industrial Line",
-    category: "lineas",
+    category: "pelado-partido",
     description:
       "Partidora semi-industrial para nuez pecán: equipo compacto y eficiente que integra hervidor + colador, oreador, elevador dosificador con variador de velocidad, sistema de partido preciso y doble separación de cáscara. Diseño portátil con ruedas: cabe en una camioneta doble cabina.",
     descriptionEn:
@@ -319,9 +326,9 @@ const rawMachines: Machine[] = [
     ],
     media: [
       { type: "image", src: "/dyfmaweb/2.webp" },
-      { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial-2.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial-3.mp4" },
+      { type: "video", src: "/dyfmaweb/maquinas/semi industrial-rapido.mp4" },
+      // { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial-2.mp4" },
+      // { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial-3.mp4" },
       { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial-4.mp4" },
     ],
     pdf: "/dyfmaweb/maquinas/linea-semi-industrial.pdf",
@@ -341,7 +348,7 @@ const rawMachines: Machine[] = [
     id: "linea-pelado",
     name: "Línea de Pelado y Procesamiento",
     nameEn: "Shelling & Processing Line",
-    category: "lineas",
+    category: "pelado-partido",
     description:
       "Línea integral de pelado y procesamiento: hervido y sanitización, tolva con elevación y dosificación, partido, prelimpieza, selección por color, separación por aire y sistema de reproceso para recuperar producto. Transforma el fruto con cáscara en un producto con valor agregado, listo para seleccionar, clasificar y envasar.",
     descriptionEn:
@@ -355,8 +362,8 @@ const rawMachines: Machine[] = [
     detail:
       "La Línea de Pelado y Procesamiento integra las etapas de hervido y sanitización, tolva con elevación y dosificación, partido, prelimpieza de cáscara, transporte y separación, selección por color, separación por aire, separación producto/cáscara, reproceso con cabezal y separador de aire, bandeja vibratoria y dosificación, y clasificación con control final. El objetivo no es solamente pelar: es aprovechar mejor la producción, reducir tareas manuales, ordenar el proceso y avanzar dentro de la cadena de valor. La configuración mostrada corresponde a nuez pecán, pero la tecnología puede analizarse y adaptarse a diferentes frutos secos según tipo de fruto, características de la cáscara, volumen de producción, capacidad requerida, nivel de automatización y producto final buscado.",
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/linea-pelado.jpeg" },
-      { type: "video", src: "/dyfmaweb/LineaPeladoraPecan.mp4" },
+      { type: "image", src: "/dyfmaweb/maquinas/render.jpeg" },
+      { type: "video", src: "/dyfmaweb/lineaSEBA.mp4" },
     ],
     specs: [
       { label: "Fruto", value: "Nuez Pecán — configurable a otros frutos" },
@@ -377,7 +384,7 @@ const rawMachines: Machine[] = [
     id: "elevador-dosificador",
     name: "Elevador Dosificador",
     nameEn: "Dosing Elevator",
-    category: "modulos",
+    category: "poscosecha",
     description:
       "Módulo con variador de velocidad para automatizar y hacer continuas las líneas de procesamiento: eleva, dosifica y alimenta el producto de manera controlada hacia el siguiente equipo. Se incorpora a líneas con horno deshidratador o partidoras, reduciendo la manipulación manual.",
     descriptionEn:
@@ -406,7 +413,7 @@ const rawMachines: Machine[] = [
     id: "envasadora",
     name: "Envasadora al Vacío",
     nameEn: "Vacuum Packer",
-    category: "envasado",
+    category: "post-pelado",
     description:
       "Envasadora al vacío para frutos secos. Extiende la vida útil y preserva la calidad del producto procesado.",
     descriptionEn:
@@ -436,11 +443,7 @@ export const machines: Machine[] = rawMachines.map((m) => ({
 
 export const categoryLabels: Record<MachineCategory, string> = {
   cosecha: "Cosecha",
-  partido: "Partido",
-  limpieza: "Limpieza",
-  secado: "Secado",
-  lineas: "Líneas de Procesamiento",
-  procesamiento: "Procesamiento",
-  envasado: "Envasado",
-  modulos: "Módulos",
+  poscosecha: "Poscosecha",
+  "pelado-partido": "Pelado | Partido",
+  "post-pelado": "Post Pelado",
 };

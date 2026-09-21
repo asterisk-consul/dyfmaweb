@@ -16,10 +16,9 @@ const { title, text, cta, marqueeTexts, class: className } = Astro.props;
 
 const steps: { label: string; num: string; cat: MachineCategory }[] = [
   { label: "Cosecha", num: "01", cat: "cosecha" },
-  { label: "Partido", num: "02", cat: "partido" },
-  { label: "Limpieza", num: "03", cat: "limpieza" },
-  { label: "Lineas", num: "04", cat: "lineas" },
-  { label: "Envasado", num: "05", cat: "envasado" },
+  { label: "Poscosecha", num: "02", cat: "poscosecha" },
+  { label: "Pelado | Partido", num: "03", cat: "pelado-partido" },
+  { label: "Post Pelado", num: "04", cat: "post-pelado" },
 ];
 
 const grouped = machines.reduce((acc, m) => {
@@ -141,7 +140,13 @@ const cardSpecs = (m: Machine) => {
     tabs.forEach(function(t) {
       t.addEventListener("click", function() {
         activateTab(t.dataset.tab);
-        t.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        var bar = t.closest(".tab-bar");
+        if (bar && bar.scrollWidth > bar.clientWidth) {
+          var target = t.offsetLeft - (bar.clientWidth - t.offsetWidth) / 2;
+          var max = bar.scrollWidth - bar.clientWidth;
+          target = Math.max(0, Math.min(target, max));
+          bar.scrollTo({ left: target, behavior: "smooth" });
+        }
       });
     });
 
