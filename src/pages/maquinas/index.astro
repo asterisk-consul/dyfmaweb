@@ -4,12 +4,19 @@ import Button from "../../components/Button.astro";
 import { machines, categoryLabels } from "../../data/machines";
 import type { MachineCategory } from "../../data/machines";
 
-// Group machines by category
-const grouped = machines.reduce((acc, m) => {
-  if (!acc[m.category]) acc[m.category] = [];
-  acc[m.category].push(m);
-  return acc;
-}, {} as Record<MachineCategory, typeof machines>);
+// Group machines by category (modules are shown inside their line, not as cards)
+const grouped = machines
+  .filter((m) => m.role !== "module")
+  .reduce((acc, m) => {
+    if (!acc[m.category]) acc[m.category] = [];
+    acc[m.category].push(m);
+    return acc;
+  }, {} as Record<MachineCategory, typeof machines>);
+
+// Lines first inside each group
+Object.values(grouped).forEach((list) => {
+  list.sort((a, b) => (a.role === "line" ? 0 : 1) - (b.role === "line" ? 0 : 1));
+});
 
 const categories: MachineCategory[] = [
   "cosecha",
@@ -39,7 +46,10 @@ const categories: MachineCategory[] = [
               <h2 class="category-title">{categoryLabels[cat]}</h2>
               <div class="machines-grid">
                 {grouped[cat].map((machine) => (
-                  <a href={`/dyfmaweb/maquinas/${machine.id}`} class="machine-card">
+                  <a
+                    href={`/dyfmaweb/maquinas/${machine.id}`}
+                    class:list={["machine-card", machine.role === "line" && "machine-card--line"]}
+                  >
                     <div class="card-media" data-has-video={machine.video ? "" : undefined}>
                       {machine.image ? (
                         <img
@@ -77,14 +87,19 @@ const categories: MachineCategory[] = [
                         ></video>
                       ) : null}
                       {machine.video ? <span class="media-badge u-mono">VIDEO</span> : null}
+                      {machine.role === "line" ? <span class="line-badge u-mono">LÍNEA</span> : null}
                     </div>
 
                     <div class="card-content">
                       <span class="card-name">{machine.name}</span>
                       <span class="card-name-en u-mono">{machine.nameEn}</span>
-                      <span class="card-spec u-mono">
-                        {machine.specs.map(s => s.value).join(" — ")}
-                      </span>
+                      {machine.role === "line" ? (
+                        <span class="card-line-note u-mono">Compuesta por módulos</span>
+                      ) : (
+                        <span class="card-spec u-mono">
+                          {machine.specs.slice(0, 2).map(s => s.value).join(" — ")}
+                        </span>
+                      )}
                     </div>
                     <span class="card-arrow">→</span>
                   </a>
@@ -192,6 +207,38 @@ const categories: MachineCategory[] = [
     transform: translateY(-2px);
   }
 
+  /* Line cards — mismo tamaño que el resto, con acento sutil */
+  .machine-card--line {
+    border-color: rgba(242, 140, 40, 0.35);
+    background: rgba(242, 140, 40, 0.03);
+  }
+
+  .machine-card--line:hover {
+    border-color: var(--color-brand-1);
+    background: rgba(242, 140, 40, 0.05);
+  }
+
+  .line-badge {
+    position: absolute;
+    top: 0.6rem;
+    right: 0.6rem;
+    padding: 0.28rem 0.55rem;
+    background: var(--color-brand-1);
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    pointer-events: none;
+  }
+
+  .card-line-note {
+    font-size: 0.6rem;
+    line-height: 1.6;
+    color: var(--color-brand-1);
+    opacity: 0.9;
+    min-height: calc(3 * 1.6em);
+  }
+
   /* Media */
   .card-media {
     position: relative;
@@ -288,11 +335,21 @@ const categories: MachineCategory[] = [
     font-weight: 500;
     line-height: 1.15;
     color: var(--color-brand-1);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: calc(2 * 1.15em);
   }
 
   .card-name-en {
     font-size: 0.65rem;
     color: var(--color-text-alt);
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .card-spec {
@@ -300,6 +357,12 @@ const categories: MachineCategory[] = [
     line-height: 1.6;
     color: var(--color-text-alt);
     opacity: 0.7;
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: calc(3 * 1.6em);
   }
 
   .card-arrow {
@@ -363,7 +426,9 @@ const categories: MachineCategory[] = [
   // Videos only load when first hovered (preload="metadata"), so the listing stays light.
   function initHoverPreviews() {
     document
-      .querySelectorAll<HTMLElement>(".machine-card[data-has-video], .machine-card:has(.hover-video)")
+      .querySelectorAll<HTMLElement>(
+        ".machine-card[data-has-video], .machine-card:has(.hover-video)"
+      )
       .forEach((card) => {
         const video = card.querySelector("video.hover-video");
         if (!video || card.dataset.previewBound) return;

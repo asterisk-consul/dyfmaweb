@@ -21,16 +21,22 @@ const steps: { label: string; num: string; cat: MachineCategory }[] = [
   { label: "Post Pelado", num: "04", cat: "post-pelado" },
 ];
 
-const grouped = machines.reduce((acc, m) => {
-  if (!acc[m.category]) acc[m.category] = [];
-  acc[m.category].push(m);
-  return acc;
-}, {} as Record<MachineCategory, Machine[]>);
+const grouped = machines
+  .filter((m) => m.role !== "module")
+  .reduce((acc, m) => {
+    if (!acc[m.category]) acc[m.category] = [];
+    acc[m.category].push(m);
+    return acc;
+  }, {} as Record<MachineCategory, Machine[]>);
+
+Object.values(grouped).forEach((list) => {
+  list.sort((a, b) => (a.role === "line" ? 0 : 1) - (b.role === "line" ? 0 : 1));
+});
 
 const cardSpecs = (m: Machine) => {
   const key = m.specs.find(s => /rendimiento|capacidad/i.test(s.label)) ?? m.specs[0];
   const rest = m.specs.filter(s => s !== key);
-  return [key, rest[0], rest[1]].filter(Boolean) as Machine["specs"];
+  return [key, rest[0]].filter(Boolean) as Machine["specs"];
 };
 ---
 
@@ -72,7 +78,10 @@ const cardSpecs = (m: Machine) => {
           data-panel={s.cat}
         >
           {(grouped[s.cat] ?? []).map(m => (
-            <a href={`/dyfmaweb/maquinas/${m.id}`} class="machine-card">
+            <a
+              href={`/dyfmaweb/maquinas/${m.id}`}
+              class:list={["machine-card", m.role === "line" && "machine-card--line"]}
+            >
               <div class="card-media">
                 {m.image ? (
                   <img
@@ -87,6 +96,7 @@ const cardSpecs = (m: Machine) => {
                   <div class="card-placeholder">Imagen pendiente</div>
                 )}
                 <span class="card-index u-mono">{String(steps.findIndex(x => x.cat === m.category) + 1).padStart(2, "0")}</span>
+                {m.role === "line" ? <span class="card-line-badge u-mono">LÍNEA</span> : null}
               </div>
               <div class="card-body">
                 <h3 class="card-name">{m.name}</h3>
@@ -368,6 +378,12 @@ const cardSpecs = (m: Machine) => {
   line-height: 1.15;
   letter-spacing: -0.02em;
   margin: 0;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: calc(2 * 1.15em);
 }
 
 .card-name-en {
@@ -375,6 +391,10 @@ const cardSpecs = (m: Machine) => {
   color: var(--color-text-alt);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-desc {
@@ -387,6 +407,7 @@ const cardSpecs = (m: Machine) => {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: calc(3 * 1.5em);
 }
 
 .card-specs {
@@ -396,6 +417,31 @@ const cardSpecs = (m: Machine) => {
   margin-top: 0.65rem;
   padding-top: 0.6rem;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: calc(2 * 1.2rem + 0.3rem + 0.6rem);
+}
+
+/* Line cards — acento sutil */
+.machine-card--line {
+  border-color: rgba(242, 140, 40, 0.35);
+  background: rgba(242, 140, 40, 0.05);
+}
+
+.machine-card--line:hover,
+.machine-card--line:focus-visible {
+  border-color: var(--color-brand-1);
+  box-shadow: 0 20px 40px -16px rgba(242, 140, 40, 0.25);
+}
+
+.card-line-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.25rem 0.55rem;
+  background: var(--color-brand-1);
+  color: #fff;
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
 }
 
 .card-spec {
@@ -419,6 +465,11 @@ const cardSpecs = (m: Machine) => {
   font-weight: 600;
   color: var(--color-text);
   transition: color 350ms ease;
+
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .machine-card:hover .spec-value,

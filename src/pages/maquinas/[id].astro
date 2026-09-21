@@ -11,6 +11,10 @@ export function getStaticPaths() {
 }
 
 const { machine } = Astro.props;
+
+const parentLines = machines.filter(
+  (m) => m.role === "line" && m.modules?.some((mod) => mod.machineId === machine.id)
+);
 ---
 
 <Layout title={`${machine.name} — DYFMA`}>
@@ -35,6 +39,44 @@ const { machine } = Astro.props;
               machine.specs.slice(0, 3).map((s) => s.value).join(" · ")}
           </p>
           <p class="machine-desc">{machine.description}</p>
+
+          <!-- Parte de una línea (módulos) -->
+          {parentLines.length > 0 && (
+            <p class="line-parent">
+              <span class="line-parent-label u-spec">Parte de</span>
+              <span class="line-parent-lines">
+                {parentLines.map((line) => (
+                  <a href={`/dyfmaweb/maquinas/${line.id}`}>{line.name}</a>
+                ))}
+              </span>
+            </p>
+          )}
+
+          <!-- Composición de la línea -->
+          {machine.modules && (
+            <div class="line-composition">
+              <span class="line-composition-title u-spec">Composición de la línea</span>
+              <ul class="composition-list">
+                {machine.modules.map((mod) => (
+                  <li>
+                    {mod.machineId ? (
+                      <a class="composition-item" href={`/dyfmaweb/maquinas/${mod.machineId}`}>
+                        <span class="composition-dot" aria-hidden="true"></span>
+                        <span>{mod.name}</span>
+                        {mod.note ? <span class="composition-note u-mono">{mod.note}</span> : null}
+                      </a>
+                    ) : (
+                      <span class="composition-item">
+                        <span class="composition-dot" aria-hidden="true"></span>
+                        <span>{mod.name}</span>
+                        {mod.note ? <span class="composition-note u-mono">{mod.note}</span> : null}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <!-- Specs table -->
           <div class="specs-table">
@@ -317,6 +359,106 @@ const { machine } = Astro.props;
     font-size: var(--font-size-md);
     color: var(--color-text-alt);
     line-height: 1.65;
+  }
+
+  /* Parte de una línea (módulos) */
+  .line-parent {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+
+    margin: 1rem 0 0;
+
+    font-size: var(--font-size-sm);
+    color: var(--color-text-alt);
+  }
+
+  .line-parent-label {
+    color: var(--color-brand-1);
+  }
+
+  .line-parent-lines {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .line-parent-lines a + a::before {
+    content: "·";
+    margin: 0 0.5rem;
+    color: var(--color-text-alt);
+  }
+
+  .line-parent a {
+    color: var(--color-text);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(242, 140, 40, 0.4);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .line-parent a:hover {
+    color: var(--color-brand-1);
+    border-color: var(--color-brand-1);
+  }
+
+  /* Composición de la línea */
+  .line-composition {
+    margin-top: 1.5rem;
+  }
+
+  .line-composition-title {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: var(--color-brand-1);
+  }
+
+  .composition-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .composition-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+
+    padding: 0.35rem 0.7rem;
+
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    font-size: 0.7rem;
+    line-height: 1.2;
+    color: var(--color-text);
+    text-decoration: none;
+
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  a.composition-item:hover {
+    border-color: var(--color-brand-1);
+    color: var(--color-brand-1);
+  }
+
+  .composition-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+    background: var(--color-brand-1);
+
+    flex-shrink: 0;
+  }
+
+  .composition-note {
+    font-size: 0.58rem;
+    color: var(--color-text-alt);
   }
 
   /* Specs table */

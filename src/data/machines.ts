@@ -9,6 +9,14 @@ export interface MachineMedia {
   src: string;
 }
 
+export type MachineRole = "line" | "machine" | "module";
+
+export interface MachineModule {
+  name: string;
+  note?: string;
+  machineId?: string;
+}
+
 export interface Machine {
   id: string;
   name: string;
@@ -25,6 +33,10 @@ export interface Machine {
   detail?: string;
   media: MachineMedia[];
   pdf?: string;
+  /** Rol de la ficha: línea compuesta, máquina suelta o módulo de una línea */
+  role?: MachineRole;
+  /** Módulos que componen una línea (solo role "line") */
+  modules?: MachineModule[];
   /** Compat: first image / first video (used by listing cards) */
   image?: string;
   video?: string;
@@ -111,6 +123,7 @@ const rawMachines: Machine[] = [
     name: "Partidora de Nuez Pecán y Avellanas",
     nameEn: "Pecan & Hazelnut Cracker",
     category: "pelado-partido",
+    role: "module",
     description:
       "Máquina para el partido de nuez pecán y avellanas con separador de cáscara regulable. Construcción en chapa acero SAE 1010 con pintura epoxi horneada. Muy bajo mantenimiento y alta eficiencia.",
     descriptionEn:
@@ -274,6 +287,13 @@ const rawMachines: Machine[] = [
     name: "Línea de Limpieza",
     nameEn: "Cleaning Line",
     category: "poscosecha",
+    role: "line",
+    modules: [
+      { name: "Limpiador / saca hojas", note: "Retira palos y hojas" },
+      { name: "Pre-cleaner", note: "Limpieza previa de impurezas" },
+      { name: "Mesa de inspección", note: "Revisión final del producto" },
+      { name: "Dosificador", machineId: "elevador-dosificador" },
+    ],
     description:
       "Línea integral para la limpieza de frutos secos desde la recepción de la cosecha: carro con clapeta de descarga, lagar de recepción de 1 TN, distribución y elevación, saca palos + saca hojas, pre-cleaner y mesa de inspección. Menos tareas manuales y producto listo para continuar su transformación.",
     descriptionEn:
@@ -310,10 +330,56 @@ const rawMachines: Machine[] = [
     ],
   },
   {
+    id: "linea-secado",
+    name: "Línea de Secado",
+    nameEn: "Drying Line",
+    category: "poscosecha",
+    role: "line",
+    description:
+      "Línea de secado y deshidratación de frutos secos: integra hornos deshidratadores de 1000 a 8000 kg de capacidad, dosificación y cinta de distribución para un secado uniforme y un flujo continuo.",
+    descriptionEn:
+      "Drying and dehydration line for tree nuts: integrates dehydrating ovens from 1000 to 8000 kg capacity, dosing and distribution conveyor for uniform drying and continuous flow.",
+    subtitle: "Hornos 1000–8000 kg · dosificación · cinta de distribución",
+    modules: [
+      { name: "Horno deshidratador", note: "1000 a 8000 kg" },
+      { name: "Dosificador", machineId: "elevador-dosificador" },
+      { name: "Cinta de distribución" },
+    ],
+    features: [
+      { title: "Secado uniforme", text: "Hornos con circulación de aire forzado para un secado homogéneo en todo el lote." },
+      { title: "Escalable", text: "Capacidad de 1000 a 8000 kg según el volumen de producción." },
+      { title: "Flujo continuo", text: "Dosificación y cinta de distribución conectan las etapas sin manipulación manual." },
+    ],
+    media: [
+      { type: "image", src: "/dyfmaweb/maquinas/secadora.jpeg" },
+      { type: "image", src: "/dyfmaweb/maquinas/secadora-2.jpeg" },
+      { type: "video", src: "/dyfmaweb/maquinas/secadora.mp4" },
+      { type: "video", src: "/dyfmaweb/maquinas/secadora-2.mp4" },
+      { type: "video", src: "/dyfmaweb/maquinas/secadora-3.mp4" },
+      { type: "video", src: "/dyfmaweb/maquinas/secadora-4.mp4" },
+      { type: "video", src: "/dyfmaweb/maquinas/secadora-5.mp4" },
+    ],
+    specs: [
+      { label: "Fruto", value: "Todo tipo de frutos secos" },
+      { label: "Capacidad", value: "Hornos de 1000 a 8000 kg" },
+      { label: "Integra", value: "Horno deshidratador · Dosificador · Cinta de distribución" },
+      { label: "Sistema", value: "Circulación de aire forzado" },
+    ],
+  },
+  {
     id: "linea-semi-industrial",
     name: "Línea Semi-Industrial",
     nameEn: "Semi-Industrial Line",
     category: "pelado-partido",
+    role: "line",
+    modules: [
+      { name: "Oreador" },
+      { name: "Dosificador", machineId: "elevador-dosificador" },
+      { name: "Partidora", machineId: "partidora-pecan-avellana" },
+      { name: "Elevador Z" },
+      { name: "Zaranda" },
+      { name: "Mesa de inspección" },
+    ],
     description:
       "Partidora semi-industrial para nuez pecán: equipo compacto y eficiente que integra hervidor + colador, oreador, elevador dosificador con variador de velocidad, sistema de partido preciso y doble separación de cáscara. Diseño portátil con ruedas: cabe en una camioneta doble cabina.",
     descriptionEn:
@@ -346,9 +412,20 @@ const rawMachines: Machine[] = [
   },
   {
     id: "linea-pelado",
-    name: "Línea de Pelado y Procesamiento",
+    name: "Línea de Pelado y Partido",
     nameEn: "Shelling & Processing Line",
     category: "pelado-partido",
+    role: "line",
+    modules: [
+      { name: "Hervidor" },
+      { name: "Dosificador", machineId: "elevador-dosificador" },
+      { name: "Partidora", machineId: "partidora-pecan-avellana" },
+      { name: "Elevador Z" },
+      { name: "Selector óptico", note: "AnySort" },
+      { name: "Elevador Z" },
+      { name: "Zaranda" },
+      { name: "Mesa de inspección", note: "Con reproceso" },
+    ],
     description:
       "Línea integral de pelado y procesamiento: hervido y sanitización, tolva con elevación y dosificación, partido, prelimpieza, selección por color, separación por aire y sistema de reproceso para recuperar producto. Transforma el fruto con cáscara en un producto con valor agregado, listo para seleccionar, clasificar y envasar.",
     descriptionEn:
@@ -385,6 +462,7 @@ const rawMachines: Machine[] = [
     name: "Elevador Dosificador",
     nameEn: "Dosing Elevator",
     category: "poscosecha",
+    role: "module",
     description:
       "Módulo con variador de velocidad para automatizar y hacer continuas las líneas de procesamiento: eleva, dosifica y alimenta el producto de manera controlada hacia el siguiente equipo. Se incorpora a líneas con horno deshidratador o partidoras, reduciendo la manipulación manual.",
     descriptionEn:
