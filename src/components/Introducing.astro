@@ -583,6 +583,42 @@ const { title, text, textExtra, cta, image, class: className } = Astro.props;
 
 
 /* =========================================================
+   VIDEO SLOT — el video es vertical (9:16): marco retrato
+   para que se vea completo, sin recorte
+   ========================================================= */
+
+.media:has(video) .media-frame {
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.media-content:has(video) {
+  min-height: 0;
+  width: auto;
+  height: 36rem;
+  aspect-ratio: 9 / 16;
+}
+
+@media (--mq-desktop-md) {
+  .media-content:has(video) {
+    height: 32rem;
+  }
+}
+
+@media (--mq-tablet) {
+  .media-content:has(video) {
+    height: 34rem;
+  }
+}
+
+@media (--mq-phone) {
+  .media-content:has(video) {
+    height: 26rem;
+  }
+}
+
+
+/* =========================================================
    REDUCED MOTION
    ========================================================= */
 

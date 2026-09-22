@@ -76,7 +76,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
   }
 
   .inner {
-    padding: 1rem 0;
+    padding: 0.5rem 0;
   }
 
   .wrapper {
@@ -84,7 +84,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 2rem;
+    height: 3.5rem;
 
     @media (--mq-tablet) {
       flex-wrap: wrap;
@@ -96,7 +96,7 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
     z-index: 3;
 
     img {
-      height: 2rem;
+      height: 3.5rem;
       width: auto;
     }
   }
@@ -129,14 +129,14 @@ const { logoUrl, logoAlt, link1, link2, links } = Astro.props;
 
       :global(body.is-nav-small:not(.is-nav-opened)) & {
         clip-path: inset(
-          0 0 calc(100% - 3.75rem) round 0 0 var(--br) var(--br)
+          0 0 calc(100% - 4.25rem) round 0 0 var(--br) var(--br)
         );
       }
     }
 
     @media (--mq-phone) {
       :global(body.is-nav-small:not(.is-nav-opened)) & {
-        clip-path: inset(0 0 calc(100% - 3.375rem) round 0 0 1rem 1rem);
+        clip-path: inset(0 0 calc(100% - 3.875rem) round 0 0 1rem 1rem);
       }
     }
 
