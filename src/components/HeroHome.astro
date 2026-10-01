@@ -67,19 +67,19 @@ const {
       ) : null}
 
       <div class="cta-wrapper">
-        <Button title="Ver máquinas" url="/dyfmaweb/maquinas" arrow class="cta" revealable={false} />
-        <Button title="Contactar" url="/dyfmaweb/contacto" color="primary-alt" class="cta cta-contact" revealable={false} />
+        <Button title="Ver soluciones" url="/maquinas" arrow class="cta" revealable={false} />
+        <Button title="Quiero asesorarme" url="/contacto" color="primary-alt" class="cta cta-contact" revealable={false} />
       </div>
 
       <div class="nut-types" data-sy-reveal="fade">
-        <span class="nut-label">PROCESAMOS</span>
+        <span class="nut-label">¿QUÉ FRUTO PROCESÁS?</span>
 
         <div class="nut-tags">
-          <span class="nut-tag">NUEZ CHANDLER</span>
-          <span class="nut-tag">PECÁN</span>
-          <span class="nut-tag">ALMENDRA</span>
-          <span class="nut-tag">PISTACHO</span>
-          <span class="nut-tag">AVELLANA</span>
+          <a class="nut-tag" href="/maquinaria-nuez-chandler">NUEZ CHANDLER</a>
+          <a class="nut-tag" href="/maquinaria-nuez-pecan">PECÁN</a>
+          <a class="nut-tag" href="/maquinaria-para-almendras">ALMENDRA</a>
+          <a class="nut-tag" href="/maquinaria-para-pistacho">PISTACHO</a>
+          <a class="nut-tag" href="/maquinaria-para-avellanas">AVELLANA</a>
         </div>
       </div>
 
@@ -92,7 +92,7 @@ const {
 
         <video
           class="hero-video"
-          src="/dyfmaweb/lineaSEBA.mp4"
+          src="/lineaSEBA.mp4"
           autoplay
           loop
           muted
@@ -367,6 +367,7 @@ const {
   text-transform: uppercase;
 
   color: var(--color-text-alt);
+  text-decoration: none;
 
   transition:
     color 180ms ease,

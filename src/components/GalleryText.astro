@@ -79,7 +79,7 @@ const cardSpecs = (m: Machine) => {
         >
           {(grouped[s.cat] ?? []).map(m => (
             <a
-              href={`/dyfmaweb/maquinas/${m.id}`}
+              href={`/maquinas/${m.id}`}
               class:list={["machine-card", m.role === "line" && "machine-card--line"]}
             >
               <div class="card-media">

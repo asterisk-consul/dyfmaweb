@@ -6,15 +6,52 @@ import WhatsAppButton from "../components/WhatsAppButton.astro";
 import { useTranslations } from "../i18n/utils";
 import "../styles/global.css";
 
-const { title } = Astro.props;
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "product";
+  schema?: Record<string, unknown>;
+}
+
+const {
+  title,
+  description = "Diseño y fabricación argentina de maquinaria para cosecha, procesamiento y agregado de valor de frutos secos.",
+  image = "/1.webp",
+  type = "website",
+  schema,
+} = Astro.props;
 const t = useTranslations();
 
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin);
+const imageURL = new URL(image, Astro.site ?? Astro.url.origin);
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "DYFMA",
+  url: new URL("/", Astro.site ?? Astro.url.origin).href,
+  logo: new URL("/dyfma-logo.png", Astro.site ?? Astro.url.origin).href,
+  description: "Ingeniería y fabricación de maquinaria para frutos secos.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Villa María",
+    addressRegion: "Córdoba",
+    addressCountry: "AR",
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+54-9-3534-11-8602",
+    contactType: "sales",
+    availableLanguage: "Spanish",
+  },
+};
+
 const links = [
-  { title: "Inicio", url: "/dyfmaweb/" },
-  { title: "Máquinas", url: "/dyfmaweb/maquinas" },
-  { title: "Plan Canje", url: "/dyfmaweb/plan-canje" },
-  { title: "Nosotros", url: "/dyfmaweb/nosotros" },
-  { title: "Contacto", url: "/dyfmaweb/contacto" },
+  { title: "Inicio", url: "/" },
+  { title: "Máquinas", url: "/maquinas" },
+  { title: "Plan Canje", url: "/plan-canje" },
+  { title: "Nosotros", url: "/nosotros" },
+  { title: "Contacto", url: "/contacto" },
 ];
 ---
 <html lang="es">
@@ -22,11 +59,33 @@ const links = [
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" href="/favicon-dyfma.png?v=2" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon-dyfma.png?v=2" />
+    <meta name="theme-color" content="#f28c28" />
+
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content="DYFMA" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={imageURL} />
+    <meta property="og:image:alt" content="Maquinaria DYFMA para frutos secos" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageURL} />
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body>
     <a href="#main" class="skip-link">{t("accessibility.skip-to-content")}</a>
     <Header
-      logoUrl="/dyfmaweb/"
+      logoUrl="/"
       logoAlt="DYFMA"
       links={links}
     />

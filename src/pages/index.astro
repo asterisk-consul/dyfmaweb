@@ -9,17 +9,21 @@ import Statements from "../components/Statements.astro";
 import Testimonials from "../components/Testimonials.astro";
 import Introducing from "../components/Introducing.astro";
 import LatamMapGraphic from "../components/LatamMapGraphic.astro";
+import GrowthJourney from "../components/GrowthJourney.astro";
 ---
 
-<Layout title="DYFMA — Máquinas para producción de frutos secos">
+<Layout
+  title="Maquinaria para frutos secos | DYFMA"
+  description="Diseñamos y fabricamos maquinaria para cosecha y procesamiento de nuez, pecán, almendra, pistacho y avellana en Villa María, Córdoba."
+>
   <HeroHome
-    title="Ingeniería y fabricación de soluciones para frutos secos"
-    subtitle="Diseñamos y fabricamos maquinaria especializada en cosecha, procesamiento y agregado de valor. Más de 12 años acompañando a productores de Argentina y la región."
-    imageSrc="/dyfmaweb/1.webp",
+    title="Convertí tu producción en valor"
+    subtitle="Ingeniería y tecnología para procesar frutos secos. Desde una máquina hasta una línea completa, acompañamos cada etapa del crecimiento de tu producción."
+    imageSrc="/1.webp",
     imageAlt="Partidora de nuez DALL 1050 — maquinaria DYFMA",
     cta={{
       title: "Ver soluciones",
-      url: "/dyfmaweb/maquinas",
+      url: "/maquinas",
     }}
   />
 
@@ -29,7 +33,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
       text="Cada equipo DYFMA esta pensado para maximizar rendimiento, reducir mermas y garantizar un proceso estable y confiable en entornos industriales exigentes."
       cta={{
         title: "Explorar maquinaria",
-        url: "/dyfmaweb/maquinas",
+        url: "/maquinas",
       }}
       marqueeTexts={[
         "NUEZ CHANDLER",
@@ -42,26 +46,8 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     />
   </div>
 
-  <div class="section-glow glow-modular" aria-hidden="true">
-    <Introducing
-      title="Crecé a tu ritmo — soluciones modulares que escalan con tu produccion"
-      text="En DYFMA creemos que tu línea de producción tiene que crecer junto con tu negocio. Por eso desarrollamos soluciones modulares: podés comenzar con una máquina y sumar nuevos equipos a medida que aumenta tu producción, hasta completar toda la línea."
-      textExtra="Una solución pensada para que inviertas de manera progresiva y puedas adaptar tu planta a las necesidades de cada etapa de crecimiento."
-      cta={{
-        title: "Ver soluciones",
-        url: "/dyfmaweb/maquinas",
-      }}
-      class="section-connector"
-    >
-      <video
-        slot="media"
-        src="/dyfmaweb/maquinas/linea-semi-industrial-3.mp4"
-        autoplay
-        loop
-        muted
-        playsinline
-      ></video>
-    </Introducing>
+  <div class="section-glow glow-modular">
+    <GrowthJourney />
   </div>
 
   <div class="section-glow glow-intro" aria-hidden="true">
@@ -70,7 +56,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
       text="En DYFMA desarrollamos y fabricamos maquinaria industrial para la cosecha, procesamiento y agregado de valor de frutos secos. Combinamos ingenieria propia, fabricacion nacional y mas de 12 anos de experiencia para ofrecer soluciones que permiten al productor procesar mejor y ganar mas."
       cta={{
         title: "Ver soluciones",
-        url: "/dyfmaweb/maquinas",
+        url: "/maquinas",
       }}
       class="section-connector"
     >
@@ -83,7 +69,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
         <div class="canje-grid">
           <div class="canje-media" data-sy-reveal="fade">
             <img
-              src="/dyfmaweb/plancanje.webp"
+              src="/plancanje.webp"
               alt="Plan Canje DYFMA — entregá tu máquina usada y renová por una nueva"
               width="1024"
               height="1536"
@@ -110,7 +96,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
             </p>
 
             <a
-              href="/dyfmaweb/plan-canje"
+              href="/plan-canje"
               class="canje-btn"
               data-sy-reveal="fade"
             >
@@ -129,17 +115,17 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
         {
           title: "Fabricamos",
           text: "Disenamos y fabricamos nuestras propias soluciones en Villa Maria, Cordoba. Cada maquina nace de una necesidad real del productor.",
-          video: "/dyfmaweb/Fabricacion.mp4",
+          video: "/Fabricacion.mp4",
         },
         {
           title: "Resolvemos",
           text: "Partimos de las necesidades de cada productor para desarrollar la tecnologia adecuada. Asesoramiento personalizado sin presion de venta.",
-          video: "/dyfmaweb/LIMPIADORA-A-CAMPO.mp4",
+          video: "/LIMPIADORA-A-CAMPO.mp4",
         },
         {
           title: "Prueba en Fabrica",
           text: "Probamos tu solucion con tu propio fruto antes de entregarla. Rendimiento, calidad y funcionamiento verificados en planta — el resultado, comprobado.",
-          video: "/dyfmaweb/pruebaMaquina.mp4",
+          video: "/pruebaMaquina.mp4",
         },
       ]}
       class="section-connector"
@@ -150,13 +136,13 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
     title="Los productores hablan"
     subtitle="Historias reales de quienes trabajan todos los días con nuestras máquinas."
     items={[
-      { video: "/dyfmaweb/testimonios/testimonio-1.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 01" },
-      { video: "/dyfmaweb/testimonios/testimonio-2.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 02" },
-      { video: "/dyfmaweb/testimonios/testimonio-3.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 03" },
-      { video: "/dyfmaweb/testimonios/testimonio-4.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 04" },
-      { video: "/dyfmaweb/testimonios/testimonio-5.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 05" },
-      { video: "/dyfmaweb/testimonios/testimonio-6.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 06" },
-      { video: "/dyfmaweb/testimonios/testimonio-7.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 07" },
+      { video: "/testimonios/testimonio-1.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 01" },
+      { video: "/testimonios/testimonio-2.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 02" },
+      { video: "/testimonios/testimonio-3.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 03" },
+      { video: "/testimonios/testimonio-4.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 04" },
+      { video: "/testimonios/testimonio-5.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 05" },
+      { video: "/testimonios/testimonio-6.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 06" },
+      { video: "/testimonios/testimonio-7.mp4", name: "Cliente DYFMA", role: "TESTIMONIO 07" },
     ]}
     class="section-connector"
   />
@@ -232,7 +218,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
   <section class="closing-cta">
     <video
       class="cta-video"
-      src="/dyfmaweb/recolector manual.mp4"
+      src="/recolector manual.mp4"
       autoplay
       loop
       muted
@@ -251,7 +237,7 @@ import LatamMapGraphic from "../components/LatamMapGraphic.astro";
           <svg class="wsp-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           <span class="cta-btn-label">WhatsApp</span>
         </a>
-        <a href="/dyfmaweb/contacto" class="cta-btn cta-btn-contact">
+        <a href="/contacto" class="cta-btn cta-btn-contact">
           <span class="cta-btn-label">Contacto</span>
         </a>
       </div>

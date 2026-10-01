@@ -1,0 +1,219 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Button from "../components/Button.astro";
+import Faqs from "../components/Faqs.astro";
+import { machines } from "../data/machines";
+import { fruitSolutions } from "../data/fruitSolutions";
+import type { FruitSolution } from "../data/fruitSolutions";
+
+export function getStaticPaths() {
+  return fruitSolutions.map((solution) => ({
+    params: { seoSlug: solution.slug },
+    props: { solution },
+  }));
+}
+
+interface Props { solution: FruitSolution }
+const { solution } = Astro.props;
+const recommended = solution.machineIds
+  .map((id) => machines.find((machine) => machine.id === id))
+  .filter((machine) => machine !== undefined);
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: solution.title,
+  description: solution.description,
+  url: Astro.url.href,
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: recommended.map((machine, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: machine.name,
+      url: new URL(`/maquinas/${machine.id}`, Astro.site ?? Astro.url.origin).href,
+    })),
+  },
+};
+---
+
+<Layout title={`${solution.title} | DYFMA`} description={solution.description} image={recommended[0]?.image} schema={schema}>
+  <article class="fruit-page">
+    <header class="fruit-hero">
+      <div class="u-container hero-grid">
+        <div>
+          <span class="u-spec eyebrow">SOLUCIONES POR FRUTO</span>
+          <h1>{solution.title}</h1>
+          <p>{solution.intro}</p>
+          <div class="hero-actions">
+            <Button title="Ver equipos" url="#equipos" arrow revealable={false} />
+            <Button title="Quiero asesorarme" url="/contacto" color="primary-alt" revealable={false} />
+          </div>
+        </div>
+        <div class="hero-carousel" data-carousel>
+          <div class="carousel-track" data-carousel-track>
+            {recommended.filter((machine) => machine.image).map((machine, index) => (
+              <a class:list={["carousel-slide", index === 0 && "is-active"]} href={`/maquinas/${machine.id}`} data-carousel-slide aria-hidden={index === 0 ? "false" : "true"}>
+                <img src={machine.image} alt={machine.name} width="800" height="600" />
+                <span><strong>{machine.name}</strong><small>Ver ficha →</small></span>
+              </a>
+            ))}
+          </div>
+          {recommended.filter((machine) => machine.image).length > 1 && (
+            <div class="carousel-controls">
+              <button type="button" data-carousel-prev aria-label="Máquina anterior">←</button>
+              <span data-carousel-count>01 / {String(recommended.filter((machine) => machine.image).length).padStart(2, "0")}</span>
+              <button type="button" data-carousel-next aria-label="Máquina siguiente">→</button>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <section class="process u-container">
+      <span class="u-spec eyebrow">FILTRÁ POR ETAPA</span>
+      <h2>¿Qué parte del proceso necesitás resolver?</h2>
+      <p class="process-help">Seleccioná una etapa para ver solamente los equipos relacionados.</p>
+      <div class="stage-grid">
+        <button class="stage is-active" type="button" data-stage-filter="all" aria-pressed="true">
+          <span class="stage-number u-mono">TODAS</span>
+          <h3>Ver todo</h3>
+          <p>Mostrá todas las soluciones recomendadas.</p>
+        </button>
+        {solution.stages.map((stage, index) => (
+          <button class="stage" type="button" data-stage-filter={stage.machineIds.join(" ")} aria-pressed="false">
+            <span class="stage-number u-mono">{String(index + 1).padStart(2, "0")}</span>
+            <h3>{stage.title}</h3>
+            <p>{stage.text}</p>
+          </button>
+        ))}
+      </div>
+      {solution.note && <p class="technical-note"><strong>Importante:</strong> {solution.note}</p>}
+    </section>
+
+    <section class="equipment" id="equipos">
+      <div class="u-container">
+        <span class="u-spec eyebrow">EQUIPOS RECOMENDADOS</span>
+        <h2>Maquinaria para {solution.name.toLowerCase()}</h2>
+        <div class="equipment-grid">
+          {recommended.map((machine) => (
+            <a class="equipment-card" href={`/maquinas/${machine.id}`} data-machine-id={machine.id}>
+              <div class="card-media">
+                {machine.image && <img src={machine.image} alt={machine.name} width="600" height="450" loading="lazy" />}
+                {machine.role === "line" && <span class="line-badge u-mono">LÍNEA</span>}
+              </div>
+              <div class="card-copy">
+                <h3>{machine.name}</h3>
+                <p>{machine.description}</p>
+                <span>Ver solución →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Faqs title={`Preguntas sobre ${solution.name}`} items={solution.faqs} />
+
+    <section class="final-cta">
+      <div class="u-container">
+        <h2>Diseñemos la solución para tu producción</h2>
+        <p>Contanos qué volumen procesás y cómo trabajás hoy. Nuestro equipo analiza tu proceso y te recomienda una configuración.</p>
+        <Button title="Quiero asesorarme" url="/contacto" arrow revealable={false} />
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .fruit-page { background: var(--color-bg); }
+  .fruit-hero { padding: 9rem 0 2.75rem; }
+  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(2rem, 6vw, 6rem); }
+  .eyebrow { color: var(--color-brand-1); }
+  h1, h2, h3 { font-family: var(--font-heading); font-weight: 500; }
+  h1 { max-width: 10em; margin: 1rem 0 1.25rem; color: var(--color-brand-1); font-size: var(--type-hero); line-height: .98; }
+  .fruit-hero p { max-width: 38rem; color: var(--color-text-alt); font-size: var(--font-size-lg); line-height: 1.55; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+  .hero-carousel { min-width: 0; }
+  .carousel-track { position: relative; aspect-ratio: 4/3; overflow: hidden; border: 1px solid rgba(242,140,40,.25); background: #fff; }
+  .carousel-slide { position: absolute; inset: 0; opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+  .carousel-slide.is-active { opacity: 1; pointer-events: auto; }
+  .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+  .carousel-slide > span { position: absolute; inset: auto 0 0; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.15rem; background: linear-gradient(transparent, rgba(17,17,17,.92)); color: #fff; }
+  .carousel-slide strong { font-family: var(--font-heading); font-weight: 500; }
+  .carousel-slide small { color: var(--color-brand-1); }
+  .carousel-controls { display: flex; justify-content: flex-end; align-items: center; gap: .65rem; margin-top: .65rem; }
+  .carousel-controls button { width: 2.25rem; height: 2.25rem; border: 1px solid rgba(255,255,255,.15); background: transparent; color: var(--color-text); cursor: pointer; }
+  .carousel-controls button:hover { border-color: var(--color-brand-1); color: var(--color-brand-1); }
+  .carousel-controls span { min-width: 4.5rem; color: var(--color-text-alt); font-family: var(--font-mono); font-size: .65rem; text-align: center; }
+  .process { padding: 2.25rem 0 4.5rem; }
+  .process > h2, .equipment h2 { margin: .7rem 0 .5rem; color: var(--color-text); font-size: var(--type-display-md); }
+  .process-help { margin: 0 0 1.5rem; color: var(--color-text-alt); }
+  .stage-grid { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .stage { flex: 1 1 9rem; min-width: 8.5rem; padding: .85rem; border: 1px solid rgba(255,255,255,.1); background: transparent; color: inherit; text-align: left; cursor: pointer; transition: border-color .2s ease, background .2s ease; }
+  .stage:hover, .stage.is-active { border-color: var(--color-brand-1); background: rgba(242,140,40,.08); }
+  .stage-number { color: var(--color-brand-1); font-size: .65rem; }
+  .stage h3 { margin: .55rem 0 .25rem; color: var(--color-text); font-size: 1rem; }
+  .stage p { margin: 0; color: var(--color-text-alt); font-size: .72rem; line-height: 1.4; }
+  .technical-note { margin: 2rem 0 0; padding: 1rem 1.25rem; border-left: 3px solid var(--color-brand-1); color: var(--color-text-alt); line-height: 1.55; }
+  .equipment { padding: 6rem 0; background: rgba(255,255,255,.018); scroll-margin-top: 5rem; }
+  .equipment-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .equipment-card { border: 1px solid rgba(255,255,255,.08); color: inherit; text-decoration: none; transition: border-color .2s ease, transform .2s ease; }
+  .equipment-card:hover { border-color: var(--color-brand-1); transform: translateY(-2px); }
+  .equipment-card[hidden] { display: none; }
+  .card-media { position: relative; aspect-ratio: 4/3; overflow: hidden; background: #fff; }
+  .card-media img { width: 100%; height: 100%; object-fit: cover; }
+  .line-badge { position: absolute; top: .65rem; right: .65rem; padding: .3rem .55rem; background: var(--color-brand-1); color: #fff; font-size: .55rem; }
+  .card-copy { padding: 1.2rem; }
+  .card-copy h3 { margin: 0 0 .65rem; color: var(--color-brand-1); font-size: 1.2rem; }
+  .card-copy p { display: -webkit-box; margin: 0 0 1rem; overflow: hidden; color: var(--color-text-alt); font-size: .82rem; line-height: 1.5; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
+  .card-copy span { color: var(--color-brand-1); font-size: .75rem; font-weight: 600; }
+  .final-cta { padding: 6rem 0; text-align: center; }
+  .final-cta h2 { margin: 0 0 1rem; color: var(--color-brand-1); font-size: var(--type-display-md); }
+  .final-cta p { max-width: 42rem; margin: 0 auto 2rem; color: var(--color-text-alt); line-height: 1.6; }
+  @media (--mq-tablet) { .hero-grid { grid-template-columns: 1fr; } h1 { font-size: var(--type-display); } .equipment-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (--mq-phone) { .fruit-hero { padding: 7rem 0 1.75rem; } .process { padding-top: 1.5rem; } h1 { font-size: var(--type-title); } .equipment-grid { grid-template-columns: 1fr; } .stage { flex-basis: calc(50% - .5rem); } }
+</style>
+
+<script>
+  function initFruitSolutionPage() {
+    document.querySelectorAll<HTMLElement>("[data-carousel]").forEach((carousel) => {
+      const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-carousel-slide]"));
+      const count = carousel.querySelector<HTMLElement>("[data-carousel-count]");
+      let current = 0;
+      const show = (index: number) => {
+        current = (index + slides.length) % slides.length;
+        slides.forEach((slide, i) => {
+          slide.classList.toggle("is-active", i === current);
+          slide.setAttribute("aria-hidden", String(i !== current));
+        });
+        if (count) count.textContent = `${String(current + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+      };
+      if (slides.length) show(0);
+      carousel.querySelector("[data-carousel-prev]")?.addEventListener("click", () => show(current - 1));
+      carousel.querySelector("[data-carousel-next]")?.addEventListener("click", () => show(current + 1));
+    });
+
+    const filters = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-stage-filter]"));
+    const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-machine-id]"));
+    const equipment = document.querySelector<HTMLElement>("#equipos");
+    filters.forEach((filter) => {
+      filter.addEventListener("click", () => {
+        const ids = filter.dataset.stageFilter?.split(" ") ?? [];
+        const showAll = ids.includes("all");
+        filters.forEach((item) => {
+          const active = item === filter;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+        cards.forEach((card) => { card.hidden = !showAll && !ids.includes(card.dataset.machineId ?? ""); });
+        window.setTimeout(() => {
+          if (!equipment) return;
+          if (window.smoothScrollTo) window.smoothScrollTo(equipment);
+          else equipment.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 80);
+      });
+    });
+  }
+  initFruitSolutionPage();
+</script>

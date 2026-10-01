@@ -29,7 +29,9 @@ jobs:
           cache: "pnpm"
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      # Preview build: keeps Hostinger production at / and adapts this artifact
+      # to https://asterisk-consul.github.io/dyfmaweb/.
+      - run: pnpm build:github
 
       - uses: actions/upload-pages-artifact@v5
         with:

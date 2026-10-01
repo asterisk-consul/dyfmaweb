@@ -17,14 +17,29 @@ const parentLines = machines.filter(
 );
 ---
 
-<Layout title={`${machine.name} — DYFMA`}>
+<Layout
+  title={`${machine.name} | DYFMA`}
+  description={machine.description}
+  image={machine.image ?? "/1.webp"}
+  type="product"
+  schema={{
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: machine.name,
+    description: machine.description,
+    image: new URL(machine.image ?? "/1.webp", Astro.site ?? Astro.url.origin).href,
+    brand: { "@type": "Brand", name: "DYFMA" },
+    manufacturer: { "@type": "Organization", name: "DYFMA" },
+    url: Astro.url.href,
+  }}
+>
   <div class="machine-page">
     <div class="u-container container">
       <!-- Breadcrumb -->
       <nav class="breadcrumb">
-        <a href="/dyfmaweb/">Inicio</a>
+        <a href="/">Inicio</a>
         <span class="sep">/</span>
-        <a href="/dyfmaweb/maquinas">Máquinas</a>
+        <a href="/maquinas">Máquinas</a>
         <span class="sep">/</span>
         <span class="current">{machine.name}</span>
       </nav>
@@ -46,7 +61,7 @@ const parentLines = machines.filter(
               <span class="line-parent-label u-spec">Parte de</span>
               <span class="line-parent-lines">
                 {parentLines.map((line) => (
-                  <a href={`/dyfmaweb/maquinas/${line.id}`}>{line.name}</a>
+                  <a href={`/maquinas/${line.id}`}>{line.name}</a>
                 ))}
               </span>
             </p>
@@ -60,7 +75,7 @@ const parentLines = machines.filter(
                 {machine.modules.map((mod) => (
                   <li>
                     {mod.machineId ? (
-                      <a class="composition-item" href={`/dyfmaweb/maquinas/${mod.machineId}`}>
+                      <a class="composition-item" href={`/maquinas/${mod.machineId}`}>
                         <span class="composition-dot" aria-hidden="true"></span>
                         <span>{mod.name}</span>
                         {mod.note ? <span class="composition-note u-mono">{mod.note}</span> : null}
@@ -123,7 +138,7 @@ const parentLines = machines.filter(
           <div class="actions">
             <Button
               title="Solicitar cotización"
-              url="/dyfmaweb/contacto"
+              url="/contacto"
               arrow
             />
 
@@ -138,7 +153,7 @@ const parentLines = machines.filter(
             ) : (
               <Button
                 title="Ver todas las máquinas"
-                url="/dyfmaweb/maquinas"
+                url="/maquinas"
                 class="secondary"
               />
             )}
@@ -219,7 +234,7 @@ const parentLines = machines.filter(
       </div>
 
       <!-- Back link -->
-      <a href="/dyfmaweb/maquinas" class="back-link">
+      <a href="/maquinas" class="back-link">
         ← Volver a máquinas
       </a>
     </div>

@@ -6,8 +6,8 @@ import {
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://asterisk-consul.github.io",
-  base: "/dyfmaweb/",
+  site: "https://www.dyfma.ar",
+  base: "/",
   output: "static",
   scopedStyleStrategy: 'where',
 });

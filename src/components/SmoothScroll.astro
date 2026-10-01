@@ -4,6 +4,7 @@
       scrollVelocity: number;
       scrollDirection: number;
       scrollCurrent: number;
+      smoothScrollTo: (target: HTMLElement) => void;
     }
   }
 
@@ -23,6 +24,22 @@
   lenis.on("scroll", ScrollTrigger.update);
 
   lenis.direction = 1;
+
+  window.smoothScrollTo = (target: HTMLElement) => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      window.scrollTo({
+        top: window.scrollY + target.getBoundingClientRect().top - 96,
+        behavior: "auto",
+      });
+      return;
+    }
+
+    lenis.scrollTo(target, {
+      offset: -96,
+      duration: 1.45,
+      easing: (t: number) => 1 - Math.pow(1 - t, 4),
+    });
+  };
 
   gsap.ticker.add((t: number) => {
     lenis.raf(t * 1000);

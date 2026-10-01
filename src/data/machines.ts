@@ -73,12 +73,12 @@ const rawMachines: Machine[] = [
       { title: "Vareo preciso", text: "La linga de acero con excéntrico genera un vaivén que se transmite directo a la rama, sin dañar el árbol." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/remecedor.webp" },
-      { type: "image", src: "/dyfmaweb/maquinas/remecedor.jpeg" },
-      { type: "video", src: "/dyfmaweb/maquinas/remecedor.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/remecedor-2.mp4" },
+      { type: "image", src: "/maquinas/remecedor.webp" },
+      { type: "image", src: "/maquinas/remecedor.jpeg" },
+      { type: "video", src: "/maquinas/remecedor.mp4" },
+      { type: "video", src: "/maquinas/remecedor-2.mp4" },
     ],
-    pdf: "/dyfmaweb/maquinas/remecedor.pdf",
+    pdf: "/maquinas/remecedor.pdf",
     specs: [
       { label: "Fruto", value: "Nuez Chandler · Pecán" },
       { label: "Rendimiento", value: "15–30 árboles/h" },
@@ -104,11 +104,11 @@ const rawMachines: Machine[] = [
       { title: "Uso intensivo", text: "Estructura metálica reforzada y mango de madera liviano, pensado para jornadas completas." },
     ],
     media: [
-      {type: "image", src: "/dyfmaweb/maquinas/recolector de mano(principal).webp" },
-      { type: "image", src: "/dyfmaweb/maquinas/recolector.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/recolector-2.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/recolector-3.jpeg" },
-      { type: "video", src: "/dyfmaweb/maquinas/recolector.mp4" },
+      {type: "image", src: "/maquinas/recolector de mano(principal).webp" },
+      { type: "image", src: "/maquinas/recolector.jpeg" },
+      { type: "image", src: "/maquinas/recolector-2.jpeg" },
+      { type: "image", src: "/maquinas/recolector-3.jpeg" },
+      { type: "video", src: "/maquinas/recolector.mp4" },
     ],
     specs: [
       { label: "Fruto", value: "Nuez · Pecán · Almendra" },
@@ -135,12 +135,12 @@ const rawMachines: Machine[] = [
       { title: "Bajo mantenimiento", text: "Construcción en chapa SAE 1010 con pintura epoxi horneada, pensada para durar." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/partidora1.webp" },
-      { type: "image", src: "/dyfmaweb/maquinas/partidora2.webp" },
-      { type: "image", src: "/dyfmaweb/maquinas/partidora-3.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/partidora-4.jpeg" },
+      { type: "image", src: "/maquinas/partidora1.webp" },
+      { type: "image", src: "/maquinas/partidora2.webp" },
+      { type: "image", src: "/maquinas/partidora-3.jpeg" },
+      { type: "image", src: "/maquinas/partidora-4.jpeg" },
     ],
-    pdf: "/dyfmaweb/maquinas/partidora.pdf",
+    pdf: "/maquinas/partidora.pdf",
     specs: [
       { label: "Fruto", value: "Nuez Pecán · Avellana" },
       { label: "Capacidad", value: "100–200 kg/h" },
@@ -158,7 +158,7 @@ const rawMachines: Machine[] = [
     id: "limpiadora-campo",
     name: "Limpiadora a Campo",
     nameEn: "Field Cleaner",
-    category: "poscosecha",
+    category: "cosecha",
     description:
       "Unidad autónoma para limpieza primaria en el campo: separa la materia verde (hojas, rueznos, tierra) de la nuez pecán mediante zaranda vibratoria y turbina centrífuga. Devuelve la materia orgánica al monte y separa los rueznos cerrados para su inspección visual.",
     descriptionEn:
@@ -172,14 +172,14 @@ const rawMachines: Machine[] = [
     detail:
       "La limpiadora a campo facilita la separación de la materia verde (hojas, rueznos, tierra) de la nuez pecán, sumado a que aumenta la materia orgánica en el monte dejándole al árbol lo que es del árbol. Por otro lado separa también los rueznos cerrados que luego se inspeccionan visualmente: ahí se detecta el ruezno cerrado, que es una nuez vacía de la que por maduración aún no abrió pero su nuez está buena.",
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/limpiadorea de campo.webp" },
-      { type: "image", src: "/dyfmaweb/maquinas/recolectora.webp"},
-      { type: "image", src: "/dyfmaweb/maquinas/limpiadora-campo.jpeg" },
-      { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo-2.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/limpiadora-campo-3.mp4" },
+      { type: "image", src: "/maquinas/limpiadorea de campo.webp" },
+      { type: "image", src: "/maquinas/recolectora.webp"},
+      { type: "image", src: "/maquinas/limpiadora-campo.jpeg" },
+      { type: "video", src: "/maquinas/limpiadora-campo.mp4" },
+      { type: "video", src: "/maquinas/limpiadora-campo-2.mp4" },
+      { type: "video", src: "/maquinas/limpiadora-campo-3.mp4" },
     ],
-    pdf: "/dyfmaweb/maquinas/limpiadora-campo.pdf",
+    pdf: "/maquinas/limpiadora-campo.pdf",
     specs: [
       { label: "Código", value: "LCLL-2700" },
       { label: "Fruto", value: "Nuez Pecán" },
@@ -208,13 +208,13 @@ const rawMachines: Machine[] = [
       { title: "Construcción robusta", text: "Diseñada para uso intensivo, campaña tras campaña." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/secadora.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/secadora-2.jpeg" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora-2.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora-3.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora-4.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora-5.mp4" },
+      { type: "image", src: "/maquinas/horno500.webp" },
+      { type: "image", src: "/maquinas/secadora.jpeg" },
+      { type: "video", src: "/maquinas/secadora.mp4" },
+      { type: "video", src: "/maquinas/secadora-2.mp4" },
+      { type: "video", src: "/maquinas/secadora-3.mp4" },
+      { type: "video", src: "/maquinas/secadora-4.mp4" },
+      { type: "video", src: "/maquinas/secadora-5.mp4" },
     ],
     specs: [
       { label: "Fruto", value: "Todo tipo de frutos secos" },
@@ -240,9 +240,9 @@ const rawMachines: Machine[] = [
       { title: "Fabricación nacional", text: "Diseñada y fabricada en Villa María, Córdoba." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/despelonadora-1.webp" },
-      { type: "image", src: "/dyfmaweb/maquinas/despelonadora.jpeg" },
-      { type: "video", src: "/dyfmaweb/maquinas/descapotadora.mp4" },
+      { type: "image", src: "/maquinas/despelonadora-1.webp" },
+      { type: "image", src: "/maquinas/despelonadora.jpeg" },
+      { type: "video", src: "/maquinas/descapotadora.mp4" },
     ],
     specs: [
       { label: "Código", value: "DALL 1050" },
@@ -268,10 +268,10 @@ const rawMachines: Machine[] = [
       { title: "Fabricación nacional", text: "Diseñada y fabricada en Villa María, Córdoba." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/despelonadora-nuez-chandler.jpeg" },
-      { type: "video", src: "/dyfmaweb/maquinas/depelonadoraNuez1.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/depelonadoraNuez2.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/depelonadoraNuez3.mp4" },
+      { type: "image", src: "/maquinas/despelonadora-nuez-chandler.jpeg" },
+      { type: "video", src: "/maquinas/depelonadoraNuez1.mp4" },
+      { type: "video", src: "/maquinas/depelonadoraNuez2.mp4" },
+      { type: "video", src: "/maquinas/depelonadoraNuez3.mp4" },
 
     ],
     specs: [
@@ -307,12 +307,12 @@ const rawMachines: Machine[] = [
     detail:
       "La Línea de Limpieza de Frutos Secos DYFMA está diseñada para optimizar el proceso desde la recepción de la cosecha, eliminando impurezas y preparando el producto para las etapas posteriores de procesamiento. La línea está compuesta por: carro con clapeta de descarga inferior (facilita la descarga controlada del producto), lagar de recepción con capacidad de hasta 1 tonelada, sistema de distribución y elevación que mantiene el flujo continuo entre etapas, saca palos + saca hojas (primera etapa de separación de materiales vegetales e impurezas de mayor tamaño), pre-cleaner (limpieza previa y separación de impurezas) y mesa de inspección (revisión final del producto antes de continuar el proceso). Concentrar diferentes procesos en una misma línea permite mejorar el flujo de trabajo, reducir tiempos y optimizar los recursos: el resultado es un producto limpio, uniforme y preparado para continuar su transformación.",
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/linea-limpieza.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/linea-limpieza-2.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/linea-limpieza-3.jpeg" },
-      { type: "video", src: "/dyfmaweb/maquinas/linea-limpieza.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/linea-limpieza-2.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/linea-limpieza-3.mp4" },
+      { type: "image", src: "/maquinas/linea-limpieza.jpeg" },
+      { type: "image", src: "/maquinas/linea-limpieza-2.jpeg" },
+      { type: "image", src: "/maquinas/linea-limpieza-3.jpeg" },
+      { type: "video", src: "/maquinas/linea-limpieza.mp4" },
+      { type: "video", src: "/maquinas/linea-limpieza-2.mp4" },
+      { type: "video", src: "/maquinas/linea-limpieza-3.mp4" },
     ],
     specs: [
       { label: "Fruto", value: "Frutos secos en general" },
@@ -351,13 +351,13 @@ const rawMachines: Machine[] = [
       { title: "Flujo continuo", text: "Dosificación y cinta de distribución conectan las etapas sin manipulación manual." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/secadora.jpeg" },
-      { type: "image", src: "/dyfmaweb/maquinas/secadora-2.jpeg" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora-2.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora-3.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora-4.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/secadora-5.mp4" },
+      { type: "image", src: "/maquinas/secadora.jpeg" },
+      { type: "image", src: "/maquinas/secadora-2.jpeg" },
+      { type: "video", src: "/maquinas/secadora.mp4" },
+      { type: "video", src: "/maquinas/secadora-2.mp4" },
+      { type: "video", src: "/maquinas/secadora-3.mp4" },
+      { type: "video", src: "/maquinas/secadora-4.mp4" },
+      { type: "video", src: "/maquinas/secadora-5.mp4" },
     ],
     specs: [
       { label: "Fruto", value: "Todo tipo de frutos secos" },
@@ -391,13 +391,13 @@ const rawMachines: Machine[] = [
       { title: "Energía simple", text: "Funciona con energía monofásica — 2,5 HP totales, sin obra eléctrica." },
     ],
     media: [
-      { type: "image", src: "/dyfmaweb/2.webp" },
-      { type: "video", src: "/dyfmaweb/maquinas/semi industrial-rapido.mp4" },
-      // { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial-2.mp4" },
-      // { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial-3.mp4" },
-      { type: "video", src: "/dyfmaweb/maquinas/linea-semi-industrial-4.mp4" },
+      { type: "image", src: "/2.webp" },
+      { type: "video", src: "/maquinas/semi industrial-rapido.mp4" },
+      // { type: "video", src: "/maquinas/linea-semi-industrial-2.mp4" },
+      // { type: "video", src: "/maquinas/linea-semi-industrial-3.mp4" },
+      { type: "video", src: "/maquinas/linea-semi-industrial-4.mp4" },
     ],
-    pdf: "/dyfmaweb/maquinas/linea-semi-industrial.pdf",
+    pdf: "/maquinas/linea-semi-industrial.pdf",
     specs: [
       { label: "Códigos", value: "PPLP-1500 | ESI-1800" },
       { label: "Fruto", value: "Nuez Pecán" },
@@ -439,8 +439,8 @@ const rawMachines: Machine[] = [
     detail:
       "La Línea de Pelado y Procesamiento integra las etapas de hervido y sanitización, tolva con elevación y dosificación, partido, prelimpieza de cáscara, transporte y separación, selección por color, separación por aire, separación producto/cáscara, reproceso con cabezal y separador de aire, bandeja vibratoria y dosificación, y clasificación con control final. El objetivo no es solamente pelar: es aprovechar mejor la producción, reducir tareas manuales, ordenar el proceso y avanzar dentro de la cadena de valor. La configuración mostrada corresponde a nuez pecán, pero la tecnología puede analizarse y adaptarse a diferentes frutos secos según tipo de fruto, características de la cáscara, volumen de producción, capacidad requerida, nivel de automatización y producto final buscado.",
     media: [
-      { type: "image", src: "/dyfmaweb/maquinas/render.jpeg" },
-      { type: "video", src: "/dyfmaweb/lineaSEBA.mp4" },
+      { type: "image", src: "/maquinas/render.jpeg" },
+      { type: "video", src: "/lineaSEBA.mp4" },
     ],
     specs: [
       { label: "Fruto", value: "Nuez Pecán — configurable a otros frutos" },
@@ -475,8 +475,8 @@ const rawMachines: Machine[] = [
     ],
     detail:
       "El Elevador Dosificador con Variador de Velocidad es un módulo diseñado para automatizar y hacer continuas las líneas de procesamiento, facilitando el traslado y la alimentación del producto entre diferentes etapas del proceso. Su función es elevar, dosificar y alimentar de manera controlada el producto hacia el siguiente equipo, permitiendo regular la velocidad de trabajo de acuerdo con las necesidades de cada línea. Puede incorporarse como módulo adicional a diferentes configuraciones — por ejemplo, líneas con horno deshidratador (horno → elevador dosificador → siguiente etapa) o líneas con partidoras (partidora → elevador dosificador → siguiente etapa) — conectando los equipos y reduciendo la necesidad de manipulación manual. No es solamente un elevador: es un módulo que permite conectar etapas del proceso, regular la alimentación y hacer más práctico el trabajo del operario.",
-    media: [{ type: "image", src: "/dyfmaweb/maquinas/elevador.jpeg" }],
-    pdf: "/dyfmaweb/maquinas/elevador-esi.pdf",
+    media: [{ type: "image", src: "/maquinas/elevador.jpeg" }],
+    pdf: "/maquinas/elevador-esi.pdf",
     specs: [
       { label: "Función", value: "Elevar · Dosificar · Alimentar el proceso" },
       { label: "Regulación", value: "Variador de velocidad para ajustar el caudal" },
@@ -502,8 +502,8 @@ const rawMachines: Machine[] = [
       { title: "Multi-fruto", text: "Apta para nuez Chandler, pecán, almendra y avellana." },
       { title: "Listo para comercializar", text: "El paso final para llevar tu producto al mercado con presentación profesional." },
     ],
-    media: [{ type: "image", src: "/dyfmaweb/maquinas/evasadoraalvacio.jpeg" }],
-    pdf: "/dyfmaweb/maquinas/envasadora.pdf",
+    media: [{ type: "image", src: "/maquinas/envasadora.webp" }],
+    pdf: "/maquinas/envasadora.pdf",
     specs: [
       { label: "Códigos", value: "EVLP-600 | EVLP-500" },
       { label: "Fruto", value: "Nuez Chandler · Pecán · Almendra · Avellana" },
