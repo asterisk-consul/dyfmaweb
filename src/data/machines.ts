@@ -135,7 +135,6 @@ const rawMachines: Machine[] = [
       { title: "Bajo mantenimiento", text: "Construcción en chapa SAE 1010 con pintura epoxi horneada, pensada para durar." },
     ],
     media: [
-      { type: "image", src: "/maquinas/partidora.webp" },
       { type: "image", src: "/maquinas/partidora1.webp" },
       { type: "image", src: "/maquinas/partidora2.webp" },
       { type: "image", src: "/maquinas/partidora-3.jpeg" },
@@ -394,6 +393,7 @@ const rawMachines: Machine[] = [
       { title: "Energía simple", text: "Funciona con energía monofásica — 2,5 HP totales, sin obra eléctrica." },
     ],
     media: [
+    { type: "image", src: "/maquinas/partidora.webp" },
       { type: "image", src: "/2.webp" },
       { type: "video", src: "/maquinas/semi industrial-rapido.mp4" },
       // { type: "video", src: "/maquinas/linea-semi-industrial-2.mp4" },
