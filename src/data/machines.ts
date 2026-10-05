@@ -94,9 +94,9 @@ const rawMachines: Machine[] = [
     nameEn: "Manual Nut Collector",
     category: "cosecha",
     description:
-      "Recolector manual para frutos secos diseñado para la recolección eficiente de nueces, almendras y pecanes directamente desde el suelo, reduciendo tiempos de trabajo y esfuerzo físico del operario. Ideal para cosechas de pequeña y mediana escala.",
+      "Recolector manual diseñado para la recolección eficiente de nuez Chandler y pecán directamente desde el suelo, reduciendo tiempos de trabajo y esfuerzo físico del operario. Ideal para cosechas de pequeña y mediana escala.",
     descriptionEn:
-      "Manual collector for efficient harvesting of walnuts, almonds and pecans directly from the ground, reducing work time and operator effort.",
+      "Manual collector for efficient harvesting of Chandler walnuts and pecans directly from the ground, reducing work time and operator effort.",
     subtitle: "Cabezal de alambre flexible · mango ergonómico",
     features: [
       { title: "Recolección eficiente", text: "Levanta el fruto directamente del suelo, reduciendo tiempos y esfuerzo físico del operario." },
@@ -111,7 +111,7 @@ const rawMachines: Machine[] = [
       { type: "video", src: "/maquinas/recolector.mp4" },
     ],
     specs: [
-      { label: "Fruto", value: "Nuez · Pecán · Almendra" },
+      { label: "Fruto", value: "Nuez Chandler · Pecán" },
       { label: "Cabezal", value: "Alambre flexible de alta resistencia" },
       { label: "Sistema", value: "Apertura para liberar el fruto fácilmente" },
       { label: "Mango", value: "Madera, liviano y ergonómico" },
@@ -135,6 +135,7 @@ const rawMachines: Machine[] = [
       { title: "Bajo mantenimiento", text: "Construcción en chapa SAE 1010 con pintura epoxi horneada, pensada para durar." },
     ],
     media: [
+      { type: "image", src: "/maquinas/partidora.webp" },
       { type: "image", src: "/maquinas/partidora1.webp" },
       { type: "image", src: "/maquinas/partidora2.webp" },
       { type: "image", src: "/maquinas/partidora-3.jpeg" },
@@ -307,6 +308,7 @@ const rawMachines: Machine[] = [
     detail:
       "La Línea de Limpieza de Frutos Secos DYFMA está diseñada para optimizar el proceso desde la recepción de la cosecha, eliminando impurezas y preparando el producto para las etapas posteriores de procesamiento. La línea está compuesta por: carro con clapeta de descarga inferior (facilita la descarga controlada del producto), lagar de recepción con capacidad de hasta 1 tonelada, sistema de distribución y elevación que mantiene el flujo continuo entre etapas, saca palos + saca hojas (primera etapa de separación de materiales vegetales e impurezas de mayor tamaño), pre-cleaner (limpieza previa y separación de impurezas) y mesa de inspección (revisión final del producto antes de continuar el proceso). Concentrar diferentes procesos en una misma línea permite mejorar el flujo de trabajo, reducir tiempos y optimizar los recursos: el resultado es un producto limpio, uniforme y preparado para continuar su transformación.",
     media: [
+      { type: "image", src: "/maquinas/lineaLimpieza.webp" },
       { type: "image", src: "/maquinas/linea-limpieza.jpeg" },
       { type: "image", src: "/maquinas/linea-limpieza-2.jpeg" },
       { type: "image", src: "/maquinas/linea-limpieza-3.jpeg" },
@@ -351,6 +353,7 @@ const rawMachines: Machine[] = [
       { title: "Flujo continuo", text: "Dosificación y cinta de distribución conectan las etapas sin manipulación manual." },
     ],
     media: [
+    {type: "image", src: "/maquinas/LineaSecado2000.webp" },
       { type: "image", src: "/maquinas/secadora.jpeg" },
       { type: "image", src: "/maquinas/secadora-2.jpeg" },
       { type: "video", src: "/maquinas/secadora.mp4" },

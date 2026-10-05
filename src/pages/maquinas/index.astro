@@ -25,6 +25,10 @@ const categories: MachineCategory[] = [
   "post-pelado",
 ];
 
+const integrationModules = ["partidora-pecan-avellana", "elevador-dosificador"]
+  .map((id) => machines.find((machine) => machine.id === id))
+  .filter((machine) => machine !== undefined);
+
 const fruitFilters = [
   { id: "pecan", label: "Nuez pecán" },
   { id: "chandler", label: "Nuez Chandler" },
@@ -45,7 +49,7 @@ const needFilters = [
 
 const machineFilters: Record<string, { fruits: string[]; needs: string[] }> = {
   "remecedor-linga": { fruits: ["pecan", "chandler"], needs: ["cosecha"] },
-  recolector: { fruits: ["pecan", "chandler", "almendra"], needs: ["cosecha"] },
+  recolector: { fruits: ["pecan", "chandler"], needs: ["cosecha"] },
   "partidora-pecan-avellana": { fruits: ["pecan", "avellana"], needs: ["partido"] },
   "limpiadora-campo": { fruits: ["pecan"], needs: ["limpieza"] },
   "horno-deshidratador": { fruits: ["pecan", "chandler", "almendra", "avellana", "pistacho"], needs: ["secado"] },
@@ -187,6 +191,33 @@ const machineFilters: Record<string, { fruits: string[]; needs: string[] }> = {
           )
         ))}
       </div>
+
+      <section class="modules-section">
+        <div class="modules-head">
+          <div>
+            <span class="section-tag u-spec">INTEGRACIÓN MODULAR</span>
+            <h2 class="modules-title">Módulos para completar tu línea</h2>
+            <p class="modules-desc">Sumá etapas y conectá equipos a medida que crece tu producción, sin reemplazar toda la instalación.</p>
+          </div>
+          <a class="modules-contact" href="/contacto">Consultar integración →</a>
+        </div>
+
+        <div class="modules-grid">
+          {integrationModules.map((machine) => (
+            <a class="module-card" href={`/maquinas/${machine.id}`}>
+              <div class="module-media">
+                {machine.image && <img src={machine.image} alt={machine.name} width="480" height="360" loading="lazy" />}
+                <span class="module-badge u-mono">MÓDULO</span>
+              </div>
+              <div class="module-copy">
+                <span class="module-name">{machine.name}</span>
+                <p>{machine.description}</p>
+                <span class="module-link">Ver módulo →</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
 
       <section class="no-results" hidden>
         <h2>No encontramos una máquina estándar para esa combinación.</h2>
@@ -396,6 +427,121 @@ const machineFilters: Record<string, { fruits: string[]; needs: string[] }> = {
     margin: 0 auto 1.5rem;
     color: var(--color-text-alt);
     line-height: 1.6;
+  }
+
+  .modules-section {
+    margin-top: 4.5rem;
+    padding: 3rem 0 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .modules-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .modules-title {
+    margin: 0.65rem 0 0.5rem;
+    color: var(--color-text);
+    font-family: var(--font-heading);
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 500;
+  }
+
+  .modules-desc {
+    max-width: 42rem;
+    margin: 0;
+    color: var(--color-text-alt);
+    line-height: 1.55;
+  }
+
+  .modules-contact {
+    flex: 0 0 auto;
+    color: var(--color-brand-1);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .module-card {
+    display: grid;
+    grid-template-columns: minmax(9rem, 0.7fr) minmax(0, 1.3fr);
+    min-width: 0;
+    border: 1px solid rgba(242, 140, 40, 0.28);
+    background: rgba(242, 140, 40, 0.025);
+    color: inherit;
+    text-decoration: none;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .module-card:hover {
+    border-color: var(--color-brand-1);
+    transform: translateY(-2px);
+  }
+
+  .module-media {
+    position: relative;
+    min-height: 12rem;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .module-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .module-badge {
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    padding: 0.3rem 0.5rem;
+    background: var(--color-brand-1);
+    color: #fff;
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+  }
+
+  .module-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.3rem;
+  }
+
+  .module-name {
+    color: var(--color-brand-1);
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+
+  .module-copy p {
+    display: -webkit-box;
+    margin: 0.65rem 0 1rem;
+    overflow: hidden;
+    color: var(--color-text-alt);
+    font-size: 0.78rem;
+    line-height: 1.5;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  .module-link {
+    margin-top: auto;
+    color: var(--color-brand-1);
+    font-size: 0.72rem;
+    font-weight: 600;
   }
 
   .category-title {
@@ -646,6 +792,15 @@ const machineFilters: Record<string, { fruits: string[]; needs: string[] }> = {
       grid-template-columns: 1fr;
     }
 
+    .modules-head {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .modules-grid {
+      grid-template-columns: 1fr;
+    }
+
     .page-title {
       font-size: 2rem;
     }
@@ -654,6 +809,15 @@ const machineFilters: Record<string, { fruits: string[]; needs: string[] }> = {
   @media (--mq-phone) {
     .machines-page {
       padding: 6rem 0 3rem;
+    }
+
+    .module-card {
+      grid-template-columns: 1fr;
+    }
+
+    .module-media {
+      min-height: auto;
+      aspect-ratio: 4 / 3;
     }
   }
 </style>
